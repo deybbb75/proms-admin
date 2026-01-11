@@ -11389,9 +11389,9 @@ body[data-leftbar-compact-mode=condensed]:not(.authentication-bg) .side-nav .sid
     width:190px;
     z-index:6
 }
-body[data-leftbar-compact-mode=condensed]:not(.authentication-bg) .side-nav .side-nav-item:hover>.collapse>ul a:hover,body[data-leftbar-compact-mode=condensed]:not(.authentication-bg) .side-nav .side-nav-item:hover>.collapsing>ul a:hover{
+/* body[data-leftbar-compact-mode=condensed]:not(.authentication-bg) .side-nav .side-nav-item:hover>.collapse>ul a:hover,body[data-leftbar-compact-mode=condensed]:not(.authentication-bg) .side-nav .side-nav-item:hover>.collapsing>ul a:hover{
     color:var(--ct-menu-item-hover)
-}
+} */
 body[data-leftbar-compact-mode=condensed]:not(.authentication-bg) .side-nav .side-nav-item:hover>.collapse>ul li:hover>.collapse,body[data-leftbar-compact-mode=condensed]:not(.authentication-bg) .side-nav .side-nav-item:hover>.collapsing>ul li:hover>.collapse{
     display:block!important;
     height:auto!important;

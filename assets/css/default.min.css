@@ -12,11 +12,11 @@
     --secondary-active-border-color: #907200;
     --secondary-rgb: 201, 164, 1;
 
-    --success-color: #00B708;
-    --success-hover-color: #00CC0A;
-    --success-border-color: #008F05;
-    --success-active-border-color: #007A04;
-    --success-rgb: 0, 183, 8;
+    --success-color: #21B027;               /* main */
+    --success-hover-color: #4CC556;         /* lighter / hover */
+    --success-border-color: #1A8C1F;        /* darker border */
+    --success-active-border-color: #16731A; /* darkest / active */
+    --success-rgb: 33, 176, 39;
 
     --info-color: #1E88E5;
     --info-hover-color: #3599F0;
@@ -30,11 +30,11 @@
     --warning-active-border-color: #ffc933;
     --warning-rgb:255,188,0;
 
-    --danger-color: #FF0000;
-    --danger-hover-color: #FF3333;
-    --danger-border-color: #CC0000;
-    --danger-active-border-color: #B30000;
-    --danger-rgb: 255, 0, 0;
+    --danger-color: #FF2121;              
+    --danger-hover-color: #FF4D4D;        
+    --danger-border-color: #CC1A1A;       
+    --danger-active-border-color: #B31717;
+    --danger-rgb: 255, 33, 33;
 
     --text-color: #444444;
 }
