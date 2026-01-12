@@ -12,10 +12,10 @@
     --secondary-active-border-color: #907200;
     --secondary-rgb: 201, 164, 1;
 
-    --success-color: #21B027;               /* main */
-    --success-hover-color: #4CC556;         /* lighter / hover */
-    --success-border-color: #1A8C1F;        /* darker border */
-    --success-active-border-color: #16731A; /* darkest / active */
+    --success-color: #21B027;               
+    --success-hover-color: #4CC556;         
+    --success-border-color: #1A8C1F;       
+    --success-active-border-color: #16731A;
     --success-rgb: 33, 176, 39;
 
     --info-color: #1E88E5;
