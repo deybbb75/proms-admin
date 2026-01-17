@@ -1,0 +1,36 @@
+.system-title-container{
+    height: 70px;
+    display: flex;
+    align-items: center;
+}
+
+.system-title{
+    margin: 0 0 0 20px;
+    color: var(--primary-color);
+}
+
+.system-title-short{
+    display: none;
+}
+
+@media (max-width:1300px){
+    .system-title{
+        font-size: 20px;
+    }
+}
+
+@media (max-width:535px){
+    .system-title{
+        display: none;
+    }
+
+    .system-title-short{
+        display: block;
+        margin: 0 0 0 20px;
+        color: var(--primary-color);
+    }
+}
+
+.modal-body .row{
+    padding-bottom: 16px;
+}

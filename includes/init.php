@@ -1,13 +1,12 @@
 <?php
-
 // Disable error reporting
-// error_reporting(1);
+error_reporting(1);
 
 // Report runtime errors
-// error_reporting(E_ERROR | E_WARNING | E_PARSE);
+error_reporting(E_ERROR | E_WARNING | E_PARSE);
 
 // Report all errors
-// error_reporting(E_ALL);
+error_reporting(E_ALL);
 
 session_name('PromsAdminSession');
 session_set_cookie_params(0, '/proms-admin/', $_SERVER['HTTP_HOST'], isset($_SERVER['HTTPS']), true);
