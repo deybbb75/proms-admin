@@ -148,3 +148,24 @@
 #2 C:\xampp\htdocs\proms-admin\index.php(4): DB::getInstance()
 #3 {main}
 
+[2026-01-18 15:44:22] SQLSTATE[42S22]: Column not found: 1054 Unknown column 'dept_id' in 'field list'
+#0 C:\xampp\htdocs\proms-admin\model\pdo.class.php(241): PDO->prepare('INSERT INTO `tb...')
+#1 C:\xampp\htdocs\proms-admin\model\pdo.class.php(264): DB->query('INSERT INTO `tb...', Array)
+#2 C:\xampp\htdocs\proms-admin\model\pdo.class.php(363): DB->run('INSERT INTO `tb...', Array)
+#3 C:\xampp\htdocs\proms-admin\pages\controller\ctr-system-user.php(45): DB->executeInsert(Array, 'tbl_system_user')
+#4 {main}
+
+[2026-01-18 15:45:23] SQLSTATE[42S22]: Column not found: 1054 Unknown column 'dept_id' in 'field list'
+#0 C:\xampp\htdocs\proms-admin\model\pdo.class.php(241): PDO->prepare('INSERT INTO `tb...')
+#1 C:\xampp\htdocs\proms-admin\model\pdo.class.php(264): DB->query('INSERT INTO `tb...', Array)
+#2 C:\xampp\htdocs\proms-admin\model\pdo.class.php(363): DB->run('INSERT INTO `tb...', Array)
+#3 C:\xampp\htdocs\proms-admin\pages\controller\ctr-system-user.php(45): DB->executeInsert(Array, 'tbl_system_user')
+#4 {main}
+
+[2026-01-18 15:45:58] SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'role' cannot be null
+#0 C:\xampp\htdocs\proms-admin\model\pdo.class.php(243): PDOStatement->execute()
+#1 C:\xampp\htdocs\proms-admin\model\pdo.class.php(264): DB->query('INSERT INTO `tb...', Array)
+#2 C:\xampp\htdocs\proms-admin\model\pdo.class.php(363): DB->run('INSERT INTO `tb...', Array)
+#3 C:\xampp\htdocs\proms-admin\pages\controller\ctr-system-user.php(44): DB->executeInsert(Array, 'tbl_system_user')
+#4 {main}
+

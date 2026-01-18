@@ -17,7 +17,7 @@ define('__SITE_PATH', $_SERVER['DOCUMENT_ROOT'] . '/proms-admin');
 date_default_timezone_set('Asia/Kuala_Lumpur');
 define('IS_DEV', true);  // set to false in production
 
-$GLOBALS['INF_CONFIG']['sitehost']   = 'http://localhost/proms-admin/';
+$GLOBALS['INF_CONFIG']['sitehost']   = 'http://localhost/proms-admin';
 $GLOBALS['INF_CONFIG']['root']       = '/proms-admin/';
 $GLOBALS['INF_CONFIG']['dbUser']     = 'root';
 $GLOBALS['INF_CONFIG']['dbPass']     = '';
@@ -34,6 +34,7 @@ $inf_dblogin = $GLOBALS['INF_CONFIG']['dbUser'];
 /* MODEL */
 // include __SITE_PATH . '/model/' . 'db.class.php';
 include __SITE_PATH . '/model/' . 'pdo.class.php';
+include __SITE_PATH . '/model/' . 'alert.class.php';
 // include __SITE_PATH . '/model/' . 'pagination.class.php';
 // include __SITE_PATH . '/model/' . 'ajaxpagination.class.php';
 // include __SITE_PATH . '/model/' . 'datatablehandler.class.php';
@@ -41,12 +42,9 @@ include __SITE_PATH . '/model/' . 'pdo.class.php';
 // include __SITE_PATH . '/model/' . 'ResponseBuilder.php';
 
 /* INCLUDES */
-// include __SITE_PATH . '/includes/' . 'common.functions.php';
+include __SITE_PATH . '/includes/' . 'common.functions.php';
 // include __SITE_PATH . '/includes/' . 'chez.functions.php';
 // include __SITE_PATH . '/includes/' . 'db.utility.php';
-
-// /* COMPONENTS */
-// include __SITE_PATH . '/components/' . 'alert.class.php';
 
 // $template = new Template;
 

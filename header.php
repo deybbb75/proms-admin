@@ -7,50 +7,58 @@
         <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description" />
         <meta content="Coderthemes" name="author" />
         <!-- App favicon -->
-        <link rel="shortcut icon" href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>assets/images/favicon.ico">
+        <link rel="shortcut icon" href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/assets/images/favicon.ico">
 
         <!-- third party css -->
-        <link href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>assets/css/vendor/jquery-jvectormap-1.2.2.css" rel="stylesheet" type="text/css" />
-        <link href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>assets/css/vendor/dataTables.bootstrap5.css" rel="stylesheet" type="text/css" />
-        <link href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>assets/css/vendor/responsive.bootstrap5.css" rel="stylesheet" type="text/css" />
-        <link href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>assets/css/vendor/buttons.bootstrap5.css" rel="stylesheet" type="text/css" />
-        <link href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>assets/css/vendor/select.bootstrap5.css" rel="stylesheet" type="text/css" />
-        <link href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>assets/css/vendor/fixedHeader.bootstrap5.css" rel="stylesheet" type="text/css" />
-        <link href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>assets/css/vendor/fixedColumns.bootstrap5.css" rel="stylesheet" type="text/css" />
+        <link href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/assets/css/vendor/jquery-jvectormap-1.2.2.css" rel="stylesheet" type="text/css" />
+        <link href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/assets/css/vendor/dataTables.bootstrap5.css" rel="stylesheet" type="text/css" />
+        <link href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/assets/css/vendor/responsive.bootstrap5.css" rel="stylesheet" type="text/css" />
+        <link href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/assets/css/vendor/buttons.bootstrap5.css" rel="stylesheet" type="text/css" />
+        <link href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/assets/css/vendor/select.bootstrap5.css" rel="stylesheet" type="text/css" />
+        <link href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/assets/css/vendor/fixedHeader.bootstrap5.css" rel="stylesheet" type="text/css" />
+        <link href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/assets/css/vendor/fixedColumns.bootstrap5.css" rel="stylesheet" type="text/css" />
         <!-- third party css end -->
 
         <!-- App css -->
-        <link href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>assets/css/default.min.css" rel="stylesheet" type="text/css" id="app-style"/>
-        <link href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>assets/css/icons.min.css" rel="stylesheet" type="text/css" />
-        <link href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>assets/css/app.min.css" rel="stylesheet" type="text/css" id="app-style"/>
+        <link href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/assets/css/default.min.css" rel="stylesheet" type="text/css" id="app-style"/>
+        <link href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+        <link href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/assets/css/app.min.css" rel="stylesheet" type="text/css" id="app-style"/>
+
+        <!-- Sweetalert Css -->
+        <link href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/assets/plugins/sweetalert2/dist/sweetalert2.min.css" rel="stylesheet" />
 
         <!-- Custom CSS -->
-         <link href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>assets/css/custom.css" rel="stylesheet" type="text/css" id="app-style"/>
+         <link href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/assets/css/custom.css" rel="stylesheet" type="text/css" id="app-style"/>
     </head>
 
     <body class="loading" data-layout-color="light" data-leftbar-theme="dark" data-layout-mode="fluid" data-rightbar-onstart="true">
+        
+        <div class="preloader" id="main-preloader">
+            <span class="loader"></span>
+        </div>
+
         <!-- Begin page -->
-        <div class="wrapper">
+        <div class="wrapper" id="content">
             <!-- ========== Left Sidebar Start ========== -->
             <div class="leftside-menu">
     
                 <!-- LOGO -->
                 <a href="index.html" class="logo text-center logo-light">
                     <span class="logo-lg">
-                        <img src="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>assets/images/logo.png" alt="" height="16">
+                        <img src="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/assets/images/logo.png" alt="" height="16">
                     </span>
                     <span class="logo-sm">
-                        <img src="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>assets/images/logo_sm.png" alt="" height="16">
+                        <img src="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/assets/images/logo_sm.png" alt="" height="16">
                     </span>
                 </a>
 
                 <!-- LOGO -->
                 <a href="index.html" class="logo text-center logo-dark">
                     <span class="logo-lg">
-                        <img src="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>assets/images/logo-dark.png" alt="" height="16">
+                        <img src="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/assets/images/logo-dark.png" alt="" height="16">
                     </span>
                     <span class="logo-sm">
-                        <img src="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>assets/images/logo_sm_dark.png" alt="" height="16">
+                        <img src="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/assets/images/logo_sm_dark.png" alt="" height="16">
                     </span>
                 </a>
     
@@ -76,16 +84,16 @@
                             <div class="collapse" id="sidebarDashboards">
                                 <ul class="side-nav-second-level">
                                     <li>
-                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/dashboard-analytics.html">Analytics</a>
+                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/dashboard-analytics.html">Analytics</a>
                                     </li>
                                     <li>
-                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/index.html">Ecommerce</a>
+                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/index.html">Ecommerce</a>
                                     </li>
                                     <li>
-                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/dashboard-projects.html">Projects</a>
+                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/dashboard-projects.html">Projects</a>
                                     </li>
                                     <li>
-                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/dashboard-wallet.html">E-Wallet <span class="badge rounded bg-danger font-10 float-end">New</span></a>
+                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/dashboard-wallet.html">E-Wallet <span class="badge rounded bg-danger font-10 float-end">New</span></a>
                                     </li>
                                 </ul>
                             </div>
@@ -94,14 +102,14 @@
                         <li class="side-nav-title side-nav-item">Apps</li>
 
                         <li class="side-nav-item">
-                            <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/apps-calendar.html" class="side-nav-link">
+                            <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/apps-calendar.html" class="side-nav-link">
                                 <i class="uil-calender"></i>
                                 <span> Calendar </span>
                             </a>
                         </li>
 
                         <li class="side-nav-item">
-                            <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/apps-chat.html" class="side-nav-link">
+                            <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/apps-chat.html" class="side-nav-link">
                                 <i class="uil-comments-alt"></i>
                                 <span> Chat </span>
                             </a>
@@ -116,19 +124,19 @@
                             <div class="collapse" id="sidebarCrm">
                                 <ul class="side-nav-second-level">
                                     <li>
-                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/crm-dashboard.html">Dashboard</a>
+                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/crm-dashboard.html">Dashboard</a>
                                     </li>
                                     <li>
-                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/crm-projects.html">Project</a>
+                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/crm-projects.html">Project</a>
                                     </li>
                                     <li>
-                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/crm-orders-list.html">Orders List</a>
+                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/crm-orders-list.html">Orders List</a>
                                     </li>
                                     <li>
-                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/crm-clients.html">Clients</a>
+                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/crm-clients.html">Clients</a>
                                     </li>
                                     <li>
-                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/crm-management.html">Management</a>
+                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/crm-management.html">Management</a>
                                     </li>
                                 </ul>
                             </div>
@@ -143,28 +151,28 @@
                             <div class="collapse" id="sidebarEcommerce">
                                 <ul class="side-nav-second-level">
                                     <li>
-                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/apps-ecommerce-products.html">Products</a>
+                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/apps-ecommerce-products.html">Products</a>
                                     </li>
                                     <li>
-                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/apps-ecommerce-products-details.html">Products Details</a>
+                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/apps-ecommerce-products-details.html">Products Details</a>
                                     </li>
                                     <li>
-                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/apps-ecommerce-orders.html">Orders</a>
+                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/apps-ecommerce-orders.html">Orders</a>
                                     </li>
                                     <li>
-                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/apps-ecommerce-orders-details.html">Order Details</a>
+                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/apps-ecommerce-orders-details.html">Order Details</a>
                                     </li>
                                     <li>
-                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/apps-ecommerce-customers.html">Customers</a>
+                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/apps-ecommerce-customers.html">Customers</a>
                                     </li>
                                     <li>
-                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/apps-ecommerce-shopping-cart.html">Shopping Cart</a>
+                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/apps-ecommerce-shopping-cart.html">Shopping Cart</a>
                                     </li>
                                     <li>
-                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/apps-ecommerce-checkout.html">Checkout</a>
+                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/apps-ecommerce-checkout.html">Checkout</a>
                                     </li>
                                     <li>
-                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/apps-ecommerce-sellers.html">Sellers</a>
+                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/apps-ecommerce-sellers.html">Sellers</a>
                                     </li>
                                 </ul>
                             </div>
@@ -179,10 +187,10 @@
                             <div class="collapse" id="sidebarEmail">
                                 <ul class="side-nav-second-level">
                                     <li>
-                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/apps-email-inbox.html">Inbox</a>
+                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/apps-email-inbox.html">Inbox</a>
                                     </li>
                                     <li>
-                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/apps-email-read.html">Read Email</a>
+                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/apps-email-read.html">Read Email</a>
                                     </li>
                                 </ul>
                             </div>
@@ -197,23 +205,23 @@
                             <div class="collapse" id="sidebarProjects">
                                 <ul class="side-nav-second-level">
                                     <li>
-                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/apps-projects-list.html">List</a>
+                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/apps-projects-list.html">List</a>
                                     </li>
                                     <li>
-                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/apps-projects-details.html">Details</a>
+                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/apps-projects-details.html">Details</a>
                                     </li>
                                     <li>
-                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/apps-projects-gantt.html">Gantt <span class="badge rounded-pill bg-light text-dark font-10 float-end">New</span></a>
+                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/apps-projects-gantt.html">Gantt <span class="badge rounded-pill bg-light text-dark font-10 float-end">New</span></a>
                                     </li>
                                     <li>
-                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/apps-projects-add.html">Create Project</a>
+                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/apps-projects-add.html">Create Project</a>
                                     </li>
                                 </ul>
                             </div>
                         </li>
 
                         <li class="side-nav-item">
-                            <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/apps-social-feed.html" class="side-nav-link">
+                            <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/apps-social-feed.html" class="side-nav-link">
                                 <i class="uil-rss"></i>
                                 <span> Social Feed </span>
                             </a>
@@ -228,20 +236,20 @@
                             <div class="collapse" id="sidebarTasks">
                                 <ul class="side-nav-second-level">
                                     <li>
-                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/apps-tasks.html">List</a>
+                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/apps-tasks.html">List</a>
                                     </li>
                                     <li>
-                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/apps-tasks-details.html">Details</a>
+                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/apps-tasks-details.html">Details</a>
                                     </li>
                                     <li>
-                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/apps-kanban.html">Kanban Board</a>
+                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/apps-kanban.html">Kanban Board</a>
                                     </li>
                                 </ul>
                             </div>
                         </li>
 
                         <li class="side-nav-item">
-                            <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/apps-file-manager.html" class="side-nav-link">
+                            <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/apps-file-manager.html" class="side-nav-link">
                                 <i class="uil-folder-plus"></i>
                                 <span> File Manager </span>
                             </a>
@@ -258,22 +266,22 @@
                             <div class="collapse" id="sidebarPages">
                                 <ul class="side-nav-second-level">
                                     <li>
-                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/pages-profile.html">Profile</a>
+                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/pages-profile.html">Profile</a>
                                     </li>
                                     <li>
-                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/pages-profile-2.html">Profile 2</a>
+                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/pages-profile-2.html">Profile 2</a>
                                     </li>
                                     <li>
-                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/pages-invoice.html">Invoice</a>
+                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/pages-invoice.html">Invoice</a>
                                     </li>
                                     <li>
-                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/pages-faq.html">FAQ</a>
+                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/pages-faq.html">FAQ</a>
                                     </li>
                                     <li>
-                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/pages-pricing.html">Pricing</a>
+                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/pages-pricing.html">Pricing</a>
                                     </li>
                                     <li>
-                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/pages-maintenance.html">Maintenance</a>
+                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/pages-maintenance.html">Maintenance</a>
                                     </li>
                                     <li class="side-nav-item">
                                         <a data-bs-toggle="collapse" href="#sidebarPagesAuth" aria-expanded="false" aria-controls="sidebarPagesAuth">
@@ -283,40 +291,40 @@
                                         <div class="collapse" id="sidebarPagesAuth">
                                             <ul class="side-nav-third-level">
                                                 <li>
-                                                    <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/pages-login.html">Login</a>
+                                                    <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/pages-login.html">Login</a>
                                                 </li>
                                                 <li>
-                                                    <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/pages-login-2.html">Login 2</a>
+                                                    <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/pages-login-2.html">Login 2</a>
                                                 </li>
                                                 <li>
-                                                    <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/pages-register.html">Register</a>
+                                                    <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/pages-register.html">Register</a>
                                                 </li>
                                                 <li>
-                                                    <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/pages-register-2.html">Register 2</a>
+                                                    <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/pages-register-2.html">Register 2</a>
                                                 </li>
                                                 <li>
-                                                    <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/pages-logout.html">Logout</a>
+                                                    <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/pages-logout.html">Logout</a>
                                                 </li>
                                                 <li>
-                                                    <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/pages-logout-2.html">Logout 2</a>
+                                                    <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/pages-logout-2.html">Logout 2</a>
                                                 </li>
                                                 <li>
-                                                    <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/pages-recoverpw.html">Recover Password</a>
+                                                    <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/pages-recoverpw.html">Recover Password</a>
                                                 </li>
                                                 <li>
-                                                    <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/pages-recoverpw-2.html">Recover Password 2</a>
+                                                    <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/pages-recoverpw-2.html">Recover Password 2</a>
                                                 </li>
                                                 <li>
-                                                    <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/pages-lock-screen.html">Lock Screen</a>
+                                                    <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/pages-lock-screen.html">Lock Screen</a>
                                                 </li>
                                                 <li>
-                                                    <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/pages-lock-screen-2.html">Lock Screen 2</a>
+                                                    <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/pages-lock-screen-2.html">Lock Screen 2</a>
                                                 </li>
                                                 <li>
-                                                    <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/pages-confirm-mail.html">Confirm Mail</a>
+                                                    <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/pages-confirm-mail.html">Confirm Mail</a>
                                                 </li>
                                                 <li>
-                                                    <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/pages-confirm-mail-2.html">Confirm Mail 2</a>
+                                                    <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/pages-confirm-mail-2.html">Confirm Mail 2</a>
                                                 </li>
                                             </ul>
                                         </div>
@@ -329,32 +337,32 @@
                                         <div class="collapse" id="sidebarPagesError">
                                             <ul class="side-nav-third-level">
                                                 <li>
-                                                <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/pages-404.html">Error 404</a>
+                                                <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/pages-404.html">Error 404</a>
                                             </li>
                                             <li>
-                                                <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/pages-404-alt.html">Error 404-alt</a>
+                                                <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/pages-404-alt.html">Error 404-alt</a>
                                             </li>
                                             <li>
-                                                <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/pages-500.html">Error 500</a>
+                                                <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/pages-500.html">Error 500</a>
                                             </li>
                                             </ul>
                                         </div>
                                     </li>
                                     <li>
-                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/pages-starter.html">Starter Page</a>
+                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/pages-starter.html">Starter Page</a>
                                     </li>
                                     <li>
-                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/pages-preloader.html">With Preloader</a>
+                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/pages-preloader.html">With Preloader</a>
                                     </li>
                                     <li>
-                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/pages-timeline.html">Timeline</a>
+                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/pages-timeline.html">Timeline</a>
                                     </li>
                                 </ul>
                             </div>
                         </li>
 
                         <li class="side-nav-item">
-                            <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/landing.html" target="_blank" class="side-nav-link">
+                            <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/landing.html" target="_blank" class="side-nav-link">
                                 <i class="uil-globe"></i>
                                 <span class="badge bg-secondary text-light float-end">New</span>
                                 <span> Landing </span>
@@ -370,13 +378,13 @@
                             <div class="collapse" id="sidebarLayouts">
                                 <ul class="side-nav-second-level">
                                     <li>
-                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/layouts-horizontal.html">Horizontal</a>
+                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/layouts-horizontal.html">Horizontal</a>
                                     </li>
                                     <li>
-                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/layouts-detached.html">Detached</a>
+                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/layouts-detached.html">Detached</a>
                                     </li>
                                     <li>
-                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/layouts-full.html">Full</a>
+                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/layouts-full.html">Full</a>
                                     </li>
                                 </ul>
                             </div>
@@ -393,76 +401,76 @@
                             <div class="collapse" id="sidebarBaseUI">
                                 <ul class="side-nav-second-level">
                                     <li>
-                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/ui-accordions.html">Accordions</a>
+                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/ui-accordions.html">Accordions</a>
                                     </li>
                                     <li>
-                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/ui-alerts.html">Alerts</a>
+                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/ui-alerts.html">Alerts</a>
                                     </li>
                                     <li>
-                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/ui-avatars.html">Avatars</a>
+                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/ui-avatars.html">Avatars</a>
                                     </li>
                                     <li>
-                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/ui-badges.html">Badges</a>
+                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/ui-badges.html">Badges</a>
                                     </li>
                                     <li>
-                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/ui-breadcrumb.html">Breadcrumb</a>
+                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/ui-breadcrumb.html">Breadcrumb</a>
                                     </li>
                                     <li>
-                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/ui-buttons.html">Buttons</a>
+                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/ui-buttons.html">Buttons</a>
                                     </li>
                                     <li>
-                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/ui-cards.html">Cards</a>
+                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/ui-cards.html">Cards</a>
                                     </li>
                                     <li>
-                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/ui-carousel.html">Carousel</a>
+                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/ui-carousel.html">Carousel</a>
                                     </li>
                                     <li>
-                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/ui-dropdowns.html">Dropdowns</a>
+                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/ui-dropdowns.html">Dropdowns</a>
                                     </li>
                                     <li>
-                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/ui-embed-video.html">Embed Video</a>
+                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/ui-embed-video.html">Embed Video</a>
                                     </li>
                                     <li>
-                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/ui-grid.html">Grid</a>
+                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/ui-grid.html">Grid</a>
                                     </li>
                                     <li>
-                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/ui-list-group.html">List Group</a>
+                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/ui-list-group.html">List Group</a>
                                     </li>
                                     <li>
-                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/ui-modals.html">Modals</a>
+                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/ui-modals.html">Modals</a>
                                     </li>
                                     <li>
-                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/ui-notifications.html">Notifications</a>
+                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/ui-notifications.html">Notifications</a>
                                     </li>
                                     <li>
-                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/ui-offcanvas.html">Offcanvas</a>
+                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/ui-offcanvas.html">Offcanvas</a>
                                     </li>
                                     <li>
-                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/ui-placeholders.html">Placeholders</a>
+                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/ui-placeholders.html">Placeholders</a>
                                     </li>
                                     <li>
-                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/ui-pagination.html">Pagination</a>
+                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/ui-pagination.html">Pagination</a>
                                     </li>
                                     <li>
-                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/ui-popovers.html">Popovers</a>
+                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/ui-popovers.html">Popovers</a>
                                     </li>
                                     <li>
-                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/ui-progress.html">Progress</a>
+                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/ui-progress.html">Progress</a>
                                     </li>
                                     <li>
-                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/ui-ribbons.html">Ribbons</a>
+                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/ui-ribbons.html">Ribbons</a>
                                     </li>
                                     <li>
-                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/ui-spinners.html">Spinners</a>
+                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/ui-spinners.html">Spinners</a>
                                     </li>
                                     <li>
-                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/ui-tabs.html">Tabs</a>
+                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/ui-tabs.html">Tabs</a>
                                     </li>
                                     <li>
-                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/ui-tooltips.html">Tooltips</a>
+                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/ui-tooltips.html">Tooltips</a>
                                     </li>
                                     <li>
-                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/ui-typography.html">Typography</a>
+                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/ui-typography.html">Typography</a>
                                     </li>
                                 </ul>
                             </div>
@@ -477,29 +485,29 @@
                             <div class="collapse" id="sidebarExtendedUI">
                                 <ul class="side-nav-second-level">
                                     <li>
-                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/extended-dragula.html">Dragula</a>
+                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/extended-dragula.html">Dragula</a>
                                     </li>
                                     <li>
-                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/extended-range-slider.html">Range Slider</a>
+                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/extended-range-slider.html">Range Slider</a>
                                     </li>
                                     <li>
-                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/extended-ratings.html">Ratings</a>
+                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/extended-ratings.html">Ratings</a>
                                     </li>
                                     <li>
-                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/extended-scrollbar.html">Scrollbar</a>
+                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/extended-scrollbar.html">Scrollbar</a>
                                     </li>
                                     <li>
-                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/extended-scrollspy.html">Scrollspy</a>
+                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/extended-scrollspy.html">Scrollspy</a>
                                     </li>
                                     <li>
-                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/extended-treeview.html">Treeview</a>
+                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/extended-treeview.html">Treeview</a>
                                     </li>
                                 </ul>
                             </div>
                         </li>
 
                         <li class="side-nav-item">
-                            <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/widgets.html" class="side-nav-link">
+                            <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/widgets.html" class="side-nav-link">
                                 <i class="uil-layer-group"></i>
                                 <span> Widgets </span>
                             </a>
@@ -514,13 +522,13 @@
                             <div class="collapse" id="sidebarIcons">
                                 <ul class="side-nav-second-level">
                                     <li>
-                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/icons-dripicons.html">Dripicons</a>
+                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/icons-dripicons.html">Dripicons</a>
                                     </li>
                                     <li>
-                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/icons-mdi.html">Material Design</a>
+                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/icons-mdi.html">Material Design</a>
                                     </li>
                                     <li>
-                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/icons-unicons.html">Unicons</a>
+                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/icons-unicons.html">Unicons</a>
                                     </li>
                                 </ul>
                             </div>
@@ -535,22 +543,22 @@
                             <div class="collapse" id="sidebarForms">
                                 <ul class="side-nav-second-level">
                                     <li>
-                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/form-elements.html">Basic Elements</a>
+                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/form-elements.html">Basic Elements</a>
                                     </li>
                                     <li>
-                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/form-advanced.html">Form Advanced</a>
+                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/form-advanced.html">Form Advanced</a>
                                     </li>
                                     <li>
-                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/form-validation.html">Validation</a>
+                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/form-validation.html">Validation</a>
                                     </li>
                                     <li>
-                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/form-wizard.html">Wizard</a>
+                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/form-wizard.html">Wizard</a>
                                     </li>
                                     <li>
-                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/form-fileuploads.html">File Uploads</a>
+                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/form-fileuploads.html">File Uploads</a>
                                     </li>
                                     <li>
-                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/form-editors.html">Editors</a>
+                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/form-editors.html">Editors</a>
                                     </li>
                                 </ul>
                             </div>
@@ -572,55 +580,55 @@
                                         <div class="collapse" id="sidebarApexCharts">
                                             <ul class="side-nav-third-level">
                                                 <li>
-                                                    <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/charts-apex-area.html">Area</a>
+                                                    <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/charts-apex-area.html">Area</a>
                                                 </li>
                                                 <li>
-                                                    <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/charts-apex-bar.html">Bar</a>
+                                                    <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/charts-apex-bar.html">Bar</a>
                                                 </li>
                                                 <li>
-                                                    <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/charts-apex-bubble.html">Bubble</a>
+                                                    <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/charts-apex-bubble.html">Bubble</a>
                                                 </li>
                                                 <li>
-                                                    <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/charts-apex-candlestick.html">Candlestick</a>
+                                                    <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/charts-apex-candlestick.html">Candlestick</a>
                                                 </li>
                                                 <li>
-                                                    <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/charts-apex-column.html">Column</a>
+                                                    <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/charts-apex-column.html">Column</a>
                                                 </li>
                                                 <li>
-                                                    <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/charts-apex-heatmap.html">Heatmap</a>
+                                                    <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/charts-apex-heatmap.html">Heatmap</a>
                                                 </li>
                                                 <li>
-                                                    <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/charts-apex-line.html">Line</a>
+                                                    <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/charts-apex-line.html">Line</a>
                                                 </li>
                                                 <li>
-                                                    <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/charts-apex-mixed.html">Mixed</a>
+                                                    <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/charts-apex-mixed.html">Mixed</a>
                                                 </li>
                                                 <li>
-                                                    <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/charts-apex-pie.html">Pie</a>
+                                                    <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/charts-apex-pie.html">Pie</a>
                                                 </li>
                                                 <li>
-                                                    <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/charts-apex-radar.html">Radar</a>
+                                                    <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/charts-apex-radar.html">Radar</a>
                                                 </li>
                                                 <li>
-                                                    <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/charts-apex-radialbar.html">RadialBar</a>
+                                                    <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/charts-apex-radialbar.html">RadialBar</a>
                                                 </li>
                                                 <li>
-                                                    <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/charts-apex-scatter.html">Scatter</a>
+                                                    <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/charts-apex-scatter.html">Scatter</a>
                                                 </li>
                                                 <li>
-                                                    <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/charts-apex-sparklines.html">Sparklines</a>
+                                                    <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/charts-apex-sparklines.html">Sparklines</a>
                                                 </li>
                                             </ul>
                                         </div>
                                     </li>
                                     <li>
-                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/charts-brite.html">Britecharts</a>
+                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/charts-brite.html">Britecharts</a>
                                     </li>
                                     <li>
-                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/charts-chartjs.html">Chartjs</a>
+                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/charts-chartjs.html">Chartjs</a>
                                     </li>
                                     <li>
-                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/charts-sparkline.html">Sparklines</a>
+                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/charts-sparkline.html">Sparklines</a>
                                     </li>
                                 </ul>
                             </div>
@@ -635,10 +643,10 @@
                             <div class="collapse" id="sidebarTables">
                                 <ul class="side-nav-second-level">
                                     <li>
-                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/tables-basic.html">Basic Tables</a>
+                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/tables-basic.html">Basic Tables</a>
                                     </li>
                                     <li>
-                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/tables-datatable.html">Data Tables</a>
+                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/tables-datatable.html">Data Tables</a>
                                     </li>
                                 </ul>
                             </div>
@@ -653,10 +661,10 @@
                             <div class="collapse" id="sidebarMaps">
                                 <ul class="side-nav-second-level">
                                     <li>
-                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/maps-google.html">Google Maps</a>
+                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/maps-google.html">Google Maps</a>
                                     </li>
                                     <li>
-                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>templates/maps-vector.html">Vector Maps</a>
+                                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/templates/maps-vector.html">Vector Maps</a>
                                     </li>
                                 </ul>
                             </div>
@@ -725,7 +733,7 @@
                         <a href="javascript: void(0);" class="float-end close-btn text-white">
                             <i class="mdi mdi-close"></i>
                         </a>
-                        <img src="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>assets/images/help-icon.svg" height="90" alt="Helper Icon Image" />
+                        <img src="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/assets/images/help-icon.svg" height="90" alt="Helper Icon Image" />
                         <h5 class="mt-3">Unlimited Access</h5>
                         <p class="mb-3">Upgrade to plan to get access to unlimited reports</p>
                         <a href="javascript: void(0);" class="btn btn-secondary btn-sm">Upgrade</a>
@@ -761,7 +769,7 @@
                                 <a class="nav-link dropdown-toggle nav-user arrow-none me-0" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false"
                                     aria-expanded="false">
                                     <span class="account-user-avatar"> 
-                                        <img src="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>assets/images/users/avatar-1.jpg" alt="user-image" class="rounded-circle">
+                                        <img src="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/assets/images/users/avatar-1.jpg" alt="user-image" class="rounded-circle">
                                     </span>
                                     <span>
                                         <span class="account-user-name">Dominic Keller</span>

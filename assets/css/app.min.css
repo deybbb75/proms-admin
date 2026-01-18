@@ -11161,7 +11161,9 @@ body{
     line-height:70px;
     width:260px;
     position:fixed;
-    top:0
+    top:0;
+    transition: 
+        width 0.4s ease
 }
 .logo span.logo-lg{
     display:block
@@ -11195,7 +11197,9 @@ body{
     top:0;
     padding-top:70px;
     -webkit-box-shadow:var(--ct-box-shadow);
-    box-shadow:var(--ct-box-shadow)
+    box-shadow:var(--ct-box-shadow);
+    transition: 
+        width 0.4s ease
 }
 .side-nav{
     padding-left:0;
@@ -11306,10 +11310,11 @@ body[data-leftbar-compact-mode=condensed]:not(.authentication-bg){
 }
 body[data-leftbar-compact-mode=condensed]:not(.authentication-bg) .wrapper .leftside-menu{
     position:absolute;
-    padding-top:0;
     width:70px;
-    z-index:5;
-    padding-top:70px
+    z-index:10000;
+    padding-top:70px;
+    transition: 
+        width 0.4s ease
 }
 body[data-leftbar-compact-mode=condensed]:not(.authentication-bg) .wrapper .leftside-menu .simplebar-content-wrapper,body[data-leftbar-compact-mode=condensed]:not(.authentication-bg) .wrapper .leftside-menu .simplebar-mask{
     overflow:visible!important
@@ -11323,7 +11328,7 @@ body[data-leftbar-compact-mode=condensed]:not(.authentication-bg) .wrapper .left
 body[data-leftbar-compact-mode=condensed]:not(.authentication-bg) .wrapper .leftside-menu .logo{
     width:70px;
     z-index:1;
-    background:var(--ct-bg-leftbar-gradient)
+    background:var(--ct-bg-leftbar-gradient);
 }
 body[data-leftbar-compact-mode=condensed]:not(.authentication-bg) .wrapper .help-box{
     display:none
@@ -11745,7 +11750,7 @@ body[data-leftbar-theme=dark] .leftside-menu{
     background:var(--ct-bg-leftbar)
 }
 body[data-leftbar-theme=dark] .leftside-menu .logo{
-    background:var(--ct-bg-leftbar)!important
+    background:var(--ct-bg-leftbar)!important;
 }
 body[data-leftbar-theme=dark] .side-nav .side-nav-link{
     color:var(--ct-dark-menu-item)

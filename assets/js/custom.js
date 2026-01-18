@@ -150,3 +150,8 @@ function reInitUI(container) {
         $(this).addClass('was-validated');
     });
 }
+
+window.onload = () => {
+  document.getElementById("main-preloader").style.display = "none";
+  document.getElementById("content").style.display = "block";
+};
