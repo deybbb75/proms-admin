@@ -151,7 +151,8 @@ function reInitUI(container) {
     });
 }
 
-window.onload = () => {
-  document.getElementById("main-preloader").style.display = "none";
-  document.getElementById("content").style.display = "block";
-};
+$(function () {
+	setTimeout(function () {
+		$("#main-preloader").fadeOut();
+	}, 50);
+});

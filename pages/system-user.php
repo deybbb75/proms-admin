@@ -38,10 +38,32 @@ $db = DB::getInstance();
                                         <th>Email</th>
                                         <th>Role</th>
                                         <th>Status</th>
+                                        <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    
+                                    <?php
+                                        $system_users_query = $db->query("SELECT * FROM tbl_system_user");
+
+                                        while ($line = $db->fetchNextObject($system_users_query)) {
+                                    ?>
+                                    <tr>
+                                        <td><?= $line->sys_id ?></td>
+                                        <td><?= $line->emp_no ?></td>
+                                        <td><?= $line->fname ?> <?= $line->mname ?> <?= $line->lname ?></td>
+                                        <td><?= $line->email; ?></td>
+                                        <td><?= $line->role; ?></td>
+                                        <td><?= $line->status; ?></td>
+                                        <td>
+                                            <button class="btn btn-success ms-1"><i class="mdi mdi-square-edit-outline"></i></button>
+                                            <button class="btn btn-danger ms-1"><i class="mdi mdi-delete"></i></button>
+                                            <!-- <a href="javascript:void(0);" class="action-icon"><i class="mdi mdi-square-edit-outline"></i></a>
+                                            <a href="javascript:void(0);" class="action-icon"><i class="mdi mdi-delete"></i></a> -->
+                                        </td>
+                                    </tr>
+                                    <?php
+                                        }
+                                    ?>
                                 </tbody>
                             </table>                                           
                         </div> <!-- end preview-->

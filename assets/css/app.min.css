@@ -13804,9 +13804,9 @@ body{
     padding-right:0!important;
     padding-left:0!important
 }
-body.loading{
+/* body.loading{
     visibility:hidden
-}
+} */
 a,button{
     outline:0!important
 }
@@ -17659,11 +17659,11 @@ table.dataTable tbody>tr.selected td,table.dataTable tbody>tr>.selected td{
 table.dataTable tbody td:focus{
     outline:0!important
 }
-table.dataTable tbody td.focus,table.dataTable tbody th.focus{
+/* table.dataTable tbody td.focus,table.dataTable tbody th.focus{
     outline:2px solid var(--primary-color)!important;
     outline-offset:-1px;
     background-color:rgba(var(--primary-rgb),.15)
-}
+} */
 .dataTables_info{
     font-weight:600
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Database connection and query execution class.
  * This class provides methods for interacting with a MySQL database using PDO.
@@ -14,6 +15,7 @@
  * NEW UPDATES:
  * Version 1.3
  * - Added support for named instances to allow multiple database connections.
+ * - Changed DB::$affectedRows() to $db->affectedRows property for better usability.
  *
  * Version 1.2
  * - Added hasDuplicate() method to check for duplicate entries.
@@ -65,355 +67,986 @@
  * * -> Utility functions:
  * - hasDuplicate($sql, $params = array(), $m = true): Check for duplicate entries in the database.
  */
-declare(strict_types=1);
-
 require_once 'DBException.php';
 
 class DB
 {
-    private ?PDO $pdo = null;
-    private static array $instances = [];
-    private bool $showErrors = false;
-
-    public int $affectedRows = 0;
-
-    private float $mtStart;
-    private int $nbQueries = 0;
-    private ?PDOStatement $lastResult = null;
-
-    private string $alias;
+    private $pdo;
+    private static $instances = [];     // Support multiple named instances
+    private $showErrors       = false;  // Set to true for development, false for production
 
     /**
-     * Constructor
+     * INTERNAL: The number of affected rows from the last query.
      */
-    private function __construct(array $config, string $alias = 'default')
-    {
-        $this->alias   = $alias;
-        $this->mtStart = microtime(true);
+    public $affectedRows;
 
-        $this->showErrors = $config['showErrors'] ?? false;
+    /**
+     * INTERNAL: The start time, in miliseconds.
+     */
+    private $mtStart;
+
+    /**
+     * INTERNAL: The number of executed queries.
+     */
+    private $nbQueries;
+
+    /**
+     * INTERNAL: The last result resource of a query().
+     */
+    private $lastResult;
+
+    /**
+     * INTERNAL: The instance alias/name
+     */
+    private $alias;
+
+    private function __construct($config, $alias = 'default')
+    {
+        $this->alias      = $alias;
+        $this->mtStart    = $this->getMicroTime();
+        $this->nbQueries  = 0;
+        $this->lastResult = NULL;
+
+        // Set error display mode from configuration (default: false for production)
+        $this->showErrors = isset($config['showErrors']) ? (bool) $config['showErrors'] : false;
 
         if (!isset($config['dbHost'], $config['dbUser'], $config['dbPass'], $config['dbDatabase'])) {
-            throw new DBException("Database configuration is incomplete.");
+            throw new DBException('Database configuration is incomplete.');
         }
 
         try {
-            $dsn = "mysql:host={$config['dbHost']};dbname={$config['dbDatabase']};charset=utf8mb4";
-
-            $this->pdo = new PDO(
-                $dsn,
-                $config['dbUser'],
-                $config['dbPass'],
-                [
-                    PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
-                    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-                    PDO::ATTR_EMULATE_PREPARES   => false
-                ]
-            );
+            $dsn       = "mysql:host={$config['dbHost']};dbname={$config['dbDatabase']};charset=utf8mb4";
+            $this->pdo = new PDO($dsn, $config['dbUser'], $config['dbPass']);
+            $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
             $this->handleError($e);
-            throw new DBException(
-                $this->showErrors
-                    ? "Connection failed: " . $e->getMessage()
-                    : "Database connection error."
-            );
+            $errorMessage = $this->showErrors
+                ? 'Database connection error: ' . $e->getMessage()
+                : 'Database connection error. Please check your configuration.';
+            throw new DBException($errorMessage);
         }
     }
 
-    /**
-     * Singleton instance
-     */
-    public static function getInstance(string $alias = 'default', ?array $config = null): DB
+    public static function getInstance($alias = 'default', $config = null)
     {
         if (!isset(self::$instances[$alias])) {
-
-            if (!$config) {
+            if ($config === null) {
+                // Set fallback to global config if none provided
                 if (!isset($GLOBALS['INF_CONFIG'])) {
-                    throw new DBException("No database configuration found.");
+                    throw new DBException('No database configuration found.');
                 }
                 $config = $GLOBALS['INF_CONFIG'];
             }
-
             self::$instances[$alias] = new DB($config, $alias);
         }
         return self::$instances[$alias];
     }
 
-    /**
-     * Get instance with overridden database name
-     */
-    public static function getInstanceWithDB(string $alias, string $dbname): DB
+    public static function getInstanceWithDB($alias, $dbname)
     {
         if (!isset($GLOBALS['INF_CONFIG'])) {
-            throw new DBException("No global database config found.");
+            throw new DBException('No database configuration found.');
         }
-
-        $config = $GLOBALS['INF_CONFIG'];
-        $config['dbDatabase'] = $dbname;
-
+        $config               = $GLOBALS['INF_CONFIG'];
+        $config['dbDatabase'] = $dbname;  // Override database name
         return self::getInstance($alias, $config);
     }
 
-    /**
-     * Error handling + log
-     */
-    private function handleError(Throwable $e): void
+    private function handleError(PDOException $e)
     {
-        $logFile = __DIR__ . "/db_errors.log";
+        $logFile = __DIR__ . '/db_errors.log';
+        $message = '[' . date('Y-m-d H:i:s') . '] Error: ' . $e->getMessage() . PHP_EOL
+            . 'Trace: ' . $e->getTraceAsString() . PHP_EOL . PHP_EOL;
 
-        $message = "[" . date("Y-m-d H:i:s") . "] "
-                 . $e->getMessage() . PHP_EOL
-                 . $e->getTraceAsString() . PHP_EOL . PHP_EOL;
-
+        // Always log errors to file
         error_log($message, 3, $logFile);
 
+        // Only display detailed errors if showErrors is enabled (development mode)
         if ($this->showErrors) {
-            error_log("DB ERROR: " . $e->getMessage());
+            // Development mode: Show detailed error information
+            error_log('DB Error: ' . $e->getMessage());
+            error_log('File: ' . $e->getFile() . ' Line: ' . $e->getLine());
         }
     }
-
-    private function createErrorMessage(string $dev, string $prod = "A database error occurred."): string
-    {
-        return $this->showErrors ? $dev : $prod;
-    }
-
-    public function enableErrorDisplay(): void { $this->showErrors = true; }
-    public function disableErrorDisplay(): void { $this->showErrors = false; }
-    public function isErrorDisplayEnabled(): bool { return $this->showErrors; }
 
     /**
-     * Validate SQL — PHP 8.4 safe
+     * Create a user-friendly error message based on showErrors setting.
+     * @param string $devMessage Detailed error message for development.
+     * @param string $prodMessage Generic error message for production.
+     * @return string The appropriate error message.
      */
-    private function validateSQL(string $sql): string
+    private function createErrorMessage($devMessage, $prodMessage = 'A database error occurred. Please try again.')
     {
-        if (stripos($sql, "DROP ") !== false ||
-            stripos($sql, "TRUNCATE ") !== false ||
-            stripos($sql, "--") !== false
-        ) {
-            throw new DBException("Dangerous SQL detected.");
-        }
-        return $sql;
+        return $this->showErrors ? $devMessage : $prodMessage;
     }
 
-    private function validateTableName(string $table): string
+    /**
+     * Enable error display for development environments.
+     * @return void
+     */
+    public function enableErrorDisplay()
     {
-        if (!preg_match('/^[a-zA-Z0-9_]+$/', $table)) {
-            throw new DBException("Invalid table name.");
+        $this->showErrors = true;
+    }
+
+    /**
+     * Disable error display for production environments.
+     * @return void
+     */
+    public function disableErrorDisplay()
+    {
+        $this->showErrors = false;
+    }
+
+    /**
+     * Check if error display is enabled.
+     * @return bool True if errors are displayed, false otherwise.
+     */
+    public function isErrorDisplayEnabled()
+    {
+        return $this->showErrors;
+    }
+
+    /**
+     * Set error display mode.
+     * @param bool $enabled True to enable error display, false to disable.
+     * @return void
+     */
+    public function setErrorDisplay($enabled)
+    {
+        $this->showErrors = (bool) $enabled;
+    }
+
+    /**
+     * Sanitize input data by trimming whitespace from strings.
+     */
+    public function sanitizeInput(array $data)
+    {
+        foreach ($data as $key => $value) {
+            if (is_resource($value))
+                continue;
+            if (is_string($value)) {
+                $data[$key] = trim($value);
+            }
+        }
+        return $data;
+    }
+
+    /**
+     * Get the PDO parameter type based on the value's type.
+     * @param mixed $value The value to determine the parameter type for.
+     * @return int The PDO parameter type constant.
+     */
+    private static function getPDOParamType($value)
+    {
+        switch (true) {
+            case is_int($value):
+                return PDO::PARAM_INT;
+            case is_bool($value):
+                return PDO::PARAM_BOOL;
+            case is_null($value):
+                return PDO::PARAM_NULL;
+            case is_resource($value):
+                return PDO::PARAM_LOB;
+            default:
+                return PDO::PARAM_STR;
+        }
+    }
+
+    /**
+     * Bind all values in the given associative array to the prepared statement.
+     * @param PDOStatement $stmt The prepared statement to bind values to.
+     * @param array $params The associative array of parameters to bind.
+     */
+    private function bindAllValues(PDOStatement $stmt, array $params)
+    {
+        foreach ($params as $key => $value) {
+            $stmt->bindValue(':' . $key, $value, self::getPDOParamType($value));
+        }
+    }
+
+    /**
+     * Get the current microtime in seconds.
+     * @return float The current microtime.
+     */
+    private function getMicroTime()
+    {
+        list($msec, $sec) = explode(' ', microtime());
+        return floor($sec / 1000) + $msec;
+    }
+
+    /**
+     * Get the execution time of the database operations in seconds.
+     * @return float The execution time in seconds.
+     */
+    public function getExecTime()
+    {
+        return round(($this->getMicroTime() - $this->mtStart) * 1000) / 1000;
+    }
+
+    /**
+     * Get the number of queries executed since the last reset.
+     * @return int The number of executed queries.
+     */
+    public function getQueriesCount()
+    {
+        return $this->nbQueries;
+    }
+
+    /**
+     * Go back to the first element of the result line.
+     * @param $result The resssource returned by a query() function.
+     */
+    public function resetFetch()
+    {
+        if ($this->lastResult instanceof PDOStatement) {
+            $this->lastResult->execute();  // Reset the cursor to the beginning
+        } else {
+            $this->handleError(new PDOException('No valid result set to reset.'));
+            throw new DBException('No valid result set to reset.');
+        }
+    }
+
+    /**
+     * Get the last inserted ID from the database.
+     * @return string The last inserted ID.
+     * @throws DBException If there is no database connection available.
+     */
+    public function lastInsertedId()
+    {
+        if ($this->pdo) {
+            return $this->pdo->lastInsertId();
+        } else {
+            $this->handleError(new PDOException('No database connection available.'));
+            throw new DBException('No database connection available.');
+        }
+    }
+
+    /**
+     * Close the database connection.
+     * This method is called automatically when the script ends, but can be called manually if needed.
+     */
+    public function close($alias = 'default')
+    {
+        $this->pdo = null;                      // Close the connection
+        unset(self::$instances[$this->alias]);  // Remove instance from the static array
+    }
+
+    /**
+     * Query the database with a prepared statement.
+     * @param string $sql The SQL query to execute.
+     * @param array $params The parameters to bind to the query.
+     * @return PDOStatement The prepared statement object, to use with fetchNextObject().
+     * @throws DBException If the query fails.
+     */
+    public function query($sql, array $params = array())
+    {
+        try {
+            $this->nbQueries++;
+            $params = $this->sanitizeInput($params);
+            $sql    = $this->validateSQL($sql);
+            $sql    = rtrim($sql, ';');  // Ensure no trailing semicolon
+            $stmt   = $this->pdo->prepare($sql);
+            $this->bindAllValues($stmt, $params);
+            $stmt->execute();
+            $this->affectedRows = $stmt->rowCount();
+            $this->lastResult   = $stmt;
+            return $stmt;
+        } catch (PDOException $e) {
+            $this->handleError($e);
+            $errorMessage = $this->createErrorMessage(
+                'Database query error: ' . $e->getMessage()
+            );
+            throw new DBException($errorMessage);
+        }
+    }
+
+    /**
+     * Get all data from the database.
+     * @param string $sql The SQL query to execute.
+     * @param array $params The parameters to bind to the query.
+     * @return array The result set as an associative array.
+     * @throws DBException If the query fails.
+     */
+    public function select($sql, array $params = array())
+    {
+        try {
+            $this->nbQueries++;
+            $params = $this->sanitizeInput($params);
+            $sql    = $this->validateSQL($sql);
+            $sql    = rtrim($sql, ';');  // Ensure no trailing semicolon
+            $stmt   = $this->pdo->prepare($sql);
+            $this->bindAllValues($stmt, $params);
+            $stmt->execute();
+            $this->affectedRows = $stmt->rowCount();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            $this->handleError($e);
+            $errorMessage = $this->createErrorMessage(
+                'Database query error: ' . $e->getMessage()
+            );
+            throw new DBException($errorMessage);
+        }
+    }
+
+    /**
+     * Run a SQL command that does not return data (e.g., INSERT, UPDATE, DELETE).
+     * @param string $sql The SQL command to execute.
+     * @param array $params The parameters to bind to the command.
+     * @return bool True on success, false on failure.
+     * @throws DBException If the command fails.
+     */
+    public function run($sql, array $params = array())
+    {
+        try {
+            $this->nbQueries++;
+            $params = $this->sanitizeInput($params);
+            $sql    = $this->validateSQL($sql);
+            $sql    = rtrim($sql, ';');  // Ensure no trailing semicolon
+            $stmt   = $this->pdo->prepare($sql);
+            $this->bindAllValues($stmt, $params);
+            $stmt->execute();
+            $this->affectedRows = $stmt->rowCount();
+            return true;
+        } catch (PDOException $e) {
+            $this->handleError($e);
+            $errorMessage = $this->createErrorMessage(
+                'Database query error: ' . $e->getMessage()
+            );
+            throw new DBException($errorMessage);
+        }
+    }
+
+    /**
+     * Fetch the next row as an object from the given statement or the last result.
+     * Useful for iterating results in a while loop.
+     * @param PDOStatement|null $stmt The statement to fetch from, or null to use last result.
+     * @return object|false The next row as an object, or false if no more rows.
+     */
+    public function fetchNextObject($stmt = NULL)
+    {
+        if ($stmt == NULL) {
+            $stmt = $this->lastResult;
+        }
+        if ($stmt instanceof PDOStatement) {
+            try {
+                return $stmt->fetchObject();
+            } catch (PDOException $e) {
+                $this->handleError($e);
+                return false;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Get the number of rows returned by the last query.
+     * Note: For SELECT statements, this may not work reliably with MySQL.
+     * Use COUNT(*) queries for accurate row counts with SELECT statements.
+     * @param PDOStatement|null $stmt The statement to check, or null to use last result.
+     * @return int The number of rows returned.
+     */
+    public function numRows($stmt = NULL)
+    {
+        if ($stmt == NULL) {
+            $stmt = $this->lastResult;
+        }
+        if ($stmt instanceof PDOStatement) {
+            try {
+                return $stmt->rowCount();
+            } catch (PDOException $e) {
+                $this->handleError($e);
+                return 0;
+            }
+        }
+        return 0;
+    }
+
+    /**
+     * Get data in JSON format.
+     * @param string $sql The SQL query to execute.
+     * @param array $params The parameters to bind to the query.
+     * @throws DBException If the query fails.
+     * @return string The JSON-encoded result set.
+     */
+    public function queryGetJSON($sql, $params = array())
+    {
+        try {
+            $this->nbQueries++;
+            $params = $this->sanitizeInput($params);
+            $sql    = rtrim($sql, ';');  // Ensure no trailing semicolon
+            $this->validateSQL($sql);
+            $stmt = $this->pdo->prepare($sql);
+            $this->bindAllValues($stmt, $params);
+            $stmt->execute();
+            $data = array();
+            while ($row = $this->fetchNextObject($stmt)) {
+                $data[] = $row;
+            }
+            return json_encode($data, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+        } catch (Exception $e) {
+            $this->handleError($e);
+            $errorMessage = $this->createErrorMessage(
+                'Database query error: ' . $e->getMessage()
+            );
+            throw new DBException($errorMessage);
+        }
+    }
+
+    /**
+     * Fetch a unique object from the database.
+     * @param string $sql The SQL query to execute.
+     * @param array $params The parameters to bind to the query.
+     * @return object|null The fetched object, or null if not found.
+     */
+    public function queryUniqueObject($sql, array $params = array())
+    {
+        try {
+            $params = $this->sanitizeInput($params);
+            $sql    = $this->validateSQL($sql);
+            $sql    = rtrim($sql, ';');  // Ensure no trailing semicolon
+            if (strpos($sql, 'LIMIT') === false) {
+                $sql .= ' LIMIT 1';      // Ensure we only fetch one result
+            }
+            $stmt = $this->pdo->prepare($sql);
+            $this->bindAllValues($stmt, $params);
+            $stmt->execute();
+            $result = $this->fetchNextObject($stmt);
+            return $result ?: null;      // Return null if no result found
+        } catch (PDOException $e) {
+            $this->handleError($e);
+            $errorMessage = $this->createErrorMessage(
+                'Database query error: ' . $e->getMessage()
+            );
+            throw new DBException($errorMessage);
+        }
+    }
+
+    /**
+     * Fetch a unique value from the database.
+     * @param string $sql The SQL query to execute.
+     * @param array $params The parameters to bind to the query.
+     * @return string|null The fetched value, or null if not found.
+     */
+    public function queryUniqueValue($sql, array $params = array())
+    {
+        try {
+            $params = $this->sanitizeInput($params);
+            $sql    = $this->validateSQL($sql);
+            $sql    = rtrim($sql, ';');                          // Ensure no trailing semicolon
+            if (strpos($sql, 'LIMIT') === false) {
+                $sql .= ' LIMIT 1';                              // Ensure we only fetch one result
+            }
+            $stmt = $this->pdo->prepare($sql);
+            $this->bindAllValues($stmt, $params);
+            $stmt->execute();
+            $result = $stmt->fetchColumn();
+            return $result !== false ? (string) $result : null;  // Return null if no result found
+        } catch (PDOException $e) {
+            $this->handleError($e);
+            $errorMessage = $this->createErrorMessage(
+                'Database query error: ' . $e->getMessage()
+            );
+            throw new DBException($errorMessage);
+        }
+    }
+
+    /**
+     * Count the number of rows in a table with optional WHERE conditions.
+     * @param string $table The name of the table to count rows from.
+     * @param string $where Optional WHERE clause conditions.
+     * @param array $params Optional associative array of parameters for the WHERE clause.
+     * @return int The number of rows matching the conditions.
+     * @throws DBException If the query fails.
+     */
+    public function countOf($table, $where = '', array $params = array())
+    {
+        $table  = $this->validateTableName($table);
+        $params = $this->sanitizeInput($params);
+        $sql    = "SELECT COUNT(*) FROM `$table`";
+        if (!empty($where)) {
+            $sql .= " WHERE $where";
+        }
+        try {
+            $this->nbQueries++;
+            $sql  = $this->validateSQL($sql);
+            $sql  = rtrim($sql, ';');  // Ensure no trailing semicolon
+            $stmt = $this->pdo->prepare($sql);
+            $this->bindAllValues($stmt, $params);
+            $stmt->execute();
+            return (int) $stmt->fetchColumn();
+        } catch (PDOException $e) {
+            $this->handleError($e);
+            $errorMessage = $this->createErrorMessage(
+                'Database query error: ' . $e->getMessage()
+            );
+            throw new DBException($errorMessage);
+        }
+    }
+
+    /**
+     * Get the sum of a column in a table with optional WHERE conditions.
+     * @param string $table The name of the table to get the sum from.
+     * @param string $column The name of the column to sum.
+     * @param string $where Optional WHERE clause conditions.
+     * @param array $params Optional associative array of parameters for the WHERE clause.
+     * @return float The sum of the specified column.
+     * @throws DBException If the query fails.
+     */
+    public function sumOf($column, $table, $where = '', array $params = array())
+    {
+        $column = $this->validateColumnName($column);
+        $table  = $this->validateTableName($table);
+        $params = $this->sanitizeInput($params);
+        $sql    = "SELECT SUM(`$column`) FROM `$table`";
+        if (!empty($where)) {
+            $sql .= " WHERE $where";
+        }
+        try {
+            $this->nbQueries++;
+            $sql  = $this->validateSQL($sql);
+            $sql  = rtrim($sql, ';');  // Ensure no trailing semicolon
+            $stmt = $this->pdo->prepare($sql);
+            $this->bindAllValues($stmt, $params);
+            $stmt->execute();
+            return (float) $stmt->fetchColumn();
+        } catch (PDOException $e) {
+            $this->handleError($e);
+            $errorMessage = $this->createErrorMessage(
+                'Database query error: ' . $e->getMessage()
+            );
+            throw new DBException($errorMessage);
+        }
+    }
+
+    /**
+     * Get the sum of a column in a table with optional WHERE conditions.
+     * @param string $table The name of the table to get the sum from.
+     * @param string $column The name of the column to sum.
+     * @param string $where Optional WHERE clause conditions.
+     * @param array $params Optional associative array of parameters for the WHERE clause.
+     * @return float The sum of the specified column.
+     * @throws DBException If the query fails.
+     */
+    public function maxOf($column, $table, $where = '', array $params = array())
+    {
+        $column = $this->validateColumnName($column);
+        $table  = $this->validateTableName($table);
+        $params = $this->sanitizeInput($params);
+        $sql    = "SELECT MAX(`$column`) FROM `$table`";
+        if (!empty($where)) {
+            $sql .= " WHERE $where";
+        }
+        try {
+            $this->nbQueries++;
+            $sql  = $this->validateSQL($sql);
+            $sql  = rtrim($sql, ';');  // Ensure no trailing semicolon
+            $stmt = $this->pdo->prepare($sql);
+            $this->bindAllValues($stmt, $params);
+            $stmt->execute();
+            return (float) $stmt->fetchColumn();
+        } catch (PDOException $e) {
+            $this->handleError($e);
+            $errorMessage = $this->createErrorMessage(
+                'Database query error: ' . $e->getMessage()
+            );
+            throw new DBException($errorMessage);
+        }
+    }
+
+    /**
+     * Get the minimum value of a column in a table with optional WHERE conditions.
+     * @param string $table The name of the table to get the min value from.
+     * @param string $column The name of the column to get the min value of.
+     * @param string $where Optional WHERE clause conditions.
+     * @param array $params Optional associative array of parameters for the WHERE clause.
+     * @return float The minimum value of the specified column.
+     * @throws DBException If the query fails.
+     */
+    public function minOf($column, $table, $where = '', array $params = array())
+    {
+        $column = $this->validateColumnName($column);
+        $table  = $this->validateTableName($table);
+        $params = $this->sanitizeInput($params);
+        $sql    = "SELECT MIN(`$column`) FROM `$table`";
+        if (!empty($where)) {
+            $sql .= " WHERE $where";
+        }
+        try {
+            $this->nbQueries++;
+            $sql  = $this->validateSQL($sql);
+            $sql  = rtrim($sql, ';');  // Ensure no trailing semicolon
+            $stmt = $this->pdo->prepare($sql);
+            $this->bindAllValues($stmt, $params);
+            $stmt->execute();
+            return (float) $stmt->fetchColumn();
+        } catch (PDOException $e) {
+            $this->handleError($e);
+            $errorMessage = $this->createErrorMessage(
+                'Database query error: ' . $e->getMessage()
+            );
+            throw new DBException($errorMessage);
+        }
+    }
+
+    /**
+     * Insert data into a table.
+     * @param array $data An associative array of column names and values to insert.
+     * @param string $table The name of the table to insert into.
+     * @return bool True on success, false on failure.
+     * @throws DBException If the insert fails.
+     */
+    public function executeInsert(array $data, $table)
+    {
+        $table = $this->validateTableName($table);
+        $this->validateColumnNames(array_keys($data));
+        $data = $this->sanitizeInput($data);
+
+        $columns      = implode('`, `', array_keys($data));
+        $placeholders = ':' . implode(', :', array_keys($data));
+        $sql          = "INSERT INTO `$table` (`$columns`) VALUES ($placeholders)";
+
+        try {
+            $this->nbQueries++;
+            $sql  = $this->validateSQL($sql);
+            $sql  = rtrim($sql, ';');
+            $stmt = $this->pdo->prepare($sql);
+            $this->bindAllValues($stmt, $data);  // Bind all values manually
+            $stmt->execute();
+            $this->affectedRows = $stmt->rowCount();
+            return true;
+        } catch (PDOException $e) {
+            $this->handleError($e);
+            $errorMessage = $this->createErrorMessage(
+                'Database query error: ' . $e->getMessage()
+            );
+            throw new DBException($errorMessage);
+        }
+    }
+
+    /**
+     * Update data in a table.
+     * @param array $data An associative array of column names and values to update.
+     * @param string $table The name of the table to update.
+     * @param string $where The WHERE clause conditions for the update.
+     * @param array $params Optional associative array of parameters for the WHERE clause.
+     * @return bool True on success, false on failure.
+     * @throws DBException If the update fails.
+     */
+    public function executeUpdate(array $data, $table, $where, array $params = array())
+    {
+        $table = $this->validateTableName($table);
+        $this->validateColumnNames(array_keys($data));
+        $this->validateColumnNames(array_keys($params));
+
+        $data   = $this->sanitizeInput($data);
+        $params = $this->sanitizeInput($params);
+
+        $setParts = array();
+        foreach ($data as $key => $value) {
+            $setParts[]         = "`$key` = :set_$key";
+            $params["set_$key"] = $value;
+        }
+        $setClause = implode(', ', $setParts);
+
+        $sql = "UPDATE `$table` SET $setClause WHERE $where";
+
+        try {
+            $this->nbQueries++;
+            $sql  = $this->validateSQL($sql);
+            $sql  = rtrim($sql, ';');
+            $stmt = $this->pdo->prepare($sql);
+            $this->bindAllValues($stmt, $params);  // Bind all values manually
+            $stmt->execute();
+            $this->affectedRows = $stmt->rowCount();
+            return true;
+        } catch (PDOException $e) {
+            $this->handleError($e);
+            $errorMessage = $this->createErrorMessage(
+                'Database query error: ' . $e->getMessage()
+            );
+            throw new DBException($errorMessage);
+        }
+    }
+
+    /**
+     * Delete data from a table.
+     * @param string $table The name of the table to delete from.
+     * @param string $where The WHERE clause conditions for the delete.
+     * @param array $params Optional associative array of parameters for the WHERE clause.
+     * @return bool True on success, false on failure.
+     * @throws DBException If the delete fails.
+     */
+    public function executeDelete($table, $where, array $params = array())
+    {
+        $table  = $this->validateTableName($table);
+        $params = $this->sanitizeInput($params);
+
+        $sql = "DELETE FROM `$table` WHERE $where";
+
+        try {
+            $this->nbQueries++;
+            $sql  = $this->validateSQL($sql);
+            $sql  = rtrim($sql, ';');  // Ensure no trailing semicolon
+            $stmt = $this->pdo->prepare($sql);
+            $this->bindAllValues($stmt, $params);
+            $stmt->execute();
+            $this->affectedRows = $stmt->rowCount();
+            return true;
+        } catch (PDOException $e) {
+            $this->handleError($e);
+            $errorMessage = $this->createErrorMessage(
+                'Database query error: ' . $e->getMessage()
+            );
+            throw new DBException($errorMessage);
+        }
+    }
+
+    /**
+     * Check for duplicate entries in the database.
+     * @param string $sql The SQL query to check for duplicates.
+     * @param array $params The parameters to bind to the query.
+     * @param bool $m Whether to use a specific method for checking duplicates.
+     * @return bool True if duplicates are found, false otherwise.
+     * @throws DBException If the query fails.
+     */
+    public function hasDuplicate($sql, array $params = array(), $m = true)
+    {
+        try {
+            $data = $this->select($sql, $params);
+            if (empty($data)) {
+                return false;
+            }
+            return $this->getDuplicate($data, $params, $m);
+        } catch (Exception $e) {
+            $errorMessage = $this->createErrorMessage($e->getMessage());
+            throw new DBException($errorMessage);
+        }
+    }
+
+    /**
+     * Validate table name to prevent SQL injection.
+     * @param string $table The table name to validate.
+     * @return string The validated table name.
+     * @throws DBException If the table name is invalid.
+     */
+    private function validateTableName($table)
+    {
+        // Allow only alphanumeric characters and underscores
+        if (!preg_match('/^[a-zA-Z_][a-zA-Z0-9_]*$/', $table)) {
+            throw new DBException('Invalid table name: ' . $table);
         }
         return $table;
     }
 
-    private function validateColumnName(string $col): string
+    /**
+     * Validate column name to prevent SQL injection.
+     * @param string $column The column name to validate.
+     * @return string The validated column name.
+     * @throws DBException If the column name is invalid.
+     */
+    private function validateColumnName($column)
     {
-        if (!preg_match('/^[a-zA-Z0-9_]+$/', $col)) {
-            throw new DBException("Invalid column name.");
+        // Allow only alphanumeric characters and underscores
+        if (!preg_match('/^[a-zA-Z_][a-zA-Z0-9_]*$/', $column)) {
+            throw new DBException('Invalid column name: ' . $column);
         }
-        return $col;
+        return $column;
     }
 
     /**
-     * Bind values with correct types (PHP 8 strict)
+     * Validate an array of column names to prevent SQL injection.
+     * @param array $columns The column names to validate.
+     * @return array The validated column names.
+     * @throws DBException If any column name is invalid.
      */
-    private function bindAllValues(PDOStatement $stmt, array $params): void
+    private function validateColumnNames(array $columns)
     {
-        foreach ($params as $key => $value) {
-            $type = match (true) {
-                is_int($value)  => PDO::PARAM_INT,
-                is_bool($value) => PDO::PARAM_BOOL,
-                $value === null => PDO::PARAM_NULL,
-                default         => PDO::PARAM_STR,
-            };
-
-            $stmt->bindValue(":" . $key, $value, $type);
+        foreach ($columns as $column) {
+            $this->validateColumnName($column);
         }
+        return $columns;
     }
 
     /**
-     * Core query method
+     * Validate SQL query for basic security.
+     * @param string $sql The SQL query to validate.
+     * @throws DBException If the SQL contains potentially dangerous content.
      */
-    public function query(string $sql, array $params = []): PDOStatement
+    private function validateSQL($sql)
+    {
+        // Remove whitespace and convert to lowercase for validation
+        $cleanSql = preg_replace('/\s+/', ' ', strtolower(trim($sql)));
+
+        // Check for multiple statements (semicolon followed by non-whitespace)
+        if (preg_match('/;\s*\w/', $cleanSql)) {
+            throw new DBException('Invalid SQL query: Multiple statements not allowed');
+        }
+
+        // Check for dangerous SQL keywords after semicolon
+        $dangerousPatterns = array(
+            '/;\s*(drop|alter|create|truncate|delete|insert|update|replace|grant|revoke)/i',
+            '/;\s*--/',
+            '/;\s*\/\*/',
+            '/union\s+select/i',
+            "/'\s*;\s*\w+/i",
+            '/\"\s*;\s*\w+/i'
+        );
+
+        foreach ($dangerousPatterns as $pattern) {
+            if (preg_match($pattern, $sql)) {
+                throw new DBException('Invalid SQL query: Potentially dangerous content detected');
+            }
+        }
+
+        return $sql;
+    }
+
+    /**
+     * Begin a database transaction.
+     * @return bool True on success, false on failure.
+     * @throws DBException If the transaction cannot be started.
+     */
+    public function beginTransaction()
     {
         try {
-            $this->nbQueries++;
-
-            $sql = $this->validateSQL(rtrim($sql, ";"));
-
-            $stmt = $this->pdo->prepare($sql);
-            $this->bindAllValues($stmt, $params);
-            $stmt->execute();
-
-            $this->lastResult = $stmt;
-            $this->affectedRows = $stmt->rowCount();
-
-            return $stmt;
+            if ($this->pdo->inTransaction()) {
+                throw new DBException('Transaction already in progress.');
+            }
+            return $this->pdo->beginTransaction();
         } catch (PDOException $e) {
             $this->handleError($e);
-            throw new DBException(
-                $this->createErrorMessage("Query failed: " . $e->getMessage())
+            $errorMessage = $this->createErrorMessage(
+                'Failed to begin transaction: ' . $e->getMessage()
             );
+            throw new DBException($errorMessage);
         }
     }
 
-    public function select(string $sql, array $params = []): array
+    /**
+     * Commit the current transaction.
+     * @return bool True on success, false on failure.
+     * @throws DBException If the transaction cannot be committed.
+     */
+    public function commit()
     {
-        return $this->query($sql, $params)->fetchAll();
-    }
-
-    public function run(string $sql, array $params = []): bool
-    {
-        $this->query($sql, $params);
-        return true;
-    }
-
-    public function fetchNextObject(?PDOStatement $stmt = null): object|false
-    {
-        $stmt = $stmt ?? $this->lastResult;
-        return $stmt?->fetchObject() ?: false;
-    }
-
-    public function numRows(?PDOStatement $stmt = null): int
-    {
-        return ($stmt ?? $this->lastResult)?->rowCount() ?? 0;
-    }
-
-    public function lastInsertedId(): string
-    {
-        return $this->pdo?->lastInsertId() ?? "0";
+        try {
+            if (!$this->pdo->inTransaction()) {
+                throw new DBException('No transaction in progress.');
+            }
+            return $this->pdo->commit();
+        } catch (PDOException $e) {
+            $this->handleError($e);
+            $errorMessage = $this->createErrorMessage(
+                'Failed to commit transaction: ' . $e->getMessage()
+            );
+            throw new DBException($errorMessage);
+        }
     }
 
     /**
-     * JSON output
+     * Roll back the current transaction.
+     * @return bool True on success, false on failure.
+     * @throws DBException If the transaction cannot be rolled back.
      */
-    public function queryGetJSON(string $sql, array $params = []): string
+    public function rollback()
     {
-        $stmt = $this->query($sql, $params);
-        $rows = $stmt->fetchAll(PDO::FETCH_OBJ);
-        return json_encode($rows, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+        try {
+            if (!$this->pdo->inTransaction()) {
+                throw new DBException('No transaction in progress.');
+            }
+            return $this->pdo->rollback();
+        } catch (PDOException $e) {
+            $this->handleError($e);
+            $errorMessage = $this->createErrorMessage(
+                'Failed to rollback transaction: ' . $e->getMessage()
+            );
+            throw new DBException($errorMessage);
+        }
     }
 
     /**
-     * UNIQUE VALUE
+     * Check if a transaction is currently active.
+     * @return bool True if a transaction is active, false otherwise.
      */
-    public function queryUniqueValue(string $sql, array $params = []): ?string
+    public function inTransaction()
     {
-        $sql .= " LIMIT 1";
-        $stmt = $this->query($sql, $params);
-        $val = $stmt->fetchColumn();
-        return $val !== false ? strval($val) : null;
-    }
-
-    public function queryUniqueObject(string $sql, array $params = []): ?object
-    {
-        $sql .= " LIMIT 1";
-        $stmt = $this->query($sql, $params);
-        $obj = $stmt->fetchObject();
-        return $obj ?: null;
+        return $this->pdo->inTransaction();
     }
 
     /**
-     * AGGREGATES: count, sum, max, min
+     * Execute a function within a database transaction.
+     * If the function throws an exception, the transaction is rolled back.
+     * If the function completes successfully, the transaction is committed.
+     *
+     * @param callable $callback The function to execute within the transaction.
+     * @return mixed The return value of the callback function.
+     * @throws DBException If the transaction fails or the callback throws an exception.
      */
-    public function countOf(string $table, string $where = "", array $params = []): int
+    public function transaction($callback)
     {
-        $table = $this->validateTableName($table);
-        $sql = "SELECT COUNT(*) FROM `$table`" . ($where ? " WHERE $where" : "");
-        return (int) $this->queryUniqueValue($sql, $params);
-    }
-
-    public function sumOf(string $column, string $table, string $where = "", array $params = []): float
-    {
-        $column = $this->validateColumnName($column);
-        $table  = $this->validateTableName($table);
-        $sql = "SELECT SUM(`$column`) FROM `$table`" . ($where ? " WHERE $where" : "");
-        return (float) $this->queryUniqueValue($sql, $params);
-    }
-
-    public function maxOf(string $column, string $table, string $where = "", array $params = []): float
-    {
-        $column = $this->validateColumnName($column);
-        $table  = $this->validateTableName($table);
-        $sql = "SELECT MAX(`$column`) FROM `$table`" . ($where ? " WHERE $where" : "");
-        return (float) $this->queryUniqueValue($sql, $params);
-    }
-
-    public function minOf(string $column, string $table, string $where = "", array $params = []): float
-    {
-        $column = $this->validateColumnName($column);
-        $table  = $this->validateTableName($table);
-        $sql = "SELECT MIN(`$column`) FROM `$table`" . ($where ? " WHERE $where" : "");
-        return (float) $this->queryUniqueValue($sql, $params);
-    }
-
-    /**
-     * INSERT using array
-     */
-    public function executeInsert(array $data, string $table): bool
-    {
-        $table = $this->validateTableName($table);
-
-        $columns = array_keys($data);
-        $placeholders = array_map(fn($c) => ":$c", $columns);
-
-        $sql = "INSERT INTO `$table` (`"
-             . implode("`,`", $columns)
-             . "`) VALUES ("
-             . implode(",", $placeholders)
-             . ")";
-
-        return $this->run($sql, $data);
-    }
-
-    /**
-     * UPDATE
-     */
-    public function executeUpdate(array $data, string $table, string $where, array $params = []): bool
-    {
-        $table = $this->validateTableName($table);
-
-        $set = [];
-        foreach ($data as $col => $val) {
-            $this->validateColumnName($col);
-            $set[] = "`$col` = :upd_$col";
+        if (!is_callable($callback)) {
+            throw new DBException('Transaction callback must be callable.');
         }
 
-        $sql = "UPDATE `$table` SET " . implode(",", $set) . " WHERE $where";
+        $this->beginTransaction();
 
-        // rename parameters so they don’t conflict
-        $merged = [];
-        foreach ($data as $col => $val) {
-            $merged["upd_$col"] = $val;
+        try {
+            $result = call_user_func($callback, $this);
+            $this->commit();
+            return $result;
+        } catch (Exception $e) {
+            $this->rollback();
+            throw $e;
         }
-        $merged += $params;
-
-        return $this->run($sql, $merged);
     }
 
-    /**
-     * DELETE
-     */
-    public function executeDelete(string $table, string $where, array $params = []): bool
-    {
-        $table = $this->validateTableName($table);
-        $sql = "DELETE FROM `$table` WHERE $where";
-        return $this->run($sql, $params);
-    }
+    // ========================== HELPER FUNCTIONS ========================== //
 
     /**
-     * DUPLICATE CHECK
+     * Function to check for duplicate values in a database row against a POST array.
+     * @param array $dbRows An array of database rows, where each row is an associative array.
+     * @param array $post An array of values from a POST request.
+     * @return string A message indicating whether duplicates were found and which values were duplicated.
      */
-    public function hasDuplicate(string $sql, array $params = []): bool
+    private function getDuplicate($dbRows, $post, $m = true)
     {
-        $count = $this->queryUniqueValue($sql, $params);
-        return !empty($count) && intval($count) > 0;
-    }
+        $duplicates = array();
 
-    /**
-     * Close connection
-     */
-    public function close(): void
-    {
-        $this->pdo = null;
-        unset(self::$instances[$this->alias]);
+        foreach ($dbRows as $record) {
+            foreach ($post as $postValue) {
+                foreach ($record as $dbValue) {
+                    if (strcasecmp($dbValue, $postValue) === 0) {
+                        $duplicates[] = $postValue;
+                    }
+                }
+            }
+        }
+
+        $duplicates = array_unique($duplicates);
+
+        // Format each value with bold
+        $formatted = array();
+        foreach ($duplicates as $val) {
+            $formatted[] = "'<strong>" . htmlspecialchars($val, ENT_QUOTES, 'UTF-8') . "</strong>'";
+        }
+
+        $count = count($formatted);
+
+        if ($count === 1) {
+            $text = $formatted[0];
+        } elseif ($count === 2) {
+            $text = $formatted[0] . ' and ' . $formatted[1];
+        } else {
+            $last = array_pop($formatted);
+            $text = implode(', ', $formatted) . ' and ' . $last;
+        }
+
+        if ($m) {
+            return "Found duplication for $text.";
+        } else {
+            return $duplicates;
+        }
     }
 }
-?>

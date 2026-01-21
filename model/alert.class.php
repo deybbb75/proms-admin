@@ -75,11 +75,7 @@ class Alert
             return;
 
         $alert = $_SESSION[self::$sessionKey];
-        echo '<script>
-            setTimeout(() => {
-                Swal.fire(' . json_encode($alert) . ');
-            }, 500);
-        </script>';
+        echo '<script>Swal.fire(' . json_encode($alert) . ');</script>';
         unset($_SESSION[self::$sessionKey]);
     }
 }

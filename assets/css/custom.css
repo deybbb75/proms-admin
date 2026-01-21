@@ -40,9 +40,9 @@
   inset: 0;
   display: flex;
   justify-content: center;
-  background: transparent;
+  background: #fff;
   align-items: center;
-  z-index: 9999;
+  z-index: 9999999;
 }
 
 .loader {
@@ -116,8 +116,4 @@
     transform: rotate(360deg);
     background-position: 50% 36px;
   }
-}
-
-#content {
-  display: none;
 }

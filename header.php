@@ -38,7 +38,7 @@
         </div>
 
         <!-- Begin page -->
-        <div class="wrapper" id="content">
+        <div class="wrapper">
             <!-- ========== Left Sidebar Start ========== -->
             <div class="leftside-menu">
     
@@ -69,7 +69,7 @@
 
                         <li class="side-nav-title side-nav-item">Navigation</li>
                         <li class="side-nav-item">
-                            <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>pages/system-user.php" class="side-nav-link">
+                            <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/pages/system-user.php" class="side-nav-link">
                                 <i class="mdi mdi-account-multiple"></i>
                                 <span> System Users </span>
                             </a>
