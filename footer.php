@@ -146,6 +146,7 @@
 
         <?php
             Alert::render();
+            unset($_SESSION['sweet-alert']);
         ?>
     </body>
 

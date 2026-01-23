@@ -11,7 +11,7 @@ $db = DB::getInstance();
         <div class="col-12">
             <div class="page-title-box">
                 <div class="page-title-right">
-                    <button class="btn btn-primary ms-1" data-bs-toggle="modal" data-bs-target="#primary-header-modal"
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#primary-header-modal"
                         onclick="addItem('fetch-system-user')">
                         <i class="mdi mdi-plus"></i>
                         <span class="add-btn-name">Add System User</span>
@@ -51,14 +51,18 @@ $db = DB::getInstance();
                                         <td><?= $line->sys_id ?></td>
                                         <td><?= $line->emp_no ?></td>
                                         <td><?= $line->fname ?> <?= $line->mname ?> <?= $line->lname ?></td>
-                                        <td><?= $line->email; ?></td>
-                                        <td><?= $line->role; ?></td>
-                                        <td><?= $line->status; ?></td>
+                                        <td><?= $line->email ?></td>
+                                        <td><?= $line->role ?></td>
                                         <td>
-                                            <button class="btn btn-success ms-1"><i class="mdi mdi-square-edit-outline"></i></button>
-                                            <button class="btn btn-danger ms-1"><i class="mdi mdi-delete"></i></button>
-                                            <!-- <a href="javascript:void(0);" class="action-icon"><i class="mdi mdi-square-edit-outline"></i></a>
-                                            <a href="javascript:void(0);" class="action-icon"><i class="mdi mdi-delete"></i></a> -->
+                                            <span class="status-<?= strtolower($line->status) ?>"><?= $line->status ?></span>
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#primary-header-modal"
+                                                onclick="editItem('fetch-system-user', '<?= encrypt_data($line->sys_id) ?>')"><i class="mdi mdi-square-edit-outline"></i>
+                                            </button>
+                                            <button class="btn btn-danger ms-1" onclick="deleteItem('<?= encrypt_data($line->sys_id) ?>')">
+                                                <i class="mdi mdi-delete"></i>
+                                            </button>
                                         </td>
                                     </tr>
                                     <?php
@@ -93,6 +97,7 @@ $db = DB::getInstance();
                     <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-primary" id="save_changes">Save changes</button>
                 </div>
+                <input type="hidden" id="delete_id" value="">
             </form>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->

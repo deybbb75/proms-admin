@@ -15,6 +15,42 @@ function addItem(fetch_name, item_id = []) {
 	});
 }
 
+function editItem(fetch_name, item_id) {
+	// Reset the form and set the button to "Save"
+	$(".fetched-data").html("");
+	$("#save_changes").attr("name", "Edit");
+	$.ajax({
+		type: "post",
+		data: {
+			id: item_id,
+		},
+		url: `fetch/${fetch_name}.php`,
+		success: function (data) {
+			let $fetch = $(".fetched-data").html(data);
+			reInitUI($fetch);
+            $("#form_validation").valid();
+		},
+	});
+}
+
+function deleteItem(item_id) {
+	Swal.fire({
+		title: "Are you sure you want to delete this?",
+		text: "You will not be able to recover this data!",
+		icon: "warning", // use "icon" instead of "type"
+		showCancelButton: true,
+		confirmButtonColor: "#FF2121",
+		confirmButtonText: "Yes, delete it!",
+		cancelButtonText: "Cancel",
+	}).then((result) => {
+		if (result.isConfirmed) {
+            $("#delete_id").attr("name", "Delete");
+            $("#delete_id").val(item_id);
+            $("#form_validation").submit();
+		}
+	});
+}
+
 function reInitUI(container) {
     var $scope = container ? $(container) : $(document);
 

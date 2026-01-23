@@ -1,5 +1,4 @@
-$(function () {
-
+function validateForm() {
     // =========================================================================
     // GROUPED RULES (your entire original rules reorganized)
     // =========================================================================
@@ -21,6 +20,7 @@ $(function () {
             fields: [
                 "fname",
                 "lname",
+                "prog_title",
             ],
             rules: { required: true, noWhitespace: true, namePattern: true }
         },
@@ -33,7 +33,20 @@ $(function () {
             rules: { required: true, noWhitespace: true, email: true }
         },
         {
-            fields: [],
+            fields: [
+                "start_date1", 
+                "start_date2",
+                "day[0]",
+                "day[1]",
+                "day[2]",
+                "start_time[0]",
+                "start_time[1]",
+                "start_time[2]",
+                "end_time[0]",
+                "end_time[1]",
+                "end_time[2]",
+                "tuition"
+            ],
             rules: { required: true, noWhitespace: true }
         },
         {
@@ -41,7 +54,7 @@ $(function () {
             rules: { required: true, digits: true }
         },
         {
-            fields: ["description"],
+            fields: ["prog_desc", "venue",],
             rules: { required: true, noWhitespace: true, descPattern: true }
         },
         {
@@ -234,5 +247,8 @@ $(function () {
         today.setHours(0, 0, 0, 0);
         return selected <= today;
     }, "Date cannot be in the future.");
+}
 
+$(function () {
+    validateForm();
 });

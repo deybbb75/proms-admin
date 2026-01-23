@@ -73,7 +73,7 @@ if (isset($_POST['Save'])) {
 if (isset($_POST['Edit'])) {
     try {
         // Check if the required fields are set
-        $requiredFields = ['emp_no' => 'LPU Number', 'fname' => 'First Name', 'lname' => 'Last Name', 'email' => 'Email', 'dept_id' => 'Department', 'role_id' => 'Role', 'status' => 'Status'];
+        $requiredFields = ['emp_no' => 'LPU Number', 'fname' => 'First Name', 'lname' => 'Last Name', 'email' => 'Email', 'role' => 'Role', 'status' => 'Status'];
         $missing        = validateRequiredFields($requiredFields, $_POST);
         if ($missing) {
             Alert::error(array(
@@ -106,8 +106,7 @@ if (isset($_POST['Edit'])) {
             'mname'   => ucwords($_POST['mname']),
             'lname'   => ucwords($_POST['lname']),
             'email'   => $_POST['email'],
-            'dept_id' => $_POST['dept_id'],
-            'role_id' => $_POST['role_id'],
+            'role'    => $_POST['role'],
             'status'  => $_POST['status'],
         );
         // Execute the update operation
@@ -146,23 +145,35 @@ if (isset($_POST['Edit'])) {
 
 if (isset($_POST['Delete'])) {
     try {
-        $id = decrypt_data($_POST['id']);
+        $id = decrypt_data($_POST['Delete']);
         $db->executeDelete('tbl_system_user', 'sys_id = :sys_id', ['sys_id' => $id]);
+        
         if ($db->affectedRows > 0) {
-            $builder
-                ->success('User successfully deleted.', 'Delete Successful');
+            Alert::success(array(
+                'title' => 'Delete Successful',
+                'text'  => 'User successfully deleted.',
+                'path'  => $redirect_path
+            ));
         } else {
-            $builder->error('No user found with the provided ID.', 'Delete Failed')->setHttpCode(200);
+            Alert::error(array(
+                'title' => 'Delete Failed',
+                'text'  => 'No user found with the provided ID.',
+                'path'  => $redirect_path
+            ));
         }
     } catch (DBException $e) {
         // Handle the database error
-        $builder->serverError('Something went wrong on our end.', 'Server Error')
-                ->withDebug($e->getMessage());
+        Alert::error(array(
+            'title' => 'Server Error',
+            'text'  => 'Something went wrong on our end.',
+            'path'  => $redirect_path
+        ));
     } catch (Exception $e) {
         // Handle other exceptions
-        $builder->error('Something went wrong with your request.', 'Error')
-                ->withDebug($e->getMessage());
+        Alert::error(array(
+            'title' => 'Error',
+            'text'  => 'Something went wrong with your request.',
+            'path'  => $redirect_path
+        ));
     }
-    // Build the response and send it
-    $builder->send();
 }
