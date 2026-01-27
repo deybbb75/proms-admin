@@ -132,3 +132,17 @@
     color:var(--success-color);
     background-color:rgba(var(--success-rgb),.18)
 }
+
+.filepond--root {
+    margin-bottom: 0;
+}
+.filepond--credits{
+    display: none;
+}
+
+.auto-grow-textarea {
+  field-sizing: content; /* The key property */
+  resize: none;          /* Hides the user-resizable handle */
+  overflow-y: hidden;    /* Hides vertical scrollbar initially */
+  min-height: 2.25rem;   /* Optional: Set a minimum height (adjust as needed) */
+}

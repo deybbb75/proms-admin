@@ -125,6 +125,14 @@
         <script src="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/assets/js/vendor/fixedHeader.bootstrap5.min.js"></script>
         <!-- third party js ends -->
 
+        <!-- FilePond Plugins Js -->
+        <script src="https://unpkg.com/filepond-plugin-file-encode/dist/filepond-plugin-file-encode.min.js"></script>
+        <script src="https://unpkg.com/filepond-plugin-file-validate-size/dist/filepond-plugin-file-validate-size.min.js"></script>
+        <script src="https://unpkg.com/filepond-plugin-image-exif-orientation/dist/filepond-plugin-image-exif-orientation.min.js"></script>
+        <script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.js"></script>
+        <script src="https://unpkg.com/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.min.js"></script>
+        <script src="https://unpkg.com/filepond/dist/filepond.min.js"></script>
+
         <!-- demo app -->
         <!-- <script src="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/assets/js/pages/demo.dashboard.js"></script> -->
         <script src="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/assets/js/pages/demo.datatable-init.js"></script>
@@ -146,7 +154,7 @@
 
         <?php
             Alert::render();
-            unset($_SESSION['sweet-alert']);
+            unset($_SESSION['prog_image']);
         ?>
     </body>
 

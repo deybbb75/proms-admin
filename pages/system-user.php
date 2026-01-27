@@ -12,7 +12,7 @@ $db = DB::getInstance();
             <div class="page-title-box">
                 <div class="page-title-right">
                     <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#primary-header-modal"
-                        onclick="addItem('fetch-system-user')">
+                        onclick="addItem({fetch_name: 'fetch-system-user'})">
                         <i class="mdi mdi-plus"></i>
                         <span class="add-btn-name">Add System User</span>
                     </button>
@@ -58,7 +58,7 @@ $db = DB::getInstance();
                                         </td>
                                         <td>
                                             <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#primary-header-modal"
-                                                onclick="editItem('fetch-system-user', '<?= encrypt_data($line->sys_id) ?>')"><i class="mdi mdi-square-edit-outline"></i>
+                                                onclick="editItem({fetch_name: 'fetch-system-user', item_id: '<?= encrypt_data($line->sys_id) ?>'})"><i class="mdi mdi-square-edit-outline"></i>
                                             </button>
                                             <button class="btn btn-danger ms-1" onclick="deleteItem('<?= encrypt_data($line->sys_id) ?>')">
                                                 <i class="mdi mdi-delete"></i>

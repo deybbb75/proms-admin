@@ -20,7 +20,6 @@ function validateForm() {
             fields: [
                 "fname",
                 "lname",
-                "prog_title",
             ],
             rules: { required: true, noWhitespace: true, namePattern: true }
         },
@@ -45,7 +44,7 @@ function validateForm() {
                 "end_time[0]",
                 "end_time[1]",
                 "end_time[2]",
-                "tuition"
+                "tuition_fee"
             ],
             rules: { required: true, noWhitespace: true }
         },
@@ -54,7 +53,7 @@ function validateForm() {
             rules: { required: true, digits: true }
         },
         {
-            fields: ["prog_desc", "venue",],
+            fields: ["prog_title", "prog_desc", "venue",],
             rules: { required: true, noWhitespace: true, descPattern: true }
         },
         {

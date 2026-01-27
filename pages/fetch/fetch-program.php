@@ -2,22 +2,43 @@
 include '../../includes/init.php';
 $db = DB::getInstance();
 
+$sched_count = 0;
+
 if (isset($_POST['id'])) {
-    $sys_id = decrypt_data($_POST['id']);
-    $sys_user = $db->queryUniqueObject('SELECT * FROM tbl_system_user WHERE sys_id = :sys_id', ['sys_id' => $sys_id]);
-    if ($sys_user) {
-        $sys_id = encrypt_data($sys_user->sys_id);
-        $fname  = $sys_user->fname;
-        $mname  = $sys_user->mname;
-        $lname  = $sys_user->lname;
-        $emp_no = $sys_user->emp_no;
-        $email  = $sys_user->email;
-        $role   = $sys_user->role;
-        $status = $sys_user->status;
+    $id = decrypt_data($_POST['id']);
+    $program = $db->queryUniqueObject('SELECT * FROM tbl_program WHERE prog_id = :prog_id', ['prog_id' => $id]);
+    if ($program) {
+        $prog_id = encrypt_data($program->prog_id);
+        $prog_title  = $program->prog_title;
+        $prog_desc  = $program->prog_desc;
+        $start_date1  = $program->start_date1;
+        $start_date2  = $program->start_date2;
+        $venue = $program->venue;
+        $tuition  = $program->tuition_fee;
+        $status = $program->status;
+        $image = $program->prog_image;
+        $image_data = base64_encode($image);
+        $image_type = $program->image_type;
+        $image_src  = "data:{$image_type};base64,{$image_data}";
+    }
+
+    $day = [];
+    $start_time = [];
+    $end_time = [];
+    $counter = 0;
+
+    $prog_sched_query = $db->query('SELECT * FROM tbl_schedule WHERE prog_id = :prog_id', ['prog_id' => $id]);
+    $sched_count = ($db->countOf("tbl_schedule", "prog_id = :prog_id", ['prog_id' => $id])) - 1;
+
+    while ($line = $db->fetchNextObject($prog_sched_query)) {
+        $day[$counter] = $line->day;
+        $start_time[$counter] = $line->start_time;
+        $end_time[$counter] = $line->end_time;
+        $counter++;
     }
 }
 ?>
-<input type="hidden" name="sys_id" value="<?= $sys_id ?? '' ?>">
+<input type="hidden" name="prog_id" value="<?= $prog_id ?? '' ?>">
 
 <div class="row">
     <div class="col-md-12">
@@ -28,7 +49,7 @@ if (isset($_POST['id'])) {
 <div class="row">
     <div class="col-sm-12">
         <label for="emp_no" class="form-label">Program Description</label>
-        <textarea class="form-control" id="prog_desc" name="prog_desc" rows="5" placeholder="Program Description"><?= $prog_desc ?? '' ?></textarea>
+        <textarea class="form-control auto-grow-textarea" id="prog_desc" name="prog_desc" rows="5" placeholder="Program Description"><?= $prog_desc ?? '' ?></textarea>
     </div>
 </div>
 <div class="row">
@@ -46,42 +67,42 @@ if (isset($_POST['id'])) {
     <div class="col-sm-12" id="schedule-container" style="padding-bottom: 0px;">
         <div class="row">
             <div class="col-lg-4">
-                <select class="form-control select2 day" id="day" data-toggle="select2" name="day[0]" data-placeholder="Select Day">
-                    <option value="<?= $day ?? '' ?>" <?php if(!empty($day)) echo 'disabled'; ?> selected>
-                        <?= !empty($day) ? $day : '' ?>
+                <select class="form-control select2 day" data-toggle="select2" name="day[0]" data-placeholder="Select Day">
+                    <option value="<?= $day[0] ?? '' ?>" <?php if(empty($day[0])) echo 'disabled'; ?> selected>
+                        <?= !empty($day[0]) ? $day[0] : '' ?>
                     </option>
                     <?php
-                        if($day != "Sunday") {
+                        if($day[0] != "Sunday") {
                     ?>
                         <option value="Sunday">Sunday</option>
                     <?php
                         }
-                        if($day != "Monday") {
+                        if($day[0] != "Monday") {
                     ?>
                         <option value="Monday">Monday</option>
                     <?php
                         }
-                        if($day != "Tuesday") {
+                        if($day[0] != "Tuesday") {
                     ?>
                         <option value="Tuesday">Tuesday</option>
                     <?php
                         }
-                        if($day != "Wednesday") {
+                        if($day[0] != "Wednesday") {
                     ?>
                         <option value="Wednesday">Wednesday</option>
                     <?php
                         }
-                        if($day != "Thursday") {
+                        if($day[0] != "Thursday") {
                     ?>
                         <option value="Thursday">Thursday</option>
                     <?php
                         }
-                        if($day != "Friday") {
+                        if($day[0] != "Friday") {
                     ?>
                         <option value="Friday">Friday</option>
                     <?php
                         }
-                        if($day != "Saturday") {
+                        if($day[0] != "Saturday") {
                     ?>
                         <option value="Saturday">Saturday</option>
                     <?php
@@ -91,18 +112,86 @@ if (isset($_POST['id'])) {
                 <span class="font-13 text-muted">Day of the Week</span>
             </div>
             <div class="col-lg-4">
-                <input class="form-control start-time" id="start_time" type="time" name="start_time[0]">
+                <input class="form-control start-time" id="start_time" type="time" name="start_time[0]" value="<?= $start_time[0] ?? '' ?>">
                 <span class="font-13 text-muted">Start Time</span>
             </div>
             <div class="col-lg-4">
-                <input class="form-control end-time" id="end_time" type="time" name="end_time[0]">
+                <input class="form-control end-time" id="end_time" type="time" name="end_time[0]" value="<?= $end_time[0] ?? '' ?>">
                 <span class="font-13 text-muted">End Time</span>
             </div>
         </div>
+
+        <?php
+            for ($i = 1; $i < $_SESSION['max_schedule']; $i++) {
+                if (empty($day[$i]) || empty($start_time[$i]) || empty($end_time[$i])) {
+                    continue;
+                }
+        ?>
+            <div class="row">
+                <div class="col-lg-4">
+                    <select class="form-control select2 day" id="day" data-toggle="select2" name="day[<?= $i ?>]" data-placeholder="Select Day">
+                        <option value="<?= $day[$i] ?? '' ?>" <?php if(empty($day[$i])) echo 'disabled'; ?> selected>
+                            <?= !empty($day[$i]) ? $day[$i] : '' ?>
+                        </option>
+                        <?php
+                            if($day[$i] != "Sunday") {
+                        ?>
+                            <option value="Sunday">Sunday</option>
+                        <?php
+                            }
+                            if($day[$i] != "Monday") {
+                        ?>
+                            <option value="Monday">Monday</option>
+                        <?php
+                            }
+                            if($day[$i] != "Tuesday") {
+                        ?>
+                            <option value="Tuesday">Tuesday</option>
+                        <?php
+                            }
+                            if($day[$i] != "Wednesday") {
+                        ?>
+                            <option value="Wednesday">Wednesday</option>
+                        <?php
+                            }
+                            if($day[$i] != "Thursday") {
+                        ?>
+                            <option value="Thursday">Thursday</option>
+                        <?php
+                            }
+                            if($day[$i] != "Friday") {
+                        ?>
+                            <option value="Friday">Friday</option>
+                        <?php
+                            }
+                            if($day[$i] != "Saturday") {
+                        ?>
+                            <option value="Saturday">Saturday</option>
+                        <?php
+                            }
+                        ?>
+                    </select>
+                    <span class="font-13 text-muted">Day of the Week</span>
+                </div>
+                <div class="col-lg-4">
+                    <input class="form-control start-time" id="start_time" type="time" name="start_time[<?= $i ?>]" value="<?= $start_time[$i] ?? '' ?>">
+                    <span class="font-13 text-muted">Start Time</span>
+                </div>
+                <div class="col-lg-3">
+                    <input class="form-control end-time" id="end_time" type="time" name="end_time[<?= $i ?>]" value="<?= $end_time[$i] ?? '' ?>">
+                    <span class="font-13 text-muted">End Time</span>
+                </div>
+                <div class="col-lg-1">
+                    <button type="button" class="btn btn-danger w-100" onclick="removeSchedule(this)"><i class="mdi mdi-close"></i></button>
+                </div>
+            </div>
+        <?php
+            }
+        ?>
     </div>
     
     <div class="col-sm-12" id="add-sched-btn-container">
-        <button type="button" class="btn btn-sm btn-info w-100" id="add-sched-btn" onclick="addSchedule(0)"><i class="mdi mdi-plus"></i> Add Schedule</button>
+    <button type="button" class="btn btn-sm btn-info w-100" id="add-sched-btn" onclick="addSchedule(<?= $sched_count ?>)"><i class="mdi mdi-plus"></i> Add Schedule</button>
     </div>
 </div>
 <div class="row">
@@ -113,14 +202,14 @@ if (isset($_POST['id'])) {
 </div>
 <div class="row">
     <div class="col-sm-6">
-        <label for="tuition" class="form-label">Tuition Fees</label>
-        <input type="text" id="tuition" name="tuition" class="form-control" data-toggle="input-mask" placeholder="Tuition Fees" value="<?= $tuition ?? '' ?>"
+        <label for="tuition_fee" class="form-label">Tuition Fees</label>
+        <input type="text" id="tuition_fee" name="tuition_fee" class="form-control" data-toggle="input-mask" placeholder="Tuition Fees" value="<?= $tuition ?? '' ?>"
             data-mask-format="000,000,000,000,000.00" data-reverse="true">
     </div>
     <div class="col-sm-6">
         <label for="status" class="form-label">Status</label>
         <select class="form-control select2" data-toggle="select2" name ="status" data-placeholder="Select Status">
-            <option value="<?= $status ?? '' ?>" <?php if(!empty($status)) echo 'disabled'; ?> selected>
+            <option value="<?= $status ?? '' ?>" <?php if(empty($status)) echo 'disabled'; ?> selected>
                 <?= !empty($status) ? $status : '' ?>
             </option>
             <?php
@@ -136,5 +225,37 @@ if (isset($_POST['id'])) {
                 }
             ?>
         </select>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <label for="img" class="form-label">Image</label>
+        <div id="image-preview" style="display: <?= !empty($image) ? 'block' : 'none' ?>;">
+            <img 
+                src="<?= $image_src ?? '' ?>" 
+                class="img-fluid mx-auto d-block mt-2"
+                style="max-width: 100%; height: auto; border-radius: 20px;"
+                alt=""
+            >
+        <?php
+            if(!empty($image)) {
+        ?>
+            <button type="button" class="btn btn-sm btn-info w-100 mt-2" onclick="updateImage('update')">Update Image</button>
+        <?php
+            }
+        ?>
+        </div>
+        <div id="image-upload" style="display: <?= !empty($image) ? 'none' : 'block' ?>;">
+            <input type="file" id="prog_image" class="filepond" name="prog_image" data-max-file-size="10MB" data-max-files="3" />
+            <span class="font-10 text-muted"><b>Note: </b>Please upload an image in <b>JPG</b> format. The file size must not exceed <b>10 MB</b>.</span>
+            <?php
+                if(!empty($image)){
+            ?>
+                <button type="button" class="btn btn-sm btn-danger w-100 mt-2" onclick="updateImage('cancel')">Cancel</button>
+            <?php
+                }
+            ?>
+        </div>
+        
     </div>
 </div>

@@ -35,6 +35,7 @@ $inf_dblogin = $GLOBALS['INF_CONFIG']['dbUser'];
 // include __SITE_PATH . '/model/' . 'db.class.php';
 include __SITE_PATH . '/model/' . 'pdo.class.php';
 include __SITE_PATH . '/model/' . 'alert.class.php';
+include __SITE_PATH . '/model/' . 'fileValidator.class.php';
 // include __SITE_PATH . '/model/' . 'pagination.class.php';
 // include __SITE_PATH . '/model/' . 'ajaxpagination.class.php';
 // include __SITE_PATH . '/model/' . 'datatablehandler.class.php';

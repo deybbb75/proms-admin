@@ -29,6 +29,10 @@
 
         <!-- Custom CSS -->
          <link href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/assets/css/custom.css" rel="stylesheet" type="text/css" id="app-style"/>
+
+        <!-- FilePond Css -->
+        <link rel="stylesheet" href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css">
+        <link rel="stylesheet" href="https://unpkg.com/filepond/dist/filepond.min.css">
     </head>
 
     <body class="loading" data-layout-color="light" data-leftbar-theme="dark" data-layout-mode="fluid" data-rightbar-onstart="true">

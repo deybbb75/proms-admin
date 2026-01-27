@@ -1,4 +1,8 @@
-function addItem(fetch_name, item_id = []) {
+function addItem({
+    fetch_name: fetch_name,
+    item_id: item_id = [],
+    custom_function: custom_function = () => {},
+}) {
 	// Reset the form and set the button to "Save"
 	$(".fetched-data").html("");
 	$("#save_changes").attr("name", "Save");
@@ -11,11 +15,16 @@ function addItem(fetch_name, item_id = []) {
 		success: function (data) {
 			let $fetch = $(".fetched-data").html(data);
 			reInitUI($fetch);
+            custom_function();
 		},
 	});
 }
 
-function editItem(fetch_name, item_id) {
+function editItem({
+    fetch_name: fetch_name,
+    item_id: item_id,
+    custom_function: custom_function = () => {},
+}) {
 	// Reset the form and set the button to "Save"
 	$(".fetched-data").html("");
 	$("#save_changes").attr("name", "Edit");
@@ -29,6 +38,7 @@ function editItem(fetch_name, item_id) {
 			let $fetch = $(".fetched-data").html(data);
 			reInitUI($fetch);
             $("#form_validation").valid();
+            custom_function();
 		},
 	});
 }
@@ -78,6 +88,11 @@ function reInitUI(container) {
 		// 🔥 Move Select2 container BEFORE the select
 		var $select2Container = $select.next('.select2');
 		$select2Container.insertBefore($select);
+
+        var value = $select.val();
+        if (value !== null && value !== '' && value.length !== 0) {
+            $select.valid();
+        }
 	});
 
 	$(".select2").on("change", function() {
@@ -192,3 +207,78 @@ $(function () {
 		$("#main-preloader").fadeOut();
 	}, 50);
 });
+
+function initFilePond(inputId, acceptedFileType, errorMsg, buttons) {
+    // Register all FilePond plugins that will be used
+    FilePond.registerPlugin(
+        FilePondPluginFileEncode,              // Allows encoding files
+        FilePondPluginFileValidateSize,        // Allows file size validation
+        FilePondPluginImageExifOrientation,    // Fixes image rotation (not used for DOCX, but ok)
+        FilePondPluginImagePreview,            // Shows preview (not used for DOCX, but ok)
+        FilePondPluginFileValidateType         // Allows file type validation
+    );
+
+    // Create the FilePond instance for the attachment input
+    remarksFile = FilePond.create(
+        document.getElementById(inputId),
+        {
+            // Only allow DOCX files
+            acceptedFileTypes: acceptedFileType,
+
+            // Backend endpoints used by FilePond
+            server: {
+                process: 'filepond-upload.php',   // Called when file is uploaded
+                revert: 'filepond-revert.php'     // Called when file is removed
+            }
+        }
+    );
+
+    // Customize FilePond error message for invalid file types
+    FilePond.setOptions({
+        labelFileTypeNotAllowed: errorMsg
+    });
+
+
+    /* =====================================================
+    FILE UPLOAD STATUS TRACKING
+    These events tell us when FilePond is uploading,
+    finished uploading, or when a new file is added.
+    ===================================================== */
+
+
+    // Fires when ONE file finishes uploading to the server
+    remarksFile.on('processfile', (error, file) => {
+
+        // If the server returned an error
+        if (error) {
+            console.log('Upload failed:', file.filename);
+            return;
+        }
+
+        // If upload was successful
+        console.log('Upload finished:', file.filename);
+    });
+
+
+    // Fires when ALL files have finished uploading
+    remarksFile.on('processfiles', () => {
+        console.log('All files uploaded');
+
+        // Enable the Approve and Return buttons
+        // (Now the form is safe to submit)
+        buttons.forEach(button => {
+            $(button).prop('disabled', false);
+        });
+    });
+
+
+    // Fires when a new file is added (upload starts again)
+    remarksFile.on('addfile', () => {
+
+        // Disable the buttons while upload is in progress
+        // to prevent submitting before upload finishes
+        buttons.forEach(button => {
+            $(button).prop('disabled', true);
+        });
+    });
+}

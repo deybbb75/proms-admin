@@ -3,8 +3,8 @@ include '../../includes/init.php';
 $db = DB::getInstance();
 
 if (isset($_POST['id'])) {
-    $sys_id = decrypt_data($_POST['id']);
-    $sys_user = $db->queryUniqueObject('SELECT * FROM tbl_system_user WHERE sys_id = :sys_id', ['sys_id' => $sys_id]);
+    $id = decrypt_data($_POST['id']);
+    $sys_user = $db->queryUniqueObject('SELECT * FROM tbl_system_user WHERE sys_id = :sys_id', ['sys_id' => $id]);
     if ($sys_user) {
         $sys_id = encrypt_data($sys_user->sys_id);
         $fname  = $sys_user->fname;
@@ -67,7 +67,7 @@ if (isset($_POST['id'])) {
     <div class="col-sm-6">
         <label for="status" class="form-label">Status</label>
         <select class="form-control select2" data-toggle="select2" name ="status" data-placeholder="Select Status">
-            <option value="<?= $status ?? '' ?>" <?php if(!empty($status)) echo 'disabled'; ?> selected>
+            <option value="<?= $status ?? '' ?>" <?php if(empty($status)) echo 'disabled'; ?> selected>
                 <?= !empty($status) ? $status : '' ?>
             </option>
             <?php

@@ -11309,18 +11309,20 @@ body[data-leftbar-compact-mode=condensed]:not(.authentication-bg){
     min-height:1600px
 }
 body[data-leftbar-compact-mode=condensed]:not(.authentication-bg) .wrapper .leftside-menu{
-    position:absolute;
+    position:fixed;
+    overflow-y: hidden scroll;
+    height: 100vh;
     width:70px;
     z-index:10000;
     padding-top:70px;
     transition: 
         width 0.4s ease
 }
-body[data-leftbar-compact-mode=condensed]:not(.authentication-bg) .wrapper .leftside-menu .simplebar-content-wrapper,body[data-leftbar-compact-mode=condensed]:not(.authentication-bg) .wrapper .leftside-menu .simplebar-mask{
+/* body[data-leftbar-compact-mode=condensed]:not(.authentication-bg) .wrapper .leftside-menu .simplebar-content-wrapper,body[data-leftbar-compact-mode=condensed]:not(.authentication-bg) .wrapper .leftside-menu .simplebar-mask{
     overflow:visible!important
-}
+} */
 body[data-leftbar-compact-mode=condensed]:not(.authentication-bg) .wrapper .leftside-menu .simplebar-scrollbar{
-    display:none!important
+    display:block !important
 }
 body[data-leftbar-compact-mode=condensed]:not(.authentication-bg) .wrapper .leftside-menu .simplebar-offset{
     bottom:0!important

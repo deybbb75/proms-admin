@@ -169,3 +169,18 @@
 #3 C:\xampp\htdocs\proms-admin\pages\controller\ctr-system-user.php(44): DB->executeInsert(Array, 'tbl_system_user')
 #4 {main}
 
+[2026-01-26 09:16:54] Error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'tuition_fees' in 'field list'
+Trace: #0 C:\Users\Dave\Documents\xampp\htdocs\proms-admin\model\pdo.class.php(716): PDOStatement->execute()
+#1 C:\Users\Dave\Documents\xampp\htdocs\proms-admin\pages\controller\ctr-program.php(51): DB->executeInsert(Array, 'tbl_program')
+#2 {main}
+
+[2026-01-26 09:17:42] Error: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'prog_id' cannot be null
+Trace: #0 C:\Users\Dave\Documents\xampp\htdocs\proms-admin\model\pdo.class.php(716): PDOStatement->execute()
+#1 C:\Users\Dave\Documents\xampp\htdocs\proms-admin\pages\controller\ctr-program.php(63): DB->executeInsert(Array, 'tbl_schedule')
+#2 {main}
+
+[2026-01-26 09:20:33] Error: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'prog_id' cannot be null
+Trace: #0 C:\Users\Dave\Documents\xampp\htdocs\proms-admin\model\pdo.class.php(716): PDOStatement->execute()
+#1 C:\Users\Dave\Documents\xampp\htdocs\proms-admin\pages\controller\ctr-program.php(63): DB->executeInsert(Array, 'tbl_schedule')
+#2 {main}
+

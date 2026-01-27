@@ -14,7 +14,7 @@ $_SESSION['max_schedule'] = 3;
             <div class="page-title-box">
                 <div class="page-title-right">
                     <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#primary-header-modal"
-                        onclick="addItem('fetch-program')">
+                        onclick="addItem({fetch_name: 'fetch-program', custom_function: fetchCustom})">
                         <i class="mdi mdi-plus"></i>
                         <span class="add-btn-name">Add Program</span>
                     </button>
@@ -45,7 +45,34 @@ $_SESSION['max_schedule'] = 3;
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    
+                                    <?php
+                                        $program_query = $db->query("SELECT * FROM tbl_program");
+
+                                        while ($line = $db->fetchNextObject($program_query)) {
+                                    ?>
+                                    <tr>
+                                        <td><?= $line->prog_id ?></td>
+                                        <td><?= $line->prog_title ?></td>
+                                        <td style="white-space: wrap;"><?= $line->prog_desc ?></td>
+                                        <td><?= $line->start_date1 ?></td>
+                                        <td><?= $line->start_date2 ?></td>
+                                        <td><?= $line->tuition_fee ?></td>
+                                        <td>
+                                            <span class="status-<?= strtolower($line->status) ?>"><?= $line->status ?></span>
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#primary-header-modal"
+                                                onclick="editItem({fetch_name: 'fetch-program', item_id: '<?= encrypt_data($line->prog_id) ?>', custom_function: fetchCustom})">
+                                                <i class="mdi mdi-square-edit-outline"></i>
+                                            </button>
+                                            <button class="btn btn-danger ms-1" onclick="deleteItem('<?= encrypt_data($line->prog_id) ?>')">
+                                                <i class="mdi mdi-delete"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <?php
+                                        }
+                                    ?>
                                 </tbody>
                             </table>                                           
                         </div> <!-- end preview-->
@@ -61,7 +88,7 @@ $_SESSION['max_schedule'] = 3;
 <div id="primary-header-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="primary-header-modalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <form action="controller/ctr-system-user.php" method="POST" id="form_validation">
+            <form action="controller/ctr-program.php" method="POST" id="form_validation">
                 <div class="modal-header modal-colored-header bg-primary">
                     <h4 class="modal-title" id="primary-header-modalLabel">Modal Heading</h4>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -105,8 +132,8 @@ $_SESSION['max_schedule'] = 3;
             <span class="font-13 text-muted">End Time</span>
         </div>
         <div class="col-lg-1">
-                <button type="button" class="btn btn-danger w-100" onclick="removeSchedule(this)"><i class="mdi mdi-close"></i></button>
-            </div>
+            <button type="button" class="btn btn-danger w-100" onclick="removeSchedule(this)"><i class="mdi mdi-close"></i></button>
+        </div>
     </div>
 </template>
 
@@ -136,7 +163,6 @@ function addSchedule(schedCounter) {
         // Append to the DOM
         container.appendChild(clone);
         reInitUI($(container));
-        
     }
     if ((schedCounter + 1) == <?= $_SESSION['max_schedule'] ?>) {
         document.getElementById('add-sched-btn-container').style.display = "none";
@@ -180,6 +206,28 @@ function removeSchedule(element) {
             document.getElementById('add-sched-btn-container').style.display = "block";
         }
     });
+}
+
+function updateImage(action){
+    const image_input_section = document.getElementById('image-upload');
+    const preview = document.getElementById('image-preview');
+
+    if(action === 'update'){
+        image_input_section.style.display = 'block';
+        preview.style.display = 'none';
+    }else{
+        image_input_section.style.display = 'none';
+        preview.style.display = 'block';
+    }
+}
+
+function fetchCustom(){
+    initFilePond(
+        'prog_image',
+        ['image/jpeg'],
+        'Only JPG files are allowed',
+        ['#save_changes']
+    );
 }
 </script>
 <?php
