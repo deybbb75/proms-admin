@@ -184,3 +184,9 @@ Trace: #0 C:\Users\Dave\Documents\xampp\htdocs\proms-admin\model\pdo.class.php(7
 #1 C:\Users\Dave\Documents\xampp\htdocs\proms-admin\pages\controller\ctr-program.php(63): DB->executeInsert(Array, 'tbl_schedule')
 #2 {main}
 
+[2026-01-28 11:28:02] Error: SQLSTATE[HY000] [2002] No connection could be made because the target machine actively refused it
+Trace: #0 C:\Users\Dave\Documents\xampp\htdocs\proms-admin\model\pdo.class.php(119): PDO->__construct('mysql:host=loca...', 'root', Object(SensitiveParameterValue))
+#1 C:\Users\Dave\Documents\xampp\htdocs\proms-admin\model\pdo.class.php(141): DB->__construct(Array, 'default')
+#2 C:\Users\Dave\Documents\xampp\htdocs\proms-admin\index.php(4): DB::getInstance()
+#3 {main}
+
