@@ -15080,7 +15080,7 @@ body[data-layout-color=dark] #preloader{
     line-height:42px
 }
 body.authentication-bg{
-    background-image:url(../images/bg-pattern-light.svg);
+    background-image:url(../images/login-bg.jpg);
     background-size:cover;
     background-position:center
 }
@@ -15093,6 +15093,15 @@ body.authentication-bg .account-pages{
     display:flex;
     min-height:100vh
 }
+
+body.authentication-bg h2{
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 15px;
+    color: var(--primary-color);
+    font-family: "Jost",  sans-serif;
+}
+
 .auth-fluid-pages.enlarged,.authentication-bg.enlarged,body.auth-fluid-pages[data-leftbar-compact-mode=condensed]{
     min-height:100px
 }

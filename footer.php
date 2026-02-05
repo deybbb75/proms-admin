@@ -1,161 +1,109 @@
+            </div>
+            <!-- content -->
+        </div>
+
+        <!-- ============================================================== -->
+        <!-- End Page content -->
+        <!-- ============================================================== -->
+
+    </div>
+    <!-- END wrapper -->
+
+    <!-- Right Sidebar -->
+    <div class="end-bar">
+
+        <div class="rightbar-title">
+            <a href="javascript:void(0);" class="end-bar-toggle float-end">
+                <i class="dripicons-cross noti-icon"></i>
+            </a>
+            <h5 class="m-0">Settings</h5>
+        </div>
+
+        <div class="rightbar-content h-100" data-simplebar>
+
+            <div class="p-3">
+                <div class="alert alert-warning" role="alert">
+                    <strong>Customize </strong> the overall color scheme, sidebar menu, etc.
                 </div>
-                <!-- content -->
-            </div>
 
-            <!-- ============================================================== -->
-            <!-- End Page content -->
-            <!-- ============================================================== -->
+                <!-- Settings -->
+                <h5 class="mt-3">Color Scheme</h5>
+                <hr class="mt-1" />
 
-        </div>
-        <!-- END wrapper -->
+                <div class="form-check form-switch mb-1">
+                    <input class="form-check-input" type="checkbox" name="color-scheme-mode" value="light" id="light-mode-check" checked>
+                    <label class="form-check-label" for="light-mode-check">Light Mode</label>
+                </div>
 
-        <!-- Right Sidebar -->
-        <div class="end-bar">
+                <div class="form-check form-switch mb-1">
+                    <input class="form-check-input" type="checkbox" name="color-scheme-mode" value="dark" id="dark-mode-check">
+                    <label class="form-check-label" for="dark-mode-check">Dark Mode</label>
+                </div>
+    
 
-            <div class="rightbar-title">
-                <a href="javascript:void(0);" class="end-bar-toggle float-end">
-                    <i class="dripicons-cross noti-icon"></i>
-                </a>
-                <h5 class="m-0">Settings</h5>
-            </div>
+                <!-- Width -->
+                <h5 class="mt-4">Width</h5>
+                <hr class="mt-1" />
+                <div class="form-check form-switch mb-1">
+                    <input class="form-check-input" type="checkbox" name="width" value="fluid" id="fluid-check" checked>
+                    <label class="form-check-label" for="fluid-check">Fluid</label>
+                </div>
 
-            <div class="rightbar-content h-100" data-simplebar>
+                <div class="form-check form-switch mb-1">
+                    <input class="form-check-input" type="checkbox" name="width" value="boxed" id="boxed-check">
+                    <label class="form-check-label" for="boxed-check">Boxed</label>
+                </div>
+    
 
-                <div class="p-3">
-                    <div class="alert alert-warning" role="alert">
-                        <strong>Customize </strong> the overall color scheme, sidebar menu, etc.
-                    </div>
+                <!-- Left Sidebar-->
+                <h5 class="mt-4">Left Sidebar</h5>
+                <hr class="mt-1" />
+                <div class="form-check form-switch mb-1">
+                    <input class="form-check-input" type="checkbox" name="theme" value="default" id="default-check">
+                    <label class="form-check-label" for="default-check">Default</label>
+                </div>
 
-                    <!-- Settings -->
-                    <h5 class="mt-3">Color Scheme</h5>
-                    <hr class="mt-1" />
+                <div class="form-check form-switch mb-1">
+                    <input class="form-check-input" type="checkbox" name="theme" value="light" id="light-check" checked>
+                    <label class="form-check-label" for="light-check">Light</label>
+                </div>
 
-                    <div class="form-check form-switch mb-1">
-                        <input class="form-check-input" type="checkbox" name="color-scheme-mode" value="light" id="light-mode-check" checked>
-                        <label class="form-check-label" for="light-mode-check">Light Mode</label>
-                    </div>
+                <div class="form-check form-switch mb-3">
+                    <input class="form-check-input" type="checkbox" name="theme" value="dark" id="dark-check">
+                    <label class="form-check-label" for="dark-check">Dark</label>
+                </div>
 
-                    <div class="form-check form-switch mb-1">
-                        <input class="form-check-input" type="checkbox" name="color-scheme-mode" value="dark" id="dark-mode-check">
-                        <label class="form-check-label" for="dark-mode-check">Dark Mode</label>
-                    </div>
-       
+                <div class="form-check form-switch mb-1">
+                    <input class="form-check-input" type="checkbox" name="compact" value="fixed" id="fixed-check" checked>
+                    <label class="form-check-label" for="fixed-check">Fixed</label>
+                </div>
 
-                    <!-- Width -->
-                    <h5 class="mt-4">Width</h5>
-                    <hr class="mt-1" />
-                    <div class="form-check form-switch mb-1">
-                        <input class="form-check-input" type="checkbox" name="width" value="fluid" id="fluid-check" checked>
-                        <label class="form-check-label" for="fluid-check">Fluid</label>
-                    </div>
+                <div class="form-check form-switch mb-1">
+                    <input class="form-check-input" type="checkbox" name="compact" value="condensed" id="condensed-check">
+                    <label class="form-check-label" for="condensed-check">Condensed</label>
+                </div>
 
-                    <div class="form-check form-switch mb-1">
-                        <input class="form-check-input" type="checkbox" name="width" value="boxed" id="boxed-check">
-                        <label class="form-check-label" for="boxed-check">Boxed</label>
-                    </div>
+                <div class="form-check form-switch mb-1">
+                    <input class="form-check-input" type="checkbox" name="compact" value="scrollable" id="scrollable-check">
+                    <label class="form-check-label" for="scrollable-check">Scrollable</label>
+                </div>
+
+                <div class="d-grid mt-4">
+                    <button class="btn btn-primary" id="resetBtn">Reset to Default</button>
         
+                    <a href="https://themes.getbootstrap.com/product/hyper-responsive-admin-dashboard-template/"
+                        class="btn btn-danger mt-3" target="_blank"><i class="mdi mdi-basket me-1"></i> Purchase Now</a>
+                </div>
+            </div> <!-- end padding-->
 
-                    <!-- Left Sidebar-->
-                    <h5 class="mt-4">Left Sidebar</h5>
-                    <hr class="mt-1" />
-                    <div class="form-check form-switch mb-1">
-                        <input class="form-check-input" type="checkbox" name="theme" value="default" id="default-check">
-                        <label class="form-check-label" for="default-check">Default</label>
-                    </div>
-
-                    <div class="form-check form-switch mb-1">
-                        <input class="form-check-input" type="checkbox" name="theme" value="light" id="light-check" checked>
-                        <label class="form-check-label" for="light-check">Light</label>
-                    </div>
-
-                    <div class="form-check form-switch mb-3">
-                        <input class="form-check-input" type="checkbox" name="theme" value="dark" id="dark-check">
-                        <label class="form-check-label" for="dark-check">Dark</label>
-                    </div>
-
-                    <div class="form-check form-switch mb-1">
-                        <input class="form-check-input" type="checkbox" name="compact" value="fixed" id="fixed-check" checked>
-                        <label class="form-check-label" for="fixed-check">Fixed</label>
-                    </div>
-
-                    <div class="form-check form-switch mb-1">
-                        <input class="form-check-input" type="checkbox" name="compact" value="condensed" id="condensed-check">
-                        <label class="form-check-label" for="condensed-check">Condensed</label>
-                    </div>
-
-                    <div class="form-check form-switch mb-1">
-                        <input class="form-check-input" type="checkbox" name="compact" value="scrollable" id="scrollable-check">
-                        <label class="form-check-label" for="scrollable-check">Scrollable</label>
-                    </div>
-
-                    <div class="d-grid mt-4">
-                        <button class="btn btn-primary" id="resetBtn">Reset to Default</button>
-            
-                        <a href="https://themes.getbootstrap.com/product/hyper-responsive-admin-dashboard-template/"
-                            class="btn btn-danger mt-3" target="_blank"><i class="mdi mdi-basket me-1"></i> Purchase Now</a>
-                    </div>
-                </div> <!-- end padding-->
-
-            </div>
         </div>
+    </div>
 
-        <div class="rightbar-overlay"></div>
-        <!-- /End-bar -->
+    <div class="rightbar-overlay"></div>
+    <!-- /End-bar -->
 
-        <!-- bundle -->
-        <script src="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/assets/js/vendor.min.js"></script>
-        <script src="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/assets/js/app.min.js"></script>
+</body>
 
-        <!-- third party js -->
-        <script src="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/assets/js/vendor/apexcharts.min.js"></script>
-        <script src="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/assets/js/vendor/jquery-jvectormap-1.2.2.min.js"></script>
-        <script src="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/assets/js/vendor/jquery-jvectormap-world-mill-en.js"></script>
-        <script src="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/assets/js/vendor/jquery.dataTables.min.js"></script>
-        <script src="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/assets/js/vendor/dataTables.bootstrap5.js"></script>
-        <script src="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/assets/js/vendor/dataTables.responsive.min.js"></script>
-        <script src="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/assets/js/vendor/responsive.bootstrap5.min.js"></script>
-        <script src="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/assets/js/vendor/dataTables.buttons.min.js"></script>
-        <script src="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/assets/js/vendor/buttons.bootstrap5.min.js"></script>
-        <script src="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/assets/js/vendor/buttons.html5.min.js"></script>
-        <script src="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/assets/js/vendor/buttons.flash.min.js"></script>
-        <script src="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/assets/js/vendor/buttons.print.min.js"></script>
-        <script src="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/assets/js/vendor/dataTables.keyTable.min.js"></script>
-        <script src="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/assets/js/vendor/dataTables.select.min.js"></script>
-        <script src="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/assets/js/vendor/fixedColumns.bootstrap5.min.js"></script>
-        <script src="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/assets/js/vendor/fixedHeader.bootstrap5.min.js"></script>
-        <!-- third party js ends -->
-
-        <!-- FilePond Plugins Js -->
-        <script src="https://unpkg.com/filepond-plugin-file-encode/dist/filepond-plugin-file-encode.min.js"></script>
-        <script src="https://unpkg.com/filepond-plugin-file-validate-size/dist/filepond-plugin-file-validate-size.min.js"></script>
-        <script src="https://unpkg.com/filepond-plugin-image-exif-orientation/dist/filepond-plugin-image-exif-orientation.min.js"></script>
-        <script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.js"></script>
-        <script src="https://unpkg.com/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.min.js"></script>
-        <script src="https://unpkg.com/filepond/dist/filepond.min.js"></script>
-
-        <!-- demo app -->
-        <!-- <script src="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/assets/js/pages/demo.dashboard.js"></script> -->
-        <script src="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/assets/js/pages/demo.datatable-init.js"></script>
-        <!-- end demo js-->
-
-        <!-- 2️⃣ jQuery Validate -->
-        <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
-
-        <!-- (Optional but recommended) Additional methods -->
-        <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/additional-methods.min.js"></script>
-
-        <!-- SweetAlert Plugin Js -->
-        <script src="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/assets/plugins/sweetalert2/dist/sweetalert2.min.js"></script>
-
-        <!-- Custom JS -->
-        <script src="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/assets/js/custom.js"></script>
-        <script src="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/assets/js/form-validation.js"></script>
-        <!-- end Custom JS -->
-
-        <?php
-            Alert::render();
-            unset($_SESSION['prog_image']);
-        ?>
-    </body>
-
-</html>
+<?php
+include 'scripts.php';
+?>
