@@ -7535,7 +7535,7 @@ textarea.form-control-lg{
 }
 .bg-secondary{
     --ct-bg-opacity:1;
-    background-color:rgba(var(--secondary-rgb),var(--ct-bg-opacity))!important
+    background-color:var(--secondary-color)!important
 }
 .bg-success{
     --ct-bg-opacity:1;
@@ -11749,10 +11749,10 @@ body[data-leftbar-theme=light][data-leftbar-compact-mode=condensed] .side-nav .s
     color:var(--ct-menu-item-hover)
 }
 body[data-leftbar-theme=dark] .leftside-menu{
-    background:var(--ct-bg-leftbar)
+    background:var(--primary-active-border-color)
 }
 body[data-leftbar-theme=dark] .leftside-menu .logo{
-    background:var(--ct-bg-leftbar)!important;
+    background:var(--primary-active-border-color)!important;
 }
 body[data-leftbar-theme=dark] .side-nav .side-nav-link{
     color:var(--ct-dark-menu-item)
