@@ -50,6 +50,6 @@
 
     <?php
         Alert::render();
-        unset($_SESSION['prog_image']);
+        unset($_SESSION['img_input']);
     ?>
 </html>

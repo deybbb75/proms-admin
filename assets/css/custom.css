@@ -134,15 +134,21 @@
 }
 
 .filepond--root {
-    margin-bottom: 0;
+    margin-bottom: 0 !important;
 }
 .filepond--credits{
     display: none;
 }
 
 .auto-grow-textarea {
-  field-sizing: content; /* The key property */
-  resize: none;          /* Hides the user-resizable handle */
-  overflow-y: hidden;    /* Hides vertical scrollbar initially */
-  min-height: 2.25rem;   /* Optional: Set a minimum height (adjust as needed) */
+  field-sizing: content;
+  resize: none;   
+  overflow-y: hidden;  
+  min-height: 2.25rem;
+}
+
+label.required::after {
+	content: " *";
+	color: red;
+	font-weight: bold;
 }

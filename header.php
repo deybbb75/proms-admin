@@ -35,9 +35,17 @@ include 'head.php';
             <div class="h-100" id="leftside-menu-container" data-simplebar>
 
                 <!--- Sidemenu -->
-                <ul class="side-nav">
+                <ul class="side-nav" id="side-nav">
 
                     <li class="side-nav-title side-nav-item">Navigation</li>
+
+                    <li class="side-nav-item">
+                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/pages/program.php" class="side-nav-link">
+                            <i class="mdi mdi-certificate"></i>
+                            <span> Programs </span>
+                        </a>
+                    </li>
+
                     <li class="side-nav-item">
                         <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/pages/system-user.php" class="side-nav-link">
                             <i class="mdi mdi-account-multiple"></i>

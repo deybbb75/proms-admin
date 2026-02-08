@@ -1,5 +1,5 @@
 <?php
-include '../includes/init.php';
+include '../../includes/init.php';
 
 $validator = new FileValidator(
     maxSizeMB: 10,
@@ -8,14 +8,14 @@ $validator = new FileValidator(
     ]
 );
 
-if (!isset($_FILES['prog_image'])) {
+if (!isset($_FILES['img_input'])) {
     http_response_code(400);
     exit('No file received');
 }else{
-    $result = $validator->check('prog_image');
+    $result = $validator->check('img_input');
     
     if($result == 'Success') {
-        $file = $_FILES['prog_image'];
+        $file = $_FILES['img_input'];
         $filename = $file['name'];
         $fileTmpPath = $file['tmp_name'];
         $finfo = finfo_open(FILEINFO_MIME_TYPE);
@@ -23,14 +23,14 @@ if (!isset($_FILES['prog_image'])) {
 
         $fileContent = file_get_contents($fileTmpPath);
 
-        $_SESSION['prog_image']['content'] = $fileContent;
-        $_SESSION['prog_image']['status'] = $result;
-        $_SESSION['prog_image']['type'] = $fileType;
+        $_SESSION['img_input']['content'] = $fileContent;
+        $_SESSION['img_input']['status'] = $result;
+        $_SESSION['img_input']['type'] = $fileType;
         
         $remarks_array['attachment_file'] = $fileContent;
     }else{
-        $_SESSION['prog_image']['content'] = $result;
-        $_SESSION['prog_image']['status'] = "Failed";
+        $_SESSION['img_input']['content'] = $result;
+        $_SESSION['img_input']['status'] = "Failed";
     }
 
     echo $fileContent;

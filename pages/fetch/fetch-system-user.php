@@ -21,7 +21,7 @@ if (isset($_POST['id'])) {
 
 <div class="row">
     <div class="col-md-4">
-        <label for="fname" class="form-label">First Name</label>
+        <label for="fname" class="form-label required">First Name</label>
         <input type="text" id="fname" name="fname" class="form-control" placeholder="First Name" value="<?= $fname ?? '' ?>">
     </div>
     <div class="col-md-4">
@@ -29,23 +29,23 @@ if (isset($_POST['id'])) {
         <input type="text" id="mname" name="mname" class="form-control" placeholder="Middle Name (Optional)" value="<?= $mname ?? '' ?>">
     </div>
     <div class="col-md-4">
-        <label for="lname" class="form-label">Last Name</label>
+        <label for="lname" class="form-label required">Last Name</label>
         <input type="text" id="lname" name="lname" class="form-control" placeholder="Last Name" value="<?= $lname ?? '' ?>">
     </div>
 </div>
 <div class="row">
     <div class="col-sm-6">
-        <label for="emp_no" class="form-label">Employee Number</label>
+        <label for="emp_no" class="form-label required">Employee Number</label>
         <input type="text" id="emp_no" name="emp_no" class="form-control" placeholder="Employee Number" value="<?= $emp_no ?? '' ?>" data-toggle="input-mask" data-mask-format="000000">
     </div>
     <div class="col-sm-6">
-        <label for="email" class="form-label">Email</label>
+        <label for="email" class="form-label required">Email</label>
         <input type="email" id="email" name="email" class="form-control" placeholder="Email" value="<?= $email ?? '' ?>">
     </div>
 </div>
 <div class="row">
     <div class="col-sm-6">
-        <label for="role" class="form-label">Role</label>
+        <label for="role" class="form-label required">Role</label>
         <select class="form-select select2" data-toggle="select2" name ="role" id="role" data-placeholder="Select Role">
             <option value="<?= $role ?? '' ?>" <?php if(!$status) echo 'disabled'; ?> selected>
                 <?= !empty($role) ? $role : '' ?>
@@ -65,7 +65,7 @@ if (isset($_POST['id'])) {
         </select>
     </div>
     <div class="col-sm-6">
-        <label for="status" class="form-label">Status</label>
+        <label for="status" class="form-label required">Status</label>
         <select class="form-control select2" data-toggle="select2" name ="status" data-placeholder="Select Status">
             <option value="<?= $status ?? '' ?>" <?php if(empty($status)) echo 'disabled'; ?> selected>
                 <?= !empty($status) ? $status : '' ?>

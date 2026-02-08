@@ -11758,10 +11758,10 @@ body[data-leftbar-theme=dark] .side-nav .side-nav-link{
     color:var(--ct-dark-menu-item)
 }
 body[data-leftbar-theme=dark] .side-nav .side-nav-link:active,body[data-leftbar-theme=dark] .side-nav .side-nav-link:focus,body[data-leftbar-theme=dark] .side-nav .side-nav-link:hover{
-    color:var(--ct-dark-menu-item-hover)
+    color:var(--secondary-color)
 }
 body[data-leftbar-theme=dark] .side-nav .menuitem-active>a{
-    color:var(--ct-dark-menu-item-active)!important
+    color:var(--secondary-color)!important
 }
 body[data-leftbar-theme=dark] .side-nav .side-nav-title{
     color:var(--ct-dark-menu-item)
@@ -11770,13 +11770,13 @@ body[data-leftbar-theme=dark] .side-nav .side-nav-forth-level li a,body[data-lef
     color:var(--ct-dark-menu-item)
 }
 body[data-leftbar-theme=dark] .side-nav .side-nav-forth-level li a:focus,body[data-leftbar-theme=dark] .side-nav .side-nav-forth-level li a:hover,body[data-leftbar-theme=dark] .side-nav .side-nav-second-level li a:focus,body[data-leftbar-theme=dark] .side-nav .side-nav-second-level li a:hover,body[data-leftbar-theme=dark] .side-nav .side-nav-third-level li a:focus,body[data-leftbar-theme=dark] .side-nav .side-nav-third-level li a:hover{
-    color:var(--ct-dark-menu-item-hover)
+    color:var(--secondary-color)
 }
 body[data-leftbar-theme=dark] .side-nav .side-nav-forth-level li.active>a,body[data-leftbar-theme=dark] .side-nav .side-nav-second-level li.active>a,body[data-leftbar-theme=dark] .side-nav .side-nav-third-level li.active>a{
-    color:var(--ct-dark-menu-item-active)
+    color:var(--secondary-color)
 }
 body[data-leftbar-theme=dark][data-leftbar-compact-mode=condensed] .side-nav .side-nav-item .side-nav-link:active,body[data-leftbar-theme=dark][data-leftbar-compact-mode=condensed] .side-nav .side-nav-item .side-nav-link:focus,body[data-leftbar-theme=dark][data-leftbar-compact-mode=condensed] .side-nav .side-nav-item .side-nav-link:hover{
-    color:var(--ct-dark-menu-item-hover)
+    color:var(--secondary-color)
 }
 body[data-leftbar-theme=dark][data-leftbar-compact-mode=condensed] .side-nav .side-nav-item:hover .side-nav-link{
     background:var(--primary-color);

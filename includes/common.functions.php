@@ -180,7 +180,7 @@ function e($data)
 function setActiveLink($link)
 {
     $systemName = basename($GLOBALS['INF_CONFIG']['sitehost']);
-    echo "<script>localStorage.setItem('menu_link', '/" . $systemName . '/modules/' . $link . "');</script>";
+    echo "<script>localStorage.setItem('menu_link', '/" . $systemName . '/pages/' . $link . "');</script>";
 }
 
 function getDuplicate($dbRows, $post, $m = true)
@@ -254,7 +254,7 @@ function checkFile(string $file_input_array): string
 
     // If no file name or empty
     if (empty($file['name'])) {
-        return "No file uploaded";
+        return "No file name uploaded";
     }
 
     // no file uploaded but field exists

@@ -57,12 +57,14 @@ $db = DB::getInstance();
                                             <span class="status-<?= strtolower($line->status) ?>"><?= $line->status ?></span>
                                         </td>
                                         <td>
-                                            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#primary-header-modal"
-                                                onclick="editItem({fetch_name: 'fetch-system-user', item_id: '<?= encrypt_data($line->sys_id) ?>'})"><i class="mdi mdi-square-edit-outline"></i>
-                                            </button>
-                                            <button class="btn btn-danger ms-1" onclick="deleteItem('<?= encrypt_data($line->sys_id) ?>')">
-                                                <i class="mdi mdi-delete"></i>
-                                            </button>
+                                            <center>
+                                                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#primary-header-modal"
+                                                    onclick="editItem({fetch_name: 'fetch-system-user', item_id: '<?= encrypt_data($line->sys_id) ?>'})"><i class="mdi mdi-square-edit-outline"></i>
+                                                </button>
+                                                <button type="button" class="btn btn-danger ms-1" onclick="deleteItem('<?= encrypt_data($line->sys_id) ?>')">
+                                                    <i class="mdi mdi-delete"></i>
+                                                </button>
+                                            </center>
                                         </td>
                                     </tr>
                                     <?php
@@ -97,7 +99,7 @@ $db = DB::getInstance();
                     <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-primary" id="save_changes">Save changes</button>
                 </div>
-                <input type="hidden" id="delete_id" value="">
+                <input type="hidden" id="action" value="">
             </form>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->

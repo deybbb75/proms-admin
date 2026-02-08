@@ -33,8 +33,8 @@ function validateForm() {
         },
         {
             fields: [
-                "start_date1", 
-                "start_date2",
+                "start_date_1", 
+                "start_date_2",
                 "day[0]",
                 "day[1]",
                 "day[2]",
@@ -44,7 +44,8 @@ function validateForm() {
                 "end_time[0]",
                 "end_time[1]",
                 "end_time[2]",
-                "tuition_fee"
+                "main_fee",
+                "sub_fee"
             ],
             rules: { required: true, noWhitespace: true }
         },
@@ -53,7 +54,7 @@ function validateForm() {
             rules: { required: true, digits: true }
         },
         {
-            fields: ["prog_title", "prog_desc", "venue",],
+            fields: ["prog_name", "prog_desc", "venue", "sub_prog_name",],
             rules: { required: true, noWhitespace: true, descPattern: true }
         },
         {

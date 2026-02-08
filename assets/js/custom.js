@@ -54,11 +54,19 @@ function deleteItem(item_id) {
 		cancelButtonText: "Cancel",
 	}).then((result) => {
 		if (result.isConfirmed) {
-            $("#delete_id").attr("name", "Delete");
-            $("#delete_id").val(item_id);
+            $(".fetched-data").html("");
+            $("#action").attr("name", "Delete");
+            $("#action").val(item_id);
             $("#form_validation").submit();
 		}
 	});
+}
+
+function viewItem(item_id) {
+    $(".fetched-data").html("");
+    $("#action").attr("name", "View");
+    $("#action").val(item_id);
+    $("#form_validation").submit();
 }
 
 function reInitUI(container) {
@@ -202,12 +210,14 @@ function reInitUI(container) {
     });
 }
 
+// Initialize UI components on page load
 $(function () {
 	setTimeout(function () {
 		$("#main-preloader").fadeOut();
 	}, 50);
 });
 
+// Initialize FilePond for the attachment input
 function initFilePond(inputId, acceptedFileType, errorMsg, buttons) {
     // Register all FilePond plugins that will be used
     FilePond.registerPlugin(
@@ -227,8 +237,8 @@ function initFilePond(inputId, acceptedFileType, errorMsg, buttons) {
 
             // Backend endpoints used by FilePond
             server: {
-                process: 'filepond-upload.php',   // Called when file is uploaded
-                revert: 'filepond-revert.php'     // Called when file is removed
+                process: 'controller/ctr-upload.php',   // Called when file is uploaded
+                revert: 'controller/ctr-revert.php'     // Called when file is removed
             }
         }
     );
@@ -282,3 +292,46 @@ function initFilePond(inputId, acceptedFileType, errorMsg, buttons) {
         });
     });
 }
+
+window.addEventListener("load", () => {
+  const menu = document.getElementById("side-nav");
+  const activeItem = menu.querySelector(".menuitem-active");
+
+  if (activeItem) {
+    activeItem.scrollIntoView({
+      behavior: "auto",
+      block: "center"
+    });
+  }
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    const menuItems = document.querySelectorAll('.simplebar-content .side-nav li');
+
+    // Get the current page's pathname
+    const currentPath = window.location.pathname;
+
+    // Get the current path saved in the local storage if the menu has subpage
+    let menuLink = localStorage.getItem('menu_link');
+    let localStoragePath = false;
+
+    menuItems.forEach(item => {
+        const link = item.querySelector('a');
+        
+        if (link) {
+            if (menuLink) {
+                localStoragePath = link.getAttribute('href').includes(menuLink);
+            }
+            
+            if (localStoragePath) {
+                item.classList.add('menuitem-active');
+
+                if (item.parentElement.classList.contains("side-nav-second-level")) {
+                    item.closest('li').classList.add('menuitem-active');
+                }
+            }
+        }
+    });
+
+    localStorage.removeItem('menu_link');
+});

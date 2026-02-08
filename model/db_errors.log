@@ -190,3 +190,73 @@ Trace: #0 C:\Users\Dave\Documents\xampp\htdocs\proms-admin\model\pdo.class.php(1
 #2 C:\Users\Dave\Documents\xampp\htdocs\proms-admin\index.php(4): DB::getInstance()
 #3 {main}
 
+[2026-02-08 12:26:44] Error: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'proms.tbl_program' doesn't exist
+Trace: #0 C:\xampp\htdocs\proms-admin\model\pdo.class.php(352): PDOStatement->execute()
+#1 C:\xampp\htdocs\proms-admin\pages\program.php(49): DB->query('SELECT * FROM t...')
+#2 {main}
+
+[2026-02-08 13:20:20] Error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'prog_image' in 'field list'
+Trace: #0 C:\xampp\htdocs\proms-admin\model\pdo.class.php(716): PDOStatement->execute()
+#1 C:\xampp\htdocs\proms-admin\pages\controller\ctr-program.php(63): DB->executeInsert(Array, 'tbl_program')
+#2 {main}
+
+[2026-02-08 13:22:29] Error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'prog_image' in 'field list'
+Trace: #0 C:\xampp\htdocs\proms-admin\model\pdo.class.php(716): PDOStatement->execute()
+#1 C:\xampp\htdocs\proms-admin\pages\controller\ctr-program.php(63): DB->executeInsert(Array, 'tbl_program')
+#2 {main}
+
+[2026-02-08 13:23:48] Error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'prog_image' in 'field list'
+Trace: #0 C:\xampp\htdocs\proms-admin\model\pdo.class.php(716): PDOStatement->execute()
+#1 C:\xampp\htdocs\proms-admin\pages\controller\ctr-program.php(63): DB->executeInsert(Array, 'tbl_program')
+#2 {main}
+
+[2026-02-08 13:24:27] Error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'prog_image' in 'field list'
+Trace: #0 C:\xampp\htdocs\proms-admin\model\pdo.class.php(716): PDOStatement->execute()
+#1 C:\xampp\htdocs\proms-admin\pages\controller\ctr-program.php(63): DB->executeInsert(Array, 'tbl_program')
+#2 {main}
+
+[2026-02-08 13:25:55] Error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'prog_image' in 'field list'
+Trace: #0 C:\xampp\htdocs\proms-admin\model\pdo.class.php(716): PDOStatement->execute()
+#1 C:\xampp\htdocs\proms-admin\pages\controller\ctr-program.php(63): DB->executeInsert(Array, 'tbl_program')
+#2 {main}
+
+[2026-02-08 15:20:10] Error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'venue' in 'field list'
+Trace: #0 C:\xampp\htdocs\proms-admin\model\pdo.class.php(716): PDOStatement->execute()
+#1 C:\xampp\htdocs\proms-admin\pages\controller\ctr-sub-program.php(72): DB->executeInsert(Array, 'tbl_sub_program')
+#2 {main}
+
+[2026-02-08 15:22:47] Error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'venue' in 'field list'
+Trace: #0 C:\xampp\htdocs\proms-admin\model\pdo.class.php(716): PDOStatement->execute()
+#1 C:\xampp\htdocs\proms-admin\pages\controller\ctr-sub-program.php(72): DB->executeInsert(Array, 'tbl_sub_program')
+#2 {main}
+
+[2026-02-08 16:46:11] Error: SQLSTATE[HY093]: Invalid parameter number: parameter was not defined
+Trace: #0 C:\xampp\htdocs\proms-admin\model\pdo.class.php(794): PDOStatement->execute()
+#1 C:\xampp\htdocs\proms-admin\pages\controller\ctr-sub-program.php(239): DB->executeDelete('tbl_schedule', 'sub_prog_id = :...', Array)
+#2 {main}
+
+[2026-02-08 16:55:47] Error: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'venue' cannot be null
+Trace: #0 C:\xampp\htdocs\proms-admin\model\pdo.class.php(716): PDOStatement->execute()
+#1 C:\xampp\htdocs\proms-admin\pages\controller\ctr-sub-program.php(78): DB->executeInsert(Array, 'tbl_sub_program')
+#2 {main}
+
+[2026-02-08 16:57:24] Error: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'venue' cannot be null
+Trace: #0 C:\xampp\htdocs\proms-admin\model\pdo.class.php(716): PDOStatement->execute()
+#1 C:\xampp\htdocs\proms-admin\pages\controller\ctr-sub-program.php(78): DB->executeInsert(Array, 'tbl_sub_program')
+#2 {main}
+
+[2026-02-08 16:58:27] Error: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'venue' cannot be null
+Trace: #0 C:\xampp\htdocs\proms-admin\model\pdo.class.php(716): PDOStatement->execute()
+#1 C:\xampp\htdocs\proms-admin\pages\controller\ctr-sub-program.php(78): DB->executeInsert(Array, 'tbl_sub_program')
+#2 {main}
+
+[2026-02-08 17:01:00] Error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'role' in 'field list'
+Trace: #0 C:\xampp\htdocs\proms-admin\model\pdo.class.php(716): PDOStatement->execute()
+#1 C:\xampp\htdocs\proms-admin\pages\controller\ctr-system-user.php(50): DB->executeInsert(Array, 'tbl_system_user')
+#2 {main}
+
+[2026-02-08 17:02:00] Error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'role' in 'field list'
+Trace: #0 C:\xampp\htdocs\proms-admin\model\pdo.class.php(716): PDOStatement->execute()
+#1 C:\xampp\htdocs\proms-admin\pages\controller\ctr-system-user.php(50): DB->executeInsert(Array, 'tbl_system_user')
+#2 {main}
+

@@ -64,6 +64,8 @@ if (isset($_POST['Save'])) {
             'html'  => 'Something went wrong on our end.',
             'path'  => $redirect_path
         ));
+
+        // echo $e->getMessage();
     } catch (Exception $e) {
         // Handle other exceptions
         Alert::error(array(
