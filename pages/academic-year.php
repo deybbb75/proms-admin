@@ -12,12 +12,12 @@ $db = DB::getInstance();
             <div class="page-title-box">
                 <div class="page-title-right">
                     <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#primary-header-modal"
-                        onclick="addItem({fetch_name: 'fetch-system-user'})">
+                        onclick="addItem({fetch_name: 'fetch-academic-year'})">
                         <i class="mdi mdi-plus"></i>
-                        <span class="add-btn-name">Add System User</span>
+                        <span class="add-btn-name">Add Academic Year</span>
                     </button>
                 </div>
-                <h4 class="page-title">SYSTEM USERS</h4>
+                <h4 class="page-title">ACADEMIC YEARS</h4>
             </div>
         </div>
     </div>
@@ -30,34 +30,30 @@ $db = DB::getInstance();
                     <table id="basic-datatable" class="table table-striped dt-responsive nowrap w-100">
                         <thead>
                             <tr>
-                                <th>Employee Number</th>
-                                <th>Full Name</th>
-                                <th>Email</th>
-                                <th>Role</th>
+                                <th>Year</th>
+                                <th>Semester</th>
                                 <th>Status</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php
-                                $system_users_query = $db->query("SELECT * FROM tbl_system_user");
+                                $ay_query = $db->query("SELECT * FROM tbl_academic_year");
 
-                                while ($line = $db->fetchNextObject($system_users_query)) {
+                                while ($line = $db->fetchNextObject($ay_query)) {
                             ?>
                             <tr>
-                                <td><?= e($line->emp_no) ?></td>
-                                <td><?= e($line->fname) ?> <?= e($line->mname) ?> <?= e($line->lname) ?></td>
-                                <td><?= e($line->email) ?></td>
-                                <td><?= e($line->role) ?></td>
+                                <td><?= e($line->year) ?></td>
+                                <td><?= e($line->semester) ?></td>
                                 <td>
                                     <span class="status-<?= strtolower($line->status) ?>"><?= $line->status ?></span>
                                 </td>
                                 <td>
                                     <center>
                                         <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#primary-header-modal"
-                                            onclick="editItem({fetch_name: 'fetch-system-user', item_id: '<?= encrypt_data($line->sys_id) ?>'})"><i class="mdi mdi-square-edit-outline"></i>
+                                            onclick="editItem({fetch_name: 'fetch-academic-year', item_id: '<?= encrypt_data($line->ay_id) ?>'})"><i class="mdi mdi-square-edit-outline"></i>
                                         </button>
-                                        <button type="button" class="btn btn-danger ms-1" onclick="deleteItem('<?= encrypt_data($line->sys_id) ?>')">
+                                        <button type="button" class="btn btn-danger ms-1" onclick="deleteItem('<?= encrypt_data($line->ay_id) ?>')">
                                             <i class="mdi mdi-delete"></i>
                                         </button>
                                     </center>
@@ -67,7 +63,7 @@ $db = DB::getInstance();
                                 }
                             ?>
                         </tbody>
-                    </table>               
+                    </table>                
                 </div> <!-- end card body-->
             </div> <!-- end card -->
         </div><!-- end col-->
@@ -79,9 +75,9 @@ $db = DB::getInstance();
 <div id="primary-header-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="primary-header-modalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <form action="controller/ctr-system-user.php" method="POST" id="form_validation">
+            <form action="controller/ctr-academic-year.php" method="POST" id="form_validation">
                 <div class="modal-header modal-colored-header bg-primary">
-                    <h4 class="modal-title" id="primary-header-modalLabel">System User Details</h4>
+                    <h4 class="modal-title" id="primary-header-modalLabel">Academic Year Details</h4>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">

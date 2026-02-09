@@ -8,9 +8,9 @@ include 'head.php';
     </div>
 
     <!-- Begin page -->
-    <div class="wrapper">
+    <div class="wrapper" id="wrapper">
         <!-- ========== Left Sidebar Start ========== -->
-        <div class="leftside-menu">
+        <div class="leftside-menu" id="leftside-menu">
 
             <!-- LOGO -->
             <a href="index.html" class="logo text-center logo-light">
@@ -37,12 +37,49 @@ include 'head.php';
                 <!--- Sidemenu -->
                 <ul class="side-nav" id="side-nav">
 
-                    <li class="side-nav-title side-nav-item">Navigation</li>
+                    <li class="side-nav-title side-nav-item">Reservation Utilities</li>
+
+                    <li class="side-nav-item">
+                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/pages/pending-reserve.php" class="side-nav-link">
+                            <i class="mdi mdi-file-clock"></i>
+                            <span> Pending Reservations </span>
+                        </a>
+                    </li>
+
+                    <li class="side-nav-item">
+                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/pages/enrolled-reserve.php" class="side-nav-link">
+                            <i class="mdi mdi-file-check"></i>
+                            <span> Enrolled Reservations </span>
+                        </a>
+                    </li>
+
+                    <li class="side-nav-title side-nav-item">System Utilities</li>
+
+                    <li class="side-nav-item">
+                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/pages/academic-year.php" class="side-nav-link">
+                            <i class="mdi mdi-calendar-month"></i>
+                            <span> Academic Years </span>
+                        </a>
+                    </li>
 
                     <li class="side-nav-item">
                         <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/pages/program.php" class="side-nav-link">
                             <i class="mdi mdi-certificate"></i>
                             <span> Programs </span>
+                        </a>
+                    </li>
+
+                    <li class="side-nav-item">
+                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/pages/news.php" class="side-nav-link">
+                            <i class="mdi mdi-newspaper"></i>
+                            <span> News & Events </span>
+                        </a>
+                    </li>
+
+                    <li class="side-nav-item">
+                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/pages/team.php" class="side-nav-link">
+                            <i class="mdi mdi-account-group"></i>
+                            <span> Our Team </span>
                         </a>
                     </li>
 

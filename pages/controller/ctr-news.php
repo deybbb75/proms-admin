@@ -1,0 +1,213 @@
+<?php
+include '../../includes/init.php';
+$db = DB::getInstance();
+
+$redirect_path = '../news.php';
+
+if (isset($_POST['Save'])) {
+    try {
+        // Check if the required fields are set
+        $requiredFields = [
+            'news_title' => 'News Title', 
+            'news_content' => 'News Content',
+            'status' => 'Status'
+        ];
+        $missing        = validateRequiredFields($requiredFields, $_POST);
+        if ($missing) {
+            Alert::error(array(
+                'title' => 'Validation Error',
+                'html'  => 'Missing required fields: ' . implode(', ', $missing),
+                'path'  => $redirect_path
+            ));
+        }
+
+        // Check for duplicate news_title
+        $message = $db->hasDuplicate('SELECT news_title FROM tbl_news WHERE news_title = :news_title', [
+            'news_title' => $_POST['news_title']
+        ]);
+        if ($message) {
+            Alert::error(array(
+                'title' => 'Duplicate Entry',
+                'html'  => $message,
+                'path'  => $redirect_path
+            ));
+        }
+
+        // Prepare the SQL array for insertion
+        $sqlArray = array(
+            'news_title'  => $_POST['news_title'],
+            'news_content'   => $_POST['news_content'],
+            'status'  => $_POST['status'],
+        );
+
+        if(isset($_SESSION['img_input'])){
+            if($_SESSION['img_input']['status'] == 'Success') {
+                $sqlArray['news_img'] = $_SESSION['img_input']['content'];
+                $sqlArray['news_img_type'] = $_SESSION['img_input']['type'];
+            }else{
+                Alert::error([
+                    'title' => 'Image Upload Error',
+                    'html'  => $_SESSION['img_input']['content'],
+                    'path'  => $redirect_path
+                ]);
+            }
+        }else{
+            Alert::error([
+                'title' => 'Image Upload Error',
+                'html'  => 'No image uploaded.',
+                'path'  => $redirect_path
+            ]);
+        }
+
+        // Execute the insert operation
+        $db->executeInsert($sqlArray, 'tbl_news');
+
+        $lastInsertId = $db->lastInsertedId();
+        
+        // Check if the insert was successful
+        if ($db->affectedRows > 0) {
+            Alert::success(array(
+                'title' => 'Save Successful',
+                'html'  => 'News successfully saved.',
+                'path'  => $redirect_path
+            ));
+        }
+    } catch (DBException $e) {
+        // Handle the database error
+        Alert::error(array(
+            'title' => 'Server Error',
+            'html'  => 'Something went wrong on our end.',
+            'path'  => $redirect_path
+        ));
+
+        // echo $e->getMessage();
+    } catch (Exception $e) {
+        // Handle other exceptions
+        Alert::error(array(
+            'title' => 'Error',
+            'html'  => 'Something went wrong with your request.',
+            'path'  => $redirect_path
+        ));
+    }
+}
+
+if (isset($_POST['Edit'])) {
+    try {
+        // Check if the required fields are set
+        $requiredFields = [
+            'news_title' => 'News Title', 
+            'news_content' => 'News Content',
+            'status' => 'Status'
+        ];
+        $missing        = validateRequiredFields($requiredFields, $_POST);
+        if ($missing) {
+            Alert::error(array(
+                'title' => 'Validation Error',
+                'html'  => 'Missing required fields: ' . implode(', ', $missing),
+                'path'  => $redirect_path
+            ));
+        }
+
+       // Decrypt the id
+        $news_id  = decrypt_data($_POST['news_id']);
+        // Check for duplicate news_title
+        $message = $db->hasDuplicate('SELECT news_title FROM tbl_news WHERE news_title = :news_title AND news_id != :news_id', [
+            'news_title' => $_POST['news_title'],
+            'news_id' => $news_id
+        ]);
+        if ($message) {
+            Alert::error(array(
+                'title' => 'Duplicate Entry',
+                'html'  => $message,
+                'path'  => $redirect_path
+            ));
+        }
+
+        // Prepare the SQL array for insertion
+        $sqlArray = array(
+            'prog_name'  => $_POST['prog_name'],
+            'prog_desc'   => $_POST['prog_desc'],
+            'status'  => $_POST['status'],
+        );
+
+        if(isset($_SESSION['img_input'])){
+            if($_SESSION['img_input']['status'] == 'Success') {
+                $sqlArray['news_img'] = $_SESSION['img_input']['content'];
+                $sqlArray['news_img_type'] = $_SESSION['img_input']['type'];
+            }else{
+                Alert::error([
+                    'title' => 'Image Upload Error',
+                    'html'  => $_SESSION['img_input']['content'],
+                    'path'  => $redirect_path
+                ]);
+            }
+        }
+
+        // Execute the insert operation
+        $db->executeUpdate($sqlArray, 'tbl_news', 'news_id = :news_id', ['news_id' => $news_id]);
+        
+        // Check if the insert was successful
+        if ($db->affectedRows > 0) {
+            Alert::success(array(
+                'title' => 'Update Successful',
+                'html'  => 'News successfully updated.',
+                'path'  => $redirect_path
+            ));
+        }else {
+            Alert::warning(array(
+                'title' => 'No Update Performed',
+                'html'  => 'Submitted data is identical to existing record.',
+                'path'  => $redirect_path
+            ));
+        }
+    } catch (DBException $e) {
+        // Handle the database error
+        Alert::error(array(
+            'title' => 'Server Error',
+            'html'  => 'Something went wrong on our end.',
+            'path'  => $redirect_path
+        ));
+    } catch (Exception $e) {
+        // Handle other exceptions
+        Alert::error(array(
+            'title' => 'Error',
+            'html'  => 'Something went wrong with your request.',
+            'path'  => $redirect_path
+        ));
+    }
+}
+
+if (isset($_POST['Delete'])) {
+    try {
+        $id = decrypt_data($_POST['Delete']);
+        $db->executeDelete('tbl_news', 'news_id = :news_id', ['news_id' => $id]);
+        
+        if ($db->affectedRows > 0) {
+            Alert::success(array(
+                'title' => 'Delete Successful',
+                'html'  => 'News successfully deleted.',
+                'path'  => $redirect_path
+            ));
+        } else {
+            Alert::error(array(
+                'title' => 'Delete Failed',
+                'html'  => 'No news found with the provided ID.',
+                'path'  => $redirect_path
+            ));
+        }
+    } catch (DBException $e) {
+        // Handle the database error
+        Alert::error(array(
+            'title' => 'Server Error',
+            'html'  => 'Something went wrong on our end.',
+            'path'  => $redirect_path
+        ));
+    } catch (Exception $e) {
+        // Handle other exceptions
+        Alert::error(array(
+            'title' => 'Error',
+            'html'  => 'Something went wrong with your request.',
+            'path'  => $redirect_path
+        ));
+    }
+}

@@ -29,48 +29,44 @@ $_SESSION['max_schedule'] = 3;
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <div class="tab-content">
-                        <div class="tab-pane show active" id="basic-datatable-preview">
-                            <table id="basic-datatable" class="table table-striped dt-responsive nowrap w-100">
-                                <thead>
-                                    <tr>
-                                        <th>Program Name</th>
-                                        <th>Description</th>
-                                        <th>Status</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php
-                                        $program_query = $db->query("SELECT * FROM tbl_program");
+                    <table id="basic-datatable" class="table table-striped dt-responsive nowrap w-100">
+                        <thead>
+                            <tr>
+                                <th>Program Name</th>
+                                <th>Description</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                                $program_query = $db->query("SELECT * FROM tbl_program");
 
-                                        while ($line = $db->fetchNextObject($program_query)) {
-                                    ?>
-                                    <tr>
-                                        <td><?= $line->prog_name ?></td>
-                                        <td style="white-space: wrap;"><?= $line->prog_desc ?></td>
-                                        <td>
-                                            <span class="status-<?= strtolower($line->status) ?>"><?= $line->status ?></span>
-                                        </td>
-                                        <td>
-                                            <center>
-                                                <button type="button" class="btn btn-info" onclick="viewItem('<?= encrypt_data($line->prog_id) ?>')">
-                                                    <i class="mdi mdi-eye"></i>
-                                                </button>
-                                                <button type="button" class="btn btn-success ms-1" data-bs-toggle="modal" data-bs-target="#primary-header-modal"
-                                                    onclick="editItem({fetch_name: 'fetch-program', item_id: '<?= encrypt_data($line->prog_id) ?>', custom_function: fetchCustom})">
-                                                    <i class="mdi mdi-square-edit-outline"></i>
-                                                </button>
-                                            </center>
-                                        </td>
-                                    </tr>
-                                    <?php
-                                        }
-                                    ?>
-                                </tbody>
-                            </table>                                           
-                        </div> <!-- end preview-->
-                    </div> <!-- end tab-content-->
+                                while ($line = $db->fetchNextObject($program_query)) {
+                            ?>
+                            <tr>
+                                <td><?= e($line->prog_name) ?></td>
+                                <td style="white-space: pre-line;"><?= e(truncateText($line->prog_desc)) ?></td>
+                                <td>
+                                    <span class="status-<?= strtolower($line->status) ?>"><?= e($line->status) ?></span>
+                                </td>
+                                <td>
+                                    <center>
+                                        <button type="button" class="btn btn-info" onclick="viewItem('<?= encrypt_data($line->prog_id) ?>')">
+                                            <i class="mdi mdi-eye"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-success ms-1" data-bs-toggle="modal" data-bs-target="#primary-header-modal"
+                                            onclick="editItem({fetch_name: 'fetch-program', item_id: '<?= encrypt_data($line->prog_id) ?>', custom_function: fetchCustom})">
+                                            <i class="mdi mdi-square-edit-outline"></i>
+                                        </button>
+                                    </center>
+                                </td>
+                            </tr>
+                            <?php
+                                }
+                            ?>
+                        </tbody>
+                    </table>                 
                 </div> <!-- end card body-->
             </div> <!-- end card -->
         </div><!-- end col-->

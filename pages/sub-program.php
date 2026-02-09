@@ -41,104 +41,105 @@ if($_SESSION['prog_id'] == $_SESSION['unique_prog_id']){
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <div class="tab-content">
-                        <div class="tab-pane show active" id="basic-datatable-preview">
-                            <table id="basic-datatable" class="table table-striped dt-responsive nowrap w-100">
-                                <thead>
-                                    <tr>
-                                        <th>Sub-program Name</th>
-                                    <?php
-                                        if($_SESSION['prog_id'] == $_SESSION['unique_prog_id']){
-                                    ?>
-                                        <th>Start of Classes</th>
-                                        <th>Schedule</th>
-                                        <th>Venue</th>
-                                    <?php
-                                        }
-                                    ?>
-                                        <th>Fees</th>
-                                        <th>Status</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php
-                                        $sub_program_query = $db->query("SELECT * FROM tbl_sub_program WHERE prog_id = :prog_id", ["prog_id" => $_SESSION['prog_id']]);
+                    <table id="basic-datatable" class="table table-striped dt-responsive nowrap w-100">
+                        <thead>
+                            <tr>
+                                <th>Sub-program Name</th>
+                            <?php
+                                if($_SESSION['prog_id'] == $_SESSION['unique_prog_id']){
+                            ?>
+                                <th>Start of Classes</th>
+                                <th>Schedule</th>
+                                <th>Venue</th>
+                            <?php
+                                }
+                            ?>
+                                <th>Fees</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                                $sub_program_query = $db->query("SELECT * FROM tbl_sub_program WHERE prog_id = :prog_id", ["prog_id" => $_SESSION['prog_id']]);
 
-                                        while ($line = $db->fetchNextObject($sub_program_query)) {
-                                    ?>
-                                    <tr>
-                                        <td><?= $line->sub_prog_name ?></td>
-                                        <?php
-                                            if($_SESSION['prog_id'] == $_SESSION['unique_prog_id']){
-                                        ?>
-                                        <td>
-                                            <center>
-                                                <p style="margin-bottom: 0;"><b>1st Semester:</b></p>
-                                                <p><?= $line->start_date_1 ?></p>
-                                                <p style="margin-bottom: 0;"><b>2nd Semester:</b></p>
-                                                <p style="margin-bottom: 0;"><?= $line->start_date_2 ?></p>
-                                            </center>
-                                        </td>
-                                        <td>
-                                            <?php
-                                                $schedule_query = $db->query("SELECT * FROM tbl_schedule WHERE sub_prog_id = :sub_prog_id", ["sub_prog_id" => $line->sub_prog_id]);
+                                while ($line = $db->fetchNextObject($sub_program_query)) {
+                            ?>
+                            <tr>
+                                <td><?= e($line->sub_prog_name) ?></td>
+                                <?php
+                                    if($_SESSION['prog_id'] == $_SESSION['unique_prog_id']){
+                                ?>
+                                <td>
+                                    <center>
+                                        <p style="margin-bottom: 0;"><b>1st Semester:</b></p>
+                                        <p><?= e($line->start_date_1) ?></p>
+                                        <p style="margin-bottom: 0;"><b>2nd Semester:</b></p>
+                                        <p style="margin-bottom: 0;"><?= e($line->start_date_2) ?></p>
+                                    </center>
+                                </td>
+                                <td>
+                                    <?php
+                                        $schedule_query = $db->query("SELECT * FROM tbl_schedule WHERE sub_prog_id = :sub_prog_id", ["sub_prog_id" => $line->sub_prog_id]);
 
-                                                if($db->numRows($schedule_query) == 0){
-                                            ?>
-                                            <p style="color: red; font-style: italic;">No Schedule Available</p>
-                                            <?php
-                                                } else{
-                                            ?>
-                                            <ul style="padding-left: 1rem;">
-                                            <?php
-                                                    while ($sched_line = $db->fetchNextObject($schedule_query)) {
-                                            ?>
-                                                <li><?= $sched_line->day ?>, <?= date("h:i A", strtotime($sched_line->start_time)) ?> - <?= date("h:i A", strtotime($sched_line->end_time)) ?></li>
-                                            <?php
-                                                    }
-                                            ?>
-                                            </ul>
-                                            <?php
-                                                }
-                                            ?>
-                                        </td>
-                                        <td><?= $line->venue ?></td>
-                                        <?php
+                                        if($db->numRows($schedule_query) == 0){
+                                    ?>
+                                    <p style="color: red; font-style: italic;">No Schedule Available</p>
+                                    <?php
+                                        } else{
+                                    ?>
+                                    <ul style="padding-left: 1rem;">
+                                    <?php
+                                            while ($sched_line = $db->fetchNextObject($schedule_query)) {
+                                    ?>
+                                        <li><?= e($sched_line->day) ?>, <?= e(date("h:i A", strtotime($sched_line->start_time))) ?> - <?= e(date("h:i A", strtotime($sched_line->end_time))) ?></li>
+                                    <?php
                                             }
-                                        ?>
-                                        <td>
-                                            <center>
-                                                <p style="margin-bottom: 0;"><b><?= $_SESSION['main_fee_title'] ?>:</b></p>
-                                                <p><?= number_format($line->main_fee, 2, '.', ',') ?></p>
-                                                <p style="margin-bottom: 0;"><b><?= $_SESSION['sub_fee_title'] ?>:</b></p>
-                                                <p style="margin-bottom: 0;"><?= number_format($line->sub_fee, 2, '.', ',') ?></p>
-                                            </center>
-                                        </td>
-                                        <td>
-                                            <span class="status-<?= strtolower($line->status) ?>"><?= $line->status ?></span>
-                                        </td>
-                                        <td>
-                                            <center>
-                                                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#primary-header-modal"
-                                                    onclick="editItem({fetch_name: 'fetch-sub-program', item_id: '<?= encrypt_data($line->prog_id) ?>', custom_function: fetchCustom})">
-                                                    <i class="mdi mdi-square-edit-outline"></i>
-                                                </button>
-                                                <button type="button" class="btn btn-danger ms-1" onclick="deleteItem('<?= encrypt_data($line->prog_id) ?>')">
-                                                    <i class="mdi mdi-delete"></i>
-                                                </button>
-                                            </center>
-                                        </td>
-                                    </tr>
+                                    ?>
+                                    </ul>
                                     <?php
                                         }
                                     ?>
-                                </tbody>
-                            </table>                                           
-                        </div> <!-- end preview-->
-                    </div> <!-- end tab-content-->
+                                </td>
+                                <td><?= e($line->venue) ?></td>
+                                <?php
+                                    }
+                                ?>
+                                <td>
+                                    <center>
+                                        <p style="margin-bottom: 0;"><b><?= e($_SESSION['main_fee_title']) ?>:</b></p>
+                                        <p><?= e(number_format($line->main_fee, 2, '.', ',')) ?></p>
+                                        <p style="margin-bottom: 0;"><b><?= e($_SESSION['sub_fee_title']) ?>:</b></p>
+                                        <p style="margin-bottom: 0;"><?= e(number_format($line->sub_fee, 2, '.', ',')) ?></p>
+                                    </center>
+                                </td>
+                                <td>
+                                    <span class="status-<?= strtolower($line->status) ?>"><?= $line->status ?></span>
+                                </td>
+                                <td>
+                                    <center>
+                                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#primary-header-modal"
+                                            onclick="editItem({fetch_name: 'fetch-sub-program', item_id: '<?= encrypt_data($line->prog_id) ?>', custom_function: fetchCustom})">
+                                            <i class="mdi mdi-square-edit-outline"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-danger ms-1" onclick="deleteItem('<?= encrypt_data($line->prog_id) ?>')">
+                                            <i class="mdi mdi-delete"></i>
+                                        </button>
+                                    </center>
+                                </td>
+                            </tr>
+                            <?php
+                                }
+                            ?>
+                        </tbody>
+                    </table>               
                 </div> <!-- end card body-->
             </div> <!-- end card -->
+
+            <button type="button" class="btn btn-warning mt-1 w-100" onclick="window.location.href='program.php'">
+                <i class="mdi mdi-keyboard-backspace"></i>
+                <span class="add-btn-name">Go Back</span>
+            </button>
         </div><!-- end col-->
     </div> <!-- end row-->
 

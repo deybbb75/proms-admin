@@ -260,3 +260,27 @@ Trace: #0 C:\xampp\htdocs\proms-admin\model\pdo.class.php(716): PDOStatement->ex
 #1 C:\xampp\htdocs\proms-admin\pages\controller\ctr-system-user.php(50): DB->executeInsert(Array, 'tbl_system_user')
 #2 {main}
 
+[2026-02-09 11:39:06] Error: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'proms.tbl_team' doesn't exist
+Trace: #0 C:\Users\Dave\Documents\xampp\htdocs\proms-admin\model\pdo.class.php(381): PDOStatement->execute()
+#1 C:\Users\Dave\Documents\xampp\htdocs\proms-admin\model\pdo.class.php(817): DB->select('SELECT member_n...', Array)
+#2 C:\Users\Dave\Documents\xampp\htdocs\proms-admin\pages\controller\ctr-team.php(25): DB->hasDuplicate('SELECT member_n...', Array)
+#3 {main}
+
+[2026-02-09 11:41:10] Error: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'proms.tbl_team' doesn't exist
+Trace: #0 C:\Users\Dave\Documents\xampp\htdocs\proms-admin\model\pdo.class.php(381): PDOStatement->execute()
+#1 C:\Users\Dave\Documents\xampp\htdocs\proms-admin\model\pdo.class.php(817): DB->select('SELECT member_n...', Array)
+#2 C:\Users\Dave\Documents\xampp\htdocs\proms-admin\pages\controller\ctr-team.php(25): DB->hasDuplicate('SELECT member_n...', Array)
+#3 {main}
+
+[2026-02-09 11:41:25] Error: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'proms.tbl_team' doesn't exist
+Trace: #0 C:\Users\Dave\Documents\xampp\htdocs\proms-admin\model\pdo.class.php(381): PDOStatement->execute()
+#1 C:\Users\Dave\Documents\xampp\htdocs\proms-admin\model\pdo.class.php(817): DB->select('SELECT member_n...', Array)
+#2 C:\Users\Dave\Documents\xampp\htdocs\proms-admin\pages\controller\ctr-team.php(25): DB->hasDuplicate('SELECT member_n...', Array)
+#3 {main}
+
+[2026-02-09 11:42:00] Error: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'proms.tbl_team' doesn't exist
+Trace: #0 C:\Users\Dave\Documents\xampp\htdocs\proms-admin\model\pdo.class.php(381): PDOStatement->execute()
+#1 C:\Users\Dave\Documents\xampp\htdocs\proms-admin\model\pdo.class.php(817): DB->select('SELECT member_n...', Array)
+#2 C:\Users\Dave\Documents\xampp\htdocs\proms-admin\pages\controller\ctr-team.php(25): DB->hasDuplicate('SELECT member_n...', Array)
+#3 {main}
+

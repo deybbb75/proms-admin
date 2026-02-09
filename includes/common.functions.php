@@ -169,12 +169,7 @@ function console_info($data)
 
 function e($data)
 {
-    if($data){
-        $data = htmlspecialchars($data, ENT_QUOTES, 'UTF-8');
-    }else{
-        $data = '';
-    }
-    return $data;
+    return $data === null || $data === '' ? $data : htmlspecialchars($data, ENT_QUOTES, 'UTF-8');
 }
 
 function setActiveLink($link)
@@ -282,6 +277,17 @@ function checkFile(string $file_input_array): string
     }
 
     return "Success";
+}
+
+function truncateText($text, $limit = 1000): string
+{
+    $text = trim($text);
+
+    if (mb_strlen($text) > $limit) {
+        $text = mb_substr($text, 0, $limit) . '...';
+    }
+
+    return $text;
 }
 
 ?>

@@ -335,3 +335,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     localStorage.removeItem('menu_link');
 });
+
+function matchHeight() {
+    const el1 = document.getElementById('wrapper');
+    const el2 = document.querySelector(
+    'body[data-leftbar-compact-mode="condensed"]:not(.authentication-bg) .wrapper .leftside-menu'
+    );
+
+    if (el1.offsetHeight > el2.offsetHeight) {
+        el2.style.height = el1.offsetHeight + "px";
+    }else{
+        el2.style.height = "fit-content";
+    }
+}
+
+window.addEventListener('resize', matchHeight);
+window.addEventListener('load', matchHeight);

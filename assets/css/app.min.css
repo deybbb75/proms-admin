@@ -11306,21 +11306,23 @@ body{
     padding:8px 30px 8px 100px
 }
 body[data-leftbar-compact-mode=condensed]:not(.authentication-bg){
-    min-height:1600px
+    min-height: fit-content;
 }
 body[data-leftbar-compact-mode=condensed]:not(.authentication-bg) .wrapper .leftside-menu{
-    position:fixed;
-    overflow-y: hidden scroll;
-    height: 100vh;
+    /* position:fixed;
+    overflow-y: hidden;
+    height: 100vh; */
+    position:absolute;
+    height: fit-content;
     width:70px;
     z-index:10000;
     padding-top:70px;
     transition: 
         width 0.4s ease
 }
-/* body[data-leftbar-compact-mode=condensed]:not(.authentication-bg) .wrapper .leftside-menu .simplebar-content-wrapper,body[data-leftbar-compact-mode=condensed]:not(.authentication-bg) .wrapper .leftside-menu .simplebar-mask{
+body[data-leftbar-compact-mode=condensed]:not(.authentication-bg) .wrapper .leftside-menu .simplebar-content-wrapper,body[data-leftbar-compact-mode=condensed]:not(.authentication-bg) .wrapper .leftside-menu .simplebar-mask{
     overflow:visible!important
-} */
+}
 body[data-leftbar-compact-mode=condensed]:not(.authentication-bg) .wrapper .leftside-menu .simplebar-scrollbar{
     display:block !important
 }
@@ -11779,7 +11781,7 @@ body[data-leftbar-theme=dark][data-leftbar-compact-mode=condensed] .side-nav .si
     color:var(--secondary-color)
 }
 body[data-leftbar-theme=dark][data-leftbar-compact-mode=condensed] .side-nav .side-nav-item:hover .side-nav-link{
-    background:var(--primary-color);
+    background:var(--secondary-color);
     color:#fff!important;
     -webkit-transition:none;
     transition:none

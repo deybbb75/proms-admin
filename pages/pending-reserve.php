@@ -27,6 +27,23 @@ $db = DB::getInstance();
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
+                    <div class="col-12" style="margin-bottom: 30px;">
+                        <label for="status" class="form-label required">Status</label>
+                        <div style="display: flex; gap: 10px;">
+                            <form action="">
+                                <select class="form-control select2" data-toggle="select2" name ="status" data-placeholder="Select Status">
+                                    <option value="<?= $status ?? '' ?>" <?php if(empty($status)) echo 'disabled'; ?> selected>
+                                        <?= !empty($status) ? $status : '' ?>
+                                    </option>
+                                    
+                                </select>
+                                <button class="btn btn-success" style="width: 200px;" onclick="addItem({fetch_name: 'fetch-system-user'})">
+                                    <span class="add-btn-name">Apply Filter</span>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
                     <table id="basic-datatable" class="table table-striped dt-responsive nowrap w-100">
                         <thead>
                             <tr>
@@ -67,7 +84,7 @@ $db = DB::getInstance();
                                 }
                             ?>
                         </tbody>
-                    </table>               
+                    </table>
                 </div> <!-- end card body-->
             </div> <!-- end card -->
         </div><!-- end col-->

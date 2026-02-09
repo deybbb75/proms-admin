@@ -20,6 +20,7 @@ function validateForm() {
             fields: [
                 "fname",
                 "lname",
+                "member_name"
             ],
             rules: { required: true, noWhitespace: true, namePattern: true }
         },
@@ -45,16 +46,21 @@ function validateForm() {
                 "end_time[1]",
                 "end_time[2]",
                 "main_fee",
-                "sub_fee"
+                "sub_fee",
+                "semester"
             ],
             rules: { required: true, noWhitespace: true }
+        },
+        {
+            fields: ["year1", "year2"],
+            rules: { required: true, noWhitespace: true, digits: true, min: 2025, max: 2100, step: 1 }
         },
         {
             fields: ["dept_id", "div_id", "course_id", "role_id",],
             rules: { required: true, digits: true }
         },
         {
-            fields: ["prog_name", "prog_desc", "venue", "sub_prog_name",],
+            fields: ["prog_name", "prog_desc", "venue", "sub_prog_name", "news_title", "news_content", "position"],
             rules: { required: true, noWhitespace: true, descPattern: true }
         },
         {

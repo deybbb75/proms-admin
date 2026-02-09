@@ -2,6 +2,8 @@
 include '../includes/init.php';
 include '../header.php';
 $db = DB::getInstance();
+
+$_SESSION['max_schedule'] = 3;
 ?>
 <!-- Start Content-->
 <div class="container-fluid">
@@ -12,12 +14,12 @@ $db = DB::getInstance();
             <div class="page-title-box">
                 <div class="page-title-right">
                     <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#primary-header-modal"
-                        onclick="addItem({fetch_name: 'fetch-system-user'})">
+                        onclick="addItem({fetch_name: 'fetch-news', custom_function: fetchCustom})">
                         <i class="mdi mdi-plus"></i>
-                        <span class="add-btn-name">Add System User</span>
+                        <span class="add-btn-name">Add News/Event</span>
                     </button>
                 </div>
-                <h4 class="page-title">SYSTEM USERS</h4>
+                <h4 class="page-title">NEWS / EVENTS</h4>
             </div>
         </div>
     </div>
@@ -30,34 +32,30 @@ $db = DB::getInstance();
                     <table id="basic-datatable" class="table table-striped dt-responsive nowrap w-100">
                         <thead>
                             <tr>
-                                <th>Employee Number</th>
-                                <th>Full Name</th>
-                                <th>Email</th>
-                                <th>Role</th>
+                                <th>News Title</th>
+                                <th>Content</th>
                                 <th>Status</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php
-                                $system_users_query = $db->query("SELECT * FROM tbl_system_user");
+                                $news_query = $db->query("SELECT * FROM tbl_news");
 
-                                while ($line = $db->fetchNextObject($system_users_query)) {
+                                while ($line = $db->fetchNextObject($news_query)) {
                             ?>
                             <tr>
-                                <td><?= e($line->emp_no) ?></td>
-                                <td><?= e($line->fname) ?> <?= e($line->mname) ?> <?= e($line->lname) ?></td>
-                                <td><?= e($line->email) ?></td>
-                                <td><?= e($line->role) ?></td>
+                                <td><?= e($line->news_title) ?></td>
+                                <td style="white-space: pre-line;"><?= e(truncateText($line->news_content)) ?></td>
                                 <td>
-                                    <span class="status-<?= strtolower($line->status) ?>"><?= $line->status ?></span>
+                                    <span class="status-<?= strtolower($line->status) ?>"><?= e($line->status) ?></span>
                                 </td>
                                 <td>
                                     <center>
                                         <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#primary-header-modal"
-                                            onclick="editItem({fetch_name: 'fetch-system-user', item_id: '<?= encrypt_data($line->sys_id) ?>'})"><i class="mdi mdi-square-edit-outline"></i>
+                                            onclick="editItem({fetch_name: 'fetch-news', item_id: '<?= encrypt_data($line->news_id) ?>', custom_function: fetchCustom})"><i class="mdi mdi-square-edit-outline"></i>
                                         </button>
-                                        <button type="button" class="btn btn-danger ms-1" onclick="deleteItem('<?= encrypt_data($line->sys_id) ?>')">
+                                        <button type="button" class="btn btn-danger ms-1" onclick="deleteItem('<?= encrypt_data($line->news_id) ?>')">
                                             <i class="mdi mdi-delete"></i>
                                         </button>
                                     </center>
@@ -79,9 +77,9 @@ $db = DB::getInstance();
 <div id="primary-header-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="primary-header-modalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <form action="controller/ctr-system-user.php" method="POST" id="form_validation">
+            <form action="controller/ctr-news.php" method="POST" id="form_validation">
                 <div class="modal-header modal-colored-header bg-primary">
-                    <h4 class="modal-title" id="primary-header-modalLabel">System User Details</h4>
+                    <h4 class="modal-title" id="primary-header-modalLabel">News Details</h4>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -99,6 +97,29 @@ $db = DB::getInstance();
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
+<script>
+function updateImage(action){
+    const image_input_section = document.getElementById('image-upload');
+    const preview = document.getElementById('image-preview');
+
+    if(action === 'update'){
+        image_input_section.style.display = 'block';
+        preview.style.display = 'none';
+    }else{
+        image_input_section.style.display = 'none';
+        preview.style.display = 'block';
+    }
+}
+
+function fetchCustom(){
+    initFilePond(
+        'img_input',
+        ['image/jpeg'],
+        'Only JPG files are allowed',
+        ['#save_changes']
+    );
+}
+</script>
 <?php
 include '../footer.php';
 ?>
