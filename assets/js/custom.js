@@ -305,6 +305,7 @@ window.addEventListener("load", () => {
   }
 });
 
+// Highlight the active menu item based on the current URL path
 document.addEventListener('DOMContentLoaded', () => {
     const menuItems = document.querySelectorAll('.simplebar-content .side-nav li');
 
@@ -336,18 +337,183 @@ document.addEventListener('DOMContentLoaded', () => {
     localStorage.removeItem('menu_link');
 });
 
+// Match the height of the left sidebar to the wrapper content
 function matchHeight() {
     const el1 = document.getElementById('wrapper');
     const el2 = document.querySelector(
     'body[data-leftbar-compact-mode="condensed"]:not(.authentication-bg) .wrapper .leftside-menu'
     );
 
-    if (el1.offsetHeight > el2.offsetHeight) {
-        el2.style.height = el1.offsetHeight + "px";
-    }else{
-        el2.style.height = "fit-content";
+    if(el1 && el2) {
+        if (el1.offsetHeight > el2.offsetHeight) {
+            el2.style.height = el1.offsetHeight + "px";
+        }else{
+            el2.style.height = "fit-content";
+        }
     }
 }
 
 window.addEventListener('resize', matchHeight);
 window.addEventListener('load', matchHeight);
+
+// Match the height of a group of elements (e.g. cards) to the tallest one
+function matchGroupHeight(selector) {
+    const elements = document.querySelectorAll(selector);
+    if (!elements.length) return;
+
+    // Reset heights first so we measure natural height
+    elements.forEach(el => el.style.height = "auto");
+
+    // Find tallest height
+    let maxHeight = 0;
+    elements.forEach(el => {
+        if (el.offsetHeight > maxHeight) {
+            maxHeight = el.offsetHeight;
+        }
+    });
+
+    // Apply tallest height to all
+    elements.forEach(el => {
+        el.style.height = maxHeight + "px";
+    });
+}
+
+// Example usage
+function runMatchHeight() {
+    matchGroupHeight(".prog_title");
+}
+
+window.addEventListener("load", runMatchHeight);
+window.addEventListener("resize", runMatchHeight);
+
+// A reusable function to create dynamic lists (e.g. objectives, activities) with add/remove functionality
+function createDynamicList(config) {
+
+    const {
+        templateId,
+        containerId,
+        addBtnId,
+        addBtnContainerId,
+        itemSelector,
+        fieldMap,
+        maxItems = Infinity,
+        confirmTitle = "Delete item?",
+        confirmText = "This action cannot be undone!",
+        afterAdd = () => {},
+        afterRemove = () => {}
+    } = config;
+
+    const template = document.getElementById(templateId);
+    const container = document.getElementById(containerId);
+    const addBtn = document.getElementById(addBtnId);
+    const addBtnContainer = document.getElementById(addBtnContainerId);
+
+    if (!template || !container || !addBtn) {
+        console.warn("DynamicList init failed — missing elements");
+        return;
+    }
+
+    // ---------- indexing ----------
+    function reindex() {
+
+        const rows = container.querySelectorAll(itemSelector);
+
+        rows.forEach((row, index) => {
+
+            Object.entries(fieldMap).forEach(([selector, name]) => {
+
+                const field = row.querySelector(selector);
+                if (field) {
+                    if (/\[\d+\]/.test(name)) {
+                        // Replace the first numeric index
+                        field.name = name.replace(/\[\d+\]/, `[${index}]`);
+                    } else {
+                        // No numeric index, append one
+                        field.name = `${name}[${index}]`;
+                    }
+                }
+
+            });
+
+        });
+
+        return rows.length;
+    }
+
+    // ---------- add button visibility ----------
+    function updateAddVisibility(count) {
+
+        if (!addBtnContainer) return;
+
+        addBtnContainer.style.display =
+            count >= maxItems ? "none" : "block";
+    }
+
+    // ---------- add item ----------
+    function addItem(payload = null) {
+
+        const count = reindex();
+
+        if (count >= maxItems) return;
+
+        const clone = template.content.cloneNode(true);
+
+        container.appendChild(clone);
+
+        const newCount = reindex();
+        updateAddVisibility(newCount);
+
+        afterAdd(container, payload);
+    }
+
+    // ---------- remove item ----------
+    function removeItem(trigger) {
+
+        Swal.fire({
+            title: confirmTitle,
+            text: confirmText,
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#FF2121"
+        }).then(result => {
+
+            if (!result.isConfirmed) return;
+
+            const row = trigger.closest(itemSelector);
+            if (!row) return;
+
+            row.remove();
+
+            const count = reindex();
+            updateAddVisibility(count);
+
+            afterRemove(container);
+
+        });
+
+    }
+
+    // ---------- bind add ----------
+    addBtn.addEventListener("click", () => addItem());
+
+    // ---------- delegated remove ----------
+    container.addEventListener("click", e => {
+
+        const removeBtn = e.target.closest("[data-remove-item]");
+
+        if (removeBtn) {
+            removeItem(removeBtn);
+        }
+
+    });
+
+    // ---------- initial state ----------
+    updateAddVisibility(reindex());
+
+    return {
+        addItem,
+        removeItem,
+        reindex
+    };
+}
+

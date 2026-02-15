@@ -6,17 +6,8 @@ $db = DB::getInstance();
 setActiveLink('program.php');
 
 $_SESSION['max_schedule'] = 3;
-$_SESSION['unique_prog_id'] = 3;
-
-if($_SESSION['prog_id'] == $_SESSION['unique_prog_id']){
-    $_SESSION['main_fee_title'] = "Tuition Fee";
-    $_SESSION['sub_fee_title'] = "Down Payment";
-}else{
-    $_SESSION['main_fee_title'] = "Assessment Fee";
-    $_SESSION['sub_fee_title'] = "Processing Fee";
-}
+$_SESSION['max_requirement'] = 10;
 ?>
-
 <!-- Start Content-->
 <div class="container-fluid">
 
@@ -26,12 +17,12 @@ if($_SESSION['prog_id'] == $_SESSION['unique_prog_id']){
             <div class="page-title-box">
                 <div class="page-title-right">
                     <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#primary-header-modal"
-                        onclick="addItem({fetch_name: 'fetch-sub-program', custom_function: fetchCustom})">
+                        onclick="addItem({fetch_name: 'fetch-cert-prog', custom_function: fetchCustom})">
                         <i class="mdi mdi-plus"></i>
                         <span class="add-btn-name">Add Sub-program</span>
                     </button>
                 </div>
-                <h4 class="page-title">SUB-PROGRAMS (<?= $db->queryUniqueValue("SELECT prog_name FROM tbl_program WHERE prog_id = :prog_id", ["prog_id" => $_SESSION['prog_id'] ]) ?>)</h4>
+                <h4 class="page-title">SUB-PROGRAMS (<?= $db->queryUniqueValue("SELECT prog_name FROM tbl_program WHERE prog_id = 3") ?>)</h4>
             </div>
         </div>
     </div>
@@ -44,16 +35,10 @@ if($_SESSION['prog_id'] == $_SESSION['unique_prog_id']){
                     <table id="basic-datatable" class="table table-striped dt-responsive nowrap w-100">
                         <thead>
                             <tr>
-                                <th>Sub-program Name</th>
-                            <?php
-                                if($_SESSION['prog_id'] == $_SESSION['unique_prog_id']){
-                            ?>
+                                <th>Title</th>
                                 <th>Start of Classes</th>
                                 <th>Schedule</th>
                                 <th>Venue</th>
-                            <?php
-                                }
-                            ?>
                                 <th>Fees</th>
                                 <th>Status</th>
                                 <th>Action</th>
@@ -61,15 +46,12 @@ if($_SESSION['prog_id'] == $_SESSION['unique_prog_id']){
                         </thead>
                         <tbody>
                             <?php
-                                $sub_program_query = $db->query("SELECT * FROM tbl_sub_program WHERE prog_id = :prog_id", ["prog_id" => $_SESSION['prog_id']]);
+                                $sub_program_query = $db->query("SELECT * FROM tbl_cert_prog");
 
                                 while ($line = $db->fetchNextObject($sub_program_query)) {
                             ?>
                             <tr>
-                                <td><?= e($line->sub_prog_name) ?></td>
-                                <?php
-                                    if($_SESSION['prog_id'] == $_SESSION['unique_prog_id']){
-                                ?>
+                                <td><?= e($line->title) ?></td>
                                 <td>
                                     <center>
                                         <p style="margin-bottom: 0;"><b>1st Semester:</b></p>
@@ -80,7 +62,7 @@ if($_SESSION['prog_id'] == $_SESSION['unique_prog_id']){
                                 </td>
                                 <td>
                                     <?php
-                                        $schedule_query = $db->query("SELECT * FROM tbl_schedule WHERE sub_prog_id = :sub_prog_id", ["sub_prog_id" => $line->sub_prog_id]);
+                                        $schedule_query = $db->query("SELECT * FROM tbl_schedule WHERE cp_id = :cp_id ORDER BY sched_order ASC", ["cp_id" => $line->cp_id]);
 
                                         if($db->numRows($schedule_query) == 0){
                                     ?>
@@ -101,15 +83,16 @@ if($_SESSION['prog_id'] == $_SESSION['unique_prog_id']){
                                         }
                                     ?>
                                 </td>
-                                <td><?= e($line->venue) ?></td>
-                                <?php
-                                    }
-                                ?>
+                                <td>
+                                    <div class="w-100 text-wrap">
+                                        <?= e($line->venue) ?>
+                                    </div>
+                                </td>
                                 <td>
                                     <center>
-                                        <p style="margin-bottom: 0;"><b><?= e($_SESSION['main_fee_title']) ?>:</b></p>
+                                        <p style="margin-bottom: 0;"><b>Tuition Fee:</b></p>
                                         <p><?= e(number_format($line->main_fee, 2, '.', ',')) ?></p>
-                                        <p style="margin-bottom: 0;"><b><?= e($_SESSION['sub_fee_title']) ?>:</b></p>
+                                        <p style="margin-bottom: 0;"><b>Down Payment:</b></p>
                                         <p style="margin-bottom: 0;"><?= e(number_format($line->sub_fee, 2, '.', ',')) ?></p>
                                     </center>
                                 </td>
@@ -119,10 +102,10 @@ if($_SESSION['prog_id'] == $_SESSION['unique_prog_id']){
                                 <td>
                                     <center>
                                         <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#primary-header-modal"
-                                            onclick="editItem({fetch_name: 'fetch-sub-program', item_id: '<?= encrypt_data($line->prog_id) ?>', custom_function: fetchCustom})">
+                                            onclick="editItem({fetch_name: 'fetch-cert-prog', item_id: '<?= encrypt_data($line->cp_id) ?>', custom_function: fetchCustom})">
                                             <i class="mdi mdi-square-edit-outline"></i>
                                         </button>
-                                        <button type="button" class="btn btn-danger ms-1" onclick="deleteItem('<?= encrypt_data($line->prog_id) ?>')">
+                                        <button type="button" class="btn btn-danger ms-1" onclick="deleteItem('<?= encrypt_data($line->cp_id) ?>')">
                                             <i class="mdi mdi-delete"></i>
                                         </button>
                                     </center>
@@ -136,7 +119,7 @@ if($_SESSION['prog_id'] == $_SESSION['unique_prog_id']){
                 </div> <!-- end card body-->
             </div> <!-- end card -->
 
-            <button type="button" class="btn btn-warning mt-1 w-100" onclick="window.location.href='program.php'">
+            <button type="button" class="btn btn-warning mt-1 mb-3 w-100" onclick="window.location.href='program.php'">
                 <i class="mdi mdi-keyboard-backspace"></i>
                 <span class="add-btn-name">Go Back</span>
             </button>
@@ -149,7 +132,7 @@ if($_SESSION['prog_id'] == $_SESSION['unique_prog_id']){
 <div id="primary-header-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="primary-header-modalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <form action="controller/ctr-sub-program.php" method="POST" id="form_validation">
+            <form action="controller/ctr-cert-prog.php" method="POST" id="form_validation">
                 <div class="modal-header modal-colored-header bg-primary">
                     <h4 class="modal-title" id="primary-header-modalLabel">Sub-program Details</h4>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -192,83 +175,28 @@ if($_SESSION['prog_id'] == $_SESSION['unique_prog_id']){
             <input class="form-control end-time" id="end_time" type="time" name="end_time">
             <span class="font-13 text-muted">End Time</span>
         </div>
-        <div class="col-lg-1">
-            <button type="button" class="btn btn-danger w-100" onclick="removeSchedule(this)"><i class="mdi mdi-close"></i></button>
+        <div class="col-lg-1 mb-3">
+            <button type="button" class="btn btn-danger w-100" data-remove-item><i class="mdi mdi-close"></i></button>
         </div>
     </div>
 </template>
 
+<template id="requirement-template">
+    <div class="row">
+        <div class="col-lg-11 col-md-10 col-12 mb-2">
+            <textarea class="form-control auto-grow-textarea requirement" id="requirement" name="requirement" rows="3" placeholder="Requirement"></textarea>
+        </div>
+        <div class="col-lg-1 col-md-2 col-12 mb-2">
+            <button type="button" class="btn btn-danger w-100" data-remove-item><i class="mdi mdi-close"></i></button>
+        </div>
+    </div>
+</template>
+
+<?php
+include '../footer.php';
+?>
+
 <script>
-function addSchedule(schedCounter) {
-    const template = document.getElementById("schedule-template");
-    const container = document.getElementById("schedule-container");
-
-    schedCounter++;
-
-    if (schedCounter <= <?= $_SESSION['max_schedule'] ?>) {
-        // Update the button's onclick with new counter
-        document.getElementById('add-sched-btn').setAttribute("onclick", `addSchedule(${schedCounter})`);
-
-        // Clone the template content
-        const clone = template.content.cloneNode(true);
-
-        const daySelect = clone.querySelector('select');
-        daySelect.name = `day[${schedCounter}]`;
-
-        const startTimeInput = clone.getElementById('start_time');
-        startTimeInput.name = `start_time[${schedCounter}]`;
-
-        const endTimeInput = clone.getElementById('end_time');
-        endTimeInput.name = `end_time[${schedCounter}]`;
-        
-        // Append to the DOM
-        container.appendChild(clone);
-        reInitUI($(container));
-    }
-    if ((schedCounter + 1) == <?= $_SESSION['max_schedule'] ?>) {
-        document.getElementById('add-sched-btn-container').style.display = "none";
-    }
-    console.log(schedCounter);
-    
-}
-
-function removeSchedule(element) {
-    Swal.fire({
-        title: "Are you sure you want to delete this schedule?",
-        text: "This action cannot be undone!",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#FF2121",
-        confirmButtonText: "Yes, delete it!",
-    }).then((result) => {
-		if (result.isConfirmed) {
-            // Remove the schedule container
-            element.closest('.row').remove();
-            
-            // Re-index remaining schedule inputs
-            const schedSelects = document.querySelectorAll('select.day');
-            for (let i = 0; i < schedSelects.length; i++) {
-                schedSelects[i].name = `day[${i}]`;
-            }
-
-            const schedStartDate = document.querySelectorAll('input.start-time');
-            for (let i = 0; i < schedStartDate.length; i++) {
-                schedStartDate[i].name = `start_time[${i}]`;
-            }
-
-            const schedEndDate = document.querySelectorAll('input.end-time');
-            for (let i = 0; i < schedEndDate.length; i++) {
-                schedEndDate[i].name = `end_time[${i}]`;
-            }
-
-            document.getElementById('add-sched-btn').setAttribute("onclick", `addSchedule(${schedSelects.length - 1})`);
-
-            // Show the add button again (if it was hidden)
-            document.getElementById('add-sched-btn-container').style.display = "block";
-        }
-    });
-}
-
 function updateImage(action){
     const image_input_section = document.getElementById('image-upload');
     const preview = document.getElementById('image-preview');
@@ -289,8 +217,43 @@ function fetchCustom(){
         'Only JPG files are allowed',
         ['#save_changes']
     );
+
+    createDynamicList({
+
+        templateId: "schedule-template",
+        containerId: "schedule-container",
+        addBtnId: "add-sched-btn",
+        addBtnContainerId: "add-sched-btn-container",
+        itemSelector: ".row",
+        maxItems: <?= $_SESSION['max_schedule'] ?>,
+        confirmTitle: "Are you sure you want to delete this schedule?",
+
+        fieldMap: {
+            "select.day": "schedule[0][day]",
+            "input.start-time": "schedule[0][start_time]",
+            "input.end-time": "schedule[0][end_time]"
+        },
+
+        afterAdd: container => reInitUI($(container))
+
+    });
+
+    createDynamicList({
+
+        templateId: "requirement-template",
+        containerId: "requirement-container",
+        addBtnId: "add-req-btn",
+        addBtnContainerId: "add-req-btn-container",
+        itemSelector: ".row",
+        maxItems: <?= $_SESSION['max_requirement'] ?>,
+        confirmTitle: "Are you sure you want to delete this requirement?",
+
+        fieldMap: {
+            "textarea.requirement": "requirement"
+        },
+
+        afterAdd: container => reInitUI($(container))
+
+    });
 }
 </script>
-<?php
-include '../footer.php';
-?>

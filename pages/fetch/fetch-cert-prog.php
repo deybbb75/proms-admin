@@ -1,0 +1,272 @@
+<?php
+include '../../includes/init.php';
+$db = DB::getInstance();
+
+if (isset($_POST['id'])) {
+    $id = decrypt_data($_POST['id']);
+    $program = $db->queryUniqueObject('SELECT * FROM tbl_cert_prog WHERE cp_id = :cp_id', ['cp_id' => $id]);
+    if ($program) {
+        $cp_id          = encrypt_data($program->cp_id);
+        $title          = $program->title;
+        $description    = $program->description;
+        $class_details  = $program->class_details;
+        $start_date_1   = $program->start_date_1;
+        $start_date_2   = $program->start_date_2;
+        $schedule       = json_decode($program->schedule, true);
+        $venue          = $program->venue;
+        $main_fee       = number_format($program->main_fee, 2, '.', ',');
+        $sub_fee        = number_format($program->sub_fee, 2, '.', ',');
+        $note           = $program->note;
+        $requirement    = json_decode($program->requirement, true);
+        $status         = $program->status;
+        $image          = $program->img;
+        $image_data     = base64_encode($image);
+        $image_type     = $program->img_type;
+        $image_src      = "data:{$image_type};base64,{$image_data}";
+    }
+}
+?>
+<input type="hidden" name="cp_id" value="<?= $cp_id ?? '' ?>">
+
+<div class="row">
+    <div class="col-md-12">
+        <label for="title" class="form-label required">Title</label>
+        <input type="text" id="title" name="title" class="form-control" placeholder="Title" value="<?= $title ?? '' ?>">
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <label for="description" class="form-label required">Description</label>
+        <textarea class="form-control auto-grow-textarea" id="description" name="description" rows="5" placeholder="Description"><?= $description ?? '' ?></textarea>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <label for="class_details" class="form-label required">Class Details</label>
+        <textarea class="form-control auto-grow-textarea" id="class_details" name="class_details" rows="5" placeholder="Class Details"><?= $class_details ?? '' ?></textarea>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-6">
+        <label for="emp_no" class="form-label required">Start of Classes (1st Semester)</label>
+        <input class="form-control" id="start_date_1" type="date" name="start_date_1" value="<?= $start_date_1 ?? '' ?>">
+    </div>
+    <div class="col-sm-6">
+        <label for="emp_no" class="form-label required">Start of Classes (2nd Semester)</label>
+        <input class="form-control" id="start_date_2" type="date" name="start_date_2" value="<?= $start_date_2 ?? '' ?>">
+    </div>
+</div>
+<div class="row">
+    <label class="form-label required" style="font-weight: 600;">Schedule</label>
+    <div class="col-sm-12" id="schedule-container" style="padding-bottom: 0px;">
+        <?php
+            if(!isset($schedule)){
+        ?>
+        <div class="row">
+            <div class="col-lg-4">
+                <select class="form-control select2 day" data-toggle="select2" name="schedule[0][day]" data-placeholder="Select Day">
+                    <option value="" disabled selected></option>
+                    <option value="Sunday">Sunday</option>
+                    <option value="Monday">Monday</option>
+                    <option value="Tuesday">Tuesday</option>
+                    <option value="Wednesday">Wednesday</option>
+                    <option value="Thursday">Thursday</option>
+                    <option value="Friday">Friday</option>
+                    <option value="Saturday">Saturday</option>
+                </select>
+                <span class="font-13 text-muted">Day of the Week</span>
+            </div>
+            <div class="col-lg-4">
+                <input class="form-control start-time" id="start_time" type="time" name="schedule[0][start_time]" value="<?= $start_time[0] ?? '' ?>">
+                <span class="font-13 text-muted">Start Time</span>
+            </div>
+            <div class="col-lg-4">
+                <input class="form-control end-time" id="end_time" type="time" name="schedule[0][end_time]" value="<?= $end_time[0] ?? '' ?>">
+                <span class="font-13 text-muted">End Time</span>
+            </div>
+        </div>
+
+        <?php
+            }else{
+                for ($i = 0; $i < count($schedule); $i++) {
+        ?>
+        <div class="row">
+            <div class="col-lg-4">
+                <select class="form-control select2 day" id="day" data-toggle="select2" name="schedule[<?= $i ?>][day]" data-placeholder="Select Day">
+                    <option value="<?= $schedule[$i]['day'] ?? '' ?>" <?php if(empty($schedule[$i]['day'])) echo 'disabled'; ?> selected>
+                        <?= !empty($schedule[$i]['day']) ? $schedule[$i]['day'] : '' ?>
+                    </option>
+                    <?php
+                        if($schedule[$i]['day'] != "Sunday") {
+                    ?>
+                        <option value="Sunday">Sunday</option>
+                    <?php
+                        }
+                        if($schedule[$i]['day'] != "Monday") {
+                    ?>
+                        <option value="Monday">Monday</option>
+                    <?php
+                        }
+                        if($schedule[$i]['day'] != "Tuesday") {
+                    ?>
+                        <option value="Tuesday">Tuesday</option>
+                    <?php
+                        }
+                        if($schedule[$i]['day'] != "Wednesday") {
+                    ?>
+                        <option value="Wednesday">Wednesday</option>
+                    <?php
+                        }
+                        if($schedule[$i]['day'] != "Thursday") {
+                    ?>
+                        <option value="Thursday">Thursday</option>
+                    <?php
+                        }
+                        if($schedule[$i]['day'] != "Friday") {
+                    ?>
+                        <option value="Friday">Friday</option>
+                    <?php
+                        }
+                        if($schedule[$i]['day'] != "Saturday") {
+                    ?>
+                        <option value="Saturday">Saturday</option>
+                    <?php
+                        }
+                    ?>
+                </select>
+                <span class="font-13 text-muted">Day of the Week</span>
+            </div>
+            <div class="col-lg-4">
+                <input class="form-control start-time" id="start_time" type="time" name="schedule[<?= $i ?>][start_time]" value="<?= $schedule[$i]['start_time'] ?? '' ?>">
+                <span class="font-13 text-muted">Start Time</span>
+            </div>
+            <div class="col-lg-3">
+                <input class="form-control end-time" id="end_time" type="time" name="schedule[<?= $i ?>][end_time]" value="<?= $schedule[$i]['end_time'] ?? '' ?>">
+                <span class="font-13 text-muted">End Time</span>
+            </div>
+            <div class="col-lg-1 mb-3">
+                <button type="button" class="btn btn-danger w-100" data-remove-item><i class="mdi mdi-close"></i></button>
+            </div>
+        </div>
+        <?php
+                }
+            }
+        ?>
+    </div>
+    
+    <div class="col-sm-12" id="add-sched-btn-container">
+        <button type="button" class="btn btn-sm btn-info w-100" id="add-sched-btn"><i class="mdi mdi-plus"></i> Add Schedule</button>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <label for="venue" class="form-label required">Venue</label>
+        <input type="text" id="venue" name="venue" class="form-control" placeholder="Venue" value="<?= $venue ?? '' ?>">
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-6">
+        <label for="main_fee" class="form-label required">Tution Fee</label>
+        <input type="text" id="main_fee" name="main_fee" class="form-control" data-toggle="input-mask" placeholder="Tution Fee" value="<?= $main_fee ?? '' ?>"
+            data-mask-format="000,000,000,000,000.00" data-reverse="true">
+    </div>
+    <div class="col-sm-6">
+        <label for="sub_fee" class="form-label required">Down Payment</label>
+        <input type="text" id="sub_fee" name="sub_fee" class="form-control" data-toggle="input-mask" placeholder="Down Payment" value="<?= $sub_fee ?? '' ?>"
+            data-mask-format="000,000,000,000,000.00" data-reverse="true">
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <label for="note" class="form-label required">Note</label>
+        <textarea class="form-control auto-grow-textarea" id="note" name="note" rows="5" placeholder="Note"><?= $note ?? '' ?></textarea>
+    </div>
+</div>
+<div class="row">
+    <label class="form-label required" style="font-weight: 600;">Requirement/s</label>
+    <div class="col-sm-12" id="requirement-container" style="padding-bottom: 0px;">
+        <?php
+            if(!isset($requirement)){
+        ?>
+        <div class="row">
+            <div class="col-lg-12">
+                <textarea class="form-control auto-grow-textarea requirement" id="requirement" name="requirement[0]" rows="3" placeholder="Requirement"></textarea>
+            </div>
+        </div>
+
+        <?php
+            }else{
+                for ($i = 0; $i < count($requirement); $i++) {
+        ?>
+        <div class="row">
+            <div class="col-lg-11 mb-2">
+                <textarea class="form-control auto-grow-textarea requirement" id="requirement" name="requirement[<?= $i ?>]" rows="3" placeholder="Requirement"><?= $requirement[$i] ?? '' ?></textarea>
+            </div>
+            <div class="col-lg-1 mb-2">
+                <button type="button" class="btn btn-danger w-100" data-remove-item><i class="mdi mdi-close"></i></button>
+            </div>
+        </div>
+        <?php
+                }
+            }
+        ?>
+    </div>
+    
+    <div class="col-sm-12" id="add-req-btn-container">
+        <button type="button" class="btn btn-sm btn-info w-100" id="add-req-btn"><i class="mdi mdi-plus"></i> Add Requirement</button>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-12">
+        <label for="status" class="form-label required">Status</label>
+        <select class="form-control select2" data-toggle="select2" name ="status" data-placeholder="Select Status">
+            <option value="<?= $status ?? '' ?>" <?php if(empty($status)) echo 'disabled'; ?> selected>
+                <?= !empty($status) ? $status : '' ?>
+            </option>
+            <?php
+                if($status != "Active") {
+            ?>
+                <option value="Active">Active</option>
+            <?php
+                }
+                if($status != "Inactive") {
+            ?>
+                <option value="Inactive">Inactive</option>
+            <?php
+                }
+            ?>
+        </select>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <label for="img" class="form-label required">Image</label>
+        <div id="image-preview" style="display: <?= !empty($image) ? 'block' : 'none' ?>;">
+            <img 
+                src="<?= $image_src ?? '' ?>" 
+                class="img-fluid mx-auto d-block mt-2"
+                style="max-width: 100%; height: auto; border-radius: 20px;"
+                alt=""
+            >
+        <?php
+            if(!empty($image)) {
+        ?>
+            <button type="button" class="btn btn-sm btn-info w-100 mt-2" onclick="updateImage('update')">Update Image</button>
+        <?php
+            }
+        ?>
+        </div>
+        <div id="image-upload" style="display: <?= !empty($image) ? 'none' : 'block' ?>;">
+            <input type="file" id="img_input" class="filepond" name="img_input" data-max-file-size="10MB" data-max-files="3" />
+            <span class="font-10 text-muted"><b>Note: </b>Please upload an image in <b>JPG</b> format. The file size must not exceed <b>10 MB</b>.</span>
+            <?php
+                if(!empty($image)){
+            ?>
+                <button type="button" class="btn btn-sm btn-danger w-100 mt-2" onclick="updateImage('cancel')">Cancel</button>
+            <?php
+                }
+            ?>
+        </div>
+        
+    </div>
+</div>

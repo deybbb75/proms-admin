@@ -48,6 +48,15 @@
     <script src="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/assets/js/form-validation.js"></script>
     <!-- end Custom JS -->
 
+    <!-- Highcharts API -->
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/non-cartesian-zoom.js"></script>
+    <script src="https://code.highcharts.com/modules/mouse-wheel-zoom.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+    <script src="https://code.highcharts.com/themes/adaptive.js"></script>
+
     <?php
         Alert::render();
         unset($_SESSION['img_input']);

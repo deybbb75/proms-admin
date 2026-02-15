@@ -2,25 +2,16 @@
 include '../../includes/init.php';
 $db = DB::getInstance();
 
-$redirect_path = '../sub-program.php';
+$redirect_path = '../foreign-lang.php';
 
 if (isset($_POST['Save'])) {
     try {
         // Check if the required fields are set
         $requiredFields = [
-            'sub_prog_name' => 'Sub-Program Name',
-            'main_fee'      => 'Tuition Fee',
-            'sub_fee'       => 'Processing Fee',
-            'status'        => 'Status'
+            'title'     => 'Title',
+            'note'      => 'Note',
+            'status'    => 'Status'
         ];
-
-        if(decrypt_data($_POST['prog_id']) == $_SESSION['unique_prog_id']){
-            $requiredFields[] = [
-                'start_date_1'  => 'Start Date (1st Semester)', 
-                'start_date_2'  => 'Start Date (2nd Semester)', 
-                'venue'         => 'Venue',
-            ];
-        }
 
         $missing        = validateRequiredFields($requiredFields, $_POST);
         if ($missing) {
@@ -31,9 +22,9 @@ if (isset($_POST['Save'])) {
             ));
         }
 
-        // Check for duplicate sub_prog_name
-        $message = $db->hasDuplicate('SELECT sub_prog_name FROM tbl_sub_program WHERE sub_prog_name = :sub_prog_name', [
-            'sub_prog_name' => $_POST['sub_prog_name']
+        // Check for duplicate title
+        $message = $db->hasDuplicate('SELECT title FROM tbl_foreign_lang WHERE title = :title', [
+            'title' => $_POST['title']
         ]);
         if ($message) {
             Alert::error(array(
@@ -45,20 +36,19 @@ if (isset($_POST['Save'])) {
 
         // Prepare the SQL array for insertion
         $sqlArray = array(
-            'sub_prog_name' => $_POST['sub_prog_name'],
-            'prog_id'       => decrypt_data($_POST['prog_id']),
-            'start_date_1'  => !empty($_POST['start_date_1']) ? $_POST['start_date_1'] : null,
-            'start_date_2'  => !empty($_POST['start_date_2']) ? $_POST['start_date_2'] : null,
-            'venue'         => !empty($_POST['venue']) ? $_POST['venue'] : null,
-            'main_fee'      => str_replace(',', '', $_POST['main_fee']),
-            'sub_fee'       => str_replace(',', '', $_POST['sub_fee']),
+            'title'         => $_POST['title'],
+            'offering'      => json_encode($_POST['offering'] ?? []),
+            'level'         => json_encode($_POST['level'] ?? []),
+            'duration'      => json_encode($_POST['duration'] ?? []),
+            'mode'          => json_encode($_POST['mode'] ?? []),
+            'note'          => json_encode($_POST['note'] ?? []),
             'status'        => $_POST['status'],
         );
 
         if(isset($_SESSION['img_input'])){
             if($_SESSION['img_input']['status'] == 'Success') {
-                $sqlArray['sub_prog_img'] = $_SESSION['img_input']['content'];
-                $sqlArray['sub_prog_img_type'] = $_SESSION['img_input']['type'];
+                $sqlArray['img'] = $_SESSION['img_input']['content'];
+                $sqlArray['img_type'] = $_SESSION['img_input']['type'];
             }else{
                 Alert::error([
                     'title' => 'Image Upload Error',
@@ -75,24 +65,8 @@ if (isset($_POST['Save'])) {
         }
 
         // Execute the insert operation
-        $db->executeInsert($sqlArray, 'tbl_sub_program');
+        $db->executeInsert($sqlArray, 'tbl_foreign_lang');
 
-        $lastInsertId = $db->lastInsertedId();
-
-        for ($i = 0; $i < $_SESSION['max_schedule']; $i++) {
-            if (empty($_POST['day'][$i]) || empty($_POST['start_time'][$i]) || empty($_POST['end_time'][$i])) {
-                continue;
-            }
-            $sqlArray = array(
-                'sub_prog_id'  => $lastInsertId,
-                'day'   => $_POST['day'][$i],
-                'start_time' => $_POST['start_time'][$i],
-                'end_time' => $_POST['end_time'][$i]
-            );
-            // Execute the insert operation
-            $db->executeInsert($sqlArray, 'tbl_schedule');
-        }
-        
         // Check if the insert was successful
         if ($db->affectedRows > 0) {
             Alert::success(array(
@@ -122,19 +96,10 @@ if (isset($_POST['Edit'])) {
     try {
         // Check if the required fields are set
         $requiredFields = [
-            'sub_prog_name' => 'Sub-program Name',
-            'main_fee'      => 'Tuition Fee',
-            'sub_fee'       => 'Processing Fee',
-            'status'        => 'Status'
+            'title'     => 'Title',
+            'status'    => 'Status'
         ];
 
-        if(decrypt_data($_POST['prog_id']) == $_SESSION['unique_prog_id']){
-            $requiredFields[] = [
-                'start_date_1'  => 'Start Date (1st Semester)', 
-                'start_date_2'  => 'Start Date (2nd Semester)', 
-                'venue'         => 'Venue',
-            ];
-        }
         $missing        = validateRequiredFields($requiredFields, $_POST);
         if ($missing) {
             Alert::error(array(
@@ -145,11 +110,11 @@ if (isset($_POST['Edit'])) {
         }
 
        // Decrypt the id
-        $sub_prog_id  = decrypt_data($_POST['sub_prog_id']);
+        $fl_id  = decrypt_data($_POST['fl_id']);
         // Check for duplicate sub_prog_name
-        $message = $db->hasDuplicate('SELECT sub_prog_name FROM tbl_sub_program WHERE sub_prog_name = :sub_prog_name AND sub_prog_id != :sub_prog_id', [
-            'sub_prog_name' => $_POST['sub_prog_name'],
-            'sub_prog_id' => $sub_prog_id
+        $message = $db->hasDuplicate('SELECT title FROM tbl_foreign_lang WHERE title = :title AND fl_id != :fl_id', [
+            'title' => $_POST['title'],
+            'fl_id' => $fl_id
         ]);
         if ($message) {
             Alert::error(array(
@@ -161,20 +126,19 @@ if (isset($_POST['Edit'])) {
 
         // Prepare the SQL array for insertion
         $sqlArray = array(
-            'sub_prog_name' => $_POST['sub_prog_name'],
-            'prog_id'       => decrypt_data($_POST['prog_id']),
-            'start_date_1'  => !empty($_POST['start_date_1']) ? $_POST['start_date_1'] : null,
-            'start_date_2'  => !empty($_POST['start_date_2']) ? $_POST['start_date_2'] : null,
-            'venue'         => !empty($_POST['venue']) ? $_POST['venue'] : null,
-            'main_fee'      => str_replace(',', '', $_POST['main_fee']),
-            'sub_fee'       => str_replace(',', '', $_POST['sub_fee']),
+            'title'         => $_POST['title'],
+            'offering'      => json_encode($_POST['offering'] ?? []),
+            'level'         => json_encode($_POST['level'] ?? []),
+            'duration'      => json_encode($_POST['duration'] ?? []),
+            'mode'          => json_encode($_POST['mode'] ?? []),
+            'note'          => json_encode($_POST['note'] ?? []),
             'status'        => $_POST['status'],
         );
 
         if(isset($_SESSION['img_input'])){
             if($_SESSION['img_input']['status'] == 'Success') {
-                $sqlArray['sub_prog_img'] = $_SESSION['img_input']['content'];
-                $sqlArray['sub_prog_img_type'] = $_SESSION['img_input']['type'];
+                $sqlArray['img'] = $_SESSION['img_input']['content'];
+                $sqlArray['img_type'] = $_SESSION['img_input']['type'];
             }else{
                 Alert::error([
                     'title' => 'Image Upload Error',
@@ -185,42 +149,15 @@ if (isset($_POST['Edit'])) {
         }
 
         // Execute the insert operation
-        $db->executeUpdate($sqlArray, 'tbl_sub_program', 'sub_prog_id = :sub_prog_id', ['sub_prog_id' => $sub_prog_id]);
-        $updated = false;
+        $db->executeUpdate($sqlArray, 'tbl_foreign_lang', 'fl_id = :fl_id', ['fl_id' => $fl_id]);
 
         if ($db->affectedRows > 0) {
-            $updated = true;
-        }
-
-        $db->executeDelete('tbl_schedule', 'sub_prog_id = :sub_prog_id', ['sub_prog_id' => $sub_prog_id]);
-
-        for ($i = 0; $i < $_SESSION['max_schedule']; $i++) {
-            if (empty($_POST['day'][$i]) || empty($_POST['start_time'][$i]) || empty($_POST['end_time'][$i])) {
-                continue;
-            }
-
-            $sqlArray = array(
-                'sub_prog_id'  => $sub_prog_id,
-                'day'   => $_POST['day'][$i],
-                'start_time' => $_POST['start_time'][$i],
-                'end_time' => $_POST['end_time'][$i]
-            );
-            // Execute the insert operation
-            $db->executeInsert($sqlArray, 'tbl_schedule');
-
-            if ($db->affectedRows > 0) {
-                $updated = true;
-            }
-        }
-        
-        // Check if the insert was successful
-        if ($updated) {
             Alert::success(array(
                 'title' => 'Update Successful',
                 'html'  => 'Sub-program successfully updated.',
                 'path'  => $redirect_path
             ));
-        }else {
+        } else {
             Alert::warning(array(
                 'title' => 'No Update Performed',
                 'html'  => 'Submitted data is identical to existing record.',
@@ -247,8 +184,7 @@ if (isset($_POST['Edit'])) {
 if (isset($_POST['Delete'])) {
     try {
         $id = decrypt_data($_POST['Delete']);
-        $db->executeDelete('tbl_schedule', 'sub_prog_id = :sub_prog_id', ['sub_prog_id' => $id]);
-        $db->executeDelete('tbl_sub_program', 'sub_prog_id = :sub_prog_id', ['sub_prog_id' => $id]);
+        $db->executeDelete('tbl_foreign_lang', 'fl_id = :fl_id', ['fl_id' => $id]);
         
         if ($db->affectedRows > 0) {
             Alert::success(array(

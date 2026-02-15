@@ -2,7 +2,11 @@ function validateForm() {
     // =========================================================================
     // GROUPED RULES (your entire original rules reorganized)
     // =========================================================================
-
+    const indexedFields = (name, count, subkey) =>
+        Array.from({ length: count }, (_, i) => 
+            subkey ? `${name}[${i}][${subkey}]` : `${name}[${i}]`
+        );
+    
     const groupedRules = [
         {
             fields: ["lpu_no"],
@@ -20,7 +24,8 @@ function validateForm() {
             fields: [
                 "fname",
                 "lname",
-                "member_name"
+                "member_name",
+                "developer"
             ],
             rules: { required: true, noWhitespace: true, namePattern: true }
         },
@@ -29,25 +34,29 @@ function validateForm() {
             rules: { noWhitespace: true, namePattern: true }
         },
         {
-            fields: ["email"],
+            fields: ["email", "developer_email"],
             rules: { required: true, noWhitespace: true, email: true }
         },
         {
             fields: [
                 "start_date_1", 
                 "start_date_2",
-                "day[0]",
-                "day[1]",
-                "day[2]",
-                "start_time[0]",
-                "start_time[1]",
-                "start_time[2]",
-                "end_time[0]",
-                "end_time[1]",
-                "end_time[2]",
+                ...indexedFields('schedule', 3, 'day'),
+                ...indexedFields('schedule', 3, 'start_time'),
+                ...indexedFields('schedule', 3, 'end_time'),
                 "main_fee",
                 "sub_fee",
-                "semester"
+                "semester",
+                ...indexedFields("objective", 10),
+                ...indexedFields("outline", 10),
+                "duration",
+                ...indexedFields("policy", 10),
+                ...indexedFields("requirement", 10),
+                ...indexedFields("offering", 10),
+                ...indexedFields("level", 10),
+                ...indexedFields("duration", 10),
+                ...indexedFields("mode", 10),
+                ...indexedFields("note", 10),
             ],
             rules: { required: true, noWhitespace: true }
         },
@@ -56,12 +65,38 @@ function validateForm() {
             rules: { required: true, noWhitespace: true, digits: true, min: 2025, max: 2100, step: 1 }
         },
         {
-            fields: ["dept_id", "div_id", "course_id", "role_id",],
+            fields: ["dept_id", "div_id", "course_id", "role_id"],
             rules: { required: true, digits: true }
         },
         {
-            fields: ["prog_name", "prog_desc", "venue", "sub_prog_name", "news_title", "news_content", "position"],
+            fields: ["credit_unit"],
+            rules: { digits: true }
+        },
+        {
+            fields: [
+                "prog_name", 
+                "venue", 
+                "title", 
+                "news_title", 
+                "news_content", 
+                "position", 
+                "description", 
+                "prog_title", 
+                "training_title",
+                "course_title",
+                "objective",
+                "class_details",
+                "note"
+            ],
             rules: { required: true, noWhitespace: true, descPattern: true }
+        },
+        {
+            fields: [
+                "course_1",
+                "course_2",
+                "course_3",
+            ],
+            rules: { noWhitespace: true, descPattern: true }
         },
         {
             fields: ["year_level"],

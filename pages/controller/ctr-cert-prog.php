@@ -2,16 +2,24 @@
 include '../../includes/init.php';
 $db = DB::getInstance();
 
-$redirect_path = '../program.php';
+$redirect_path = '../cert-prog.php';
 
 if (isset($_POST['Save'])) {
     try {
         // Check if the required fields are set
         $requiredFields = [
-            'prog_name' => 'Program Name', 
-            'prog_desc' => 'Program Description',
-            'status' => 'Status'
+            'title'         => 'Title',
+            'description'   => 'Description',
+            'class_details' => 'Class Details',
+            'start_date_1'  => 'Start Date (1st Semester)', 
+            'start_date_2'  => 'Start Date (2nd Semester)', 
+            'venue'         => 'Venue',
+            'main_fee'      => 'Tuition Fee',
+            'sub_fee'       => 'Processing Fee',
+            'note'          => 'Note',
+            'status'        => 'Status'
         ];
+
         $missing        = validateRequiredFields($requiredFields, $_POST);
         if ($missing) {
             Alert::error(array(
@@ -21,9 +29,9 @@ if (isset($_POST['Save'])) {
             ));
         }
 
-        // Check for duplicate prog_name
-        $message = $db->hasDuplicate('SELECT prog_name FROM tbl_program WHERE prog_name = :prog_name', [
-            'prog_name' => $_POST['prog_name']
+        // Check for duplicate title
+        $message = $db->hasDuplicate('SELECT title FROM tbl_cert_prog WHERE title = :title', [
+            'title' => $_POST['title']
         ]);
         if ($message) {
             Alert::error(array(
@@ -35,15 +43,24 @@ if (isset($_POST['Save'])) {
 
         // Prepare the SQL array for insertion
         $sqlArray = array(
-            'prog_name'  => $_POST['prog_name'],
-            'prog_desc'   => $_POST['prog_desc'],
-            'status'  => $_POST['status'],
+            'title'         => $_POST['title'],
+            'description'   => $_POST['description'],
+            'class_details' => $_POST['class_details'],
+            'start_date_1'  => $_POST['start_date_1'],
+            'start_date_2'  => $_POST['start_date_2'],
+            'schedule'      => json_encode($_POST['schedule'] ?? []),
+            'venue'         => $_POST['venue'],
+            'main_fee'      => str_replace(',', '', $_POST['main_fee']),
+            'sub_fee'       => str_replace(',', '', $_POST['sub_fee']),
+            'note'          => $_POST['note'],
+            'requirement'   => json_encode($_POST['requirement'] ?? []),
+            'status'        => $_POST['status'],
         );
 
         if(isset($_SESSION['img_input'])){
             if($_SESSION['img_input']['status'] == 'Success') {
-                $sqlArray['prog_img'] = $_SESSION['img_input']['content'];
-                $sqlArray['prog_img_type'] = $_SESSION['img_input']['type'];
+                $sqlArray['img'] = $_SESSION['img_input']['content'];
+                $sqlArray['img_type'] = $_SESSION['img_input']['type'];
             }else{
                 Alert::error([
                     'title' => 'Image Upload Error',
@@ -60,15 +77,13 @@ if (isset($_POST['Save'])) {
         }
 
         // Execute the insert operation
-        $db->executeInsert($sqlArray, 'tbl_program');
-
-        $lastInsertId = $db->lastInsertedId();
+        $db->executeInsert($sqlArray, 'tbl_cert_prog');
         
         // Check if the insert was successful
         if ($db->affectedRows > 0) {
             Alert::success(array(
                 'title' => 'Save Successful',
-                'html'  => 'Program successfully saved.',
+                'html'  => 'Sub-program successfully saved.',
                 'path'  => $redirect_path
             ));
         }
@@ -79,8 +94,6 @@ if (isset($_POST['Save'])) {
             'html'  => 'Something went wrong on our end.',
             'path'  => $redirect_path
         ));
-
-        // echo $e->getMessage();
     } catch (Exception $e) {
         // Handle other exceptions
         Alert::error(array(
@@ -95,9 +108,18 @@ if (isset($_POST['Edit'])) {
     try {
         // Check if the required fields are set
         $requiredFields = [
-            'prog_name' => 'Program Name',
-            'status' => 'Status'
+            'title'         => 'Title',
+            'description'   => 'Description',
+            'class_details' => 'Class Details',
+            'start_date_1'  => 'Start Date (1st Semester)', 
+            'start_date_2'  => 'Start Date (2nd Semester)', 
+            'venue'         => 'Venue',
+            'main_fee'      => 'Tuition Fee',
+            'sub_fee'       => 'Processing Fee',
+            'note'          => 'Note',
+            'status'        => 'Status'
         ];
+
         $missing        = validateRequiredFields($requiredFields, $_POST);
         if ($missing) {
             Alert::error(array(
@@ -108,11 +130,11 @@ if (isset($_POST['Edit'])) {
         }
 
        // Decrypt the id
-        $prog_id  = decrypt_data($_POST['prog_id']);
-        // Check for duplicate prog_name
-        $message = $db->hasDuplicate('SELECT prog_name FROM tbl_program WHERE prog_name = :prog_name AND prog_id != :prog_id', [
-            'prog_name' => $_POST['prog_name'],
-            'prog_id' => $prog_id
+        $cp_id  = decrypt_data($_POST['cp_id']);
+        // Check for duplicate sub_prog_name
+        $message = $db->hasDuplicate('SELECT title FROM tbl_cert_prog WHERE title = :title AND cp_id != :cp_id', [
+            'title' => $_POST['title'],
+            'cp_id' => $cp_id
         ]);
         if ($message) {
             Alert::error(array(
@@ -124,8 +146,18 @@ if (isset($_POST['Edit'])) {
 
         // Prepare the SQL array for insertion
         $sqlArray = array(
-            'prog_name'  => $_POST['prog_name'],
-            'status'  => $_POST['status'],
+            'title'         => $_POST['title'],
+            'description'   => $_POST['description'],
+            'class_details' => $_POST['class_details'],
+            'start_date_1'  => $_POST['start_date_1'],
+            'start_date_2'  => $_POST['start_date_2'],
+            'schedule'      => json_encode($_POST['schedule'] ?? []),
+            'venue'         => $_POST['venue'],
+            'main_fee'      => str_replace(',', '', $_POST['main_fee']),
+            'sub_fee'       => str_replace(',', '', $_POST['sub_fee']),
+            'note'          => $_POST['note'],
+            'requirement'   => json_encode($_POST['requirement'] ?? []),
+            'status'        => $_POST['status'],
         );
 
         if(isset($_SESSION['img_input'])){
@@ -142,16 +174,15 @@ if (isset($_POST['Edit'])) {
         }
 
         // Execute the insert operation
-        $db->executeUpdate($sqlArray, 'tbl_program', 'prog_id = :prog_id', ['prog_id' => $prog_id]);
+        $db->executeUpdate($sqlArray, 'tbl_cert_prog', 'cp_id = :cp_id', ['cp_id' => $cp_id]);
         
-        // Check if the insert was successful
         if ($db->affectedRows > 0) {
             Alert::success(array(
                 'title' => 'Update Successful',
-                'html'  => 'Program successfully updated.',
+                'html'  => 'Sub-program successfully updated.',
                 'path'  => $redirect_path
             ));
-        }else {
+        } else {
             Alert::warning(array(
                 'title' => 'No Update Performed',
                 'html'  => 'Submitted data is identical to existing record.',
@@ -175,21 +206,24 @@ if (isset($_POST['Edit'])) {
     }
 }
 
-if (isset($_POST['View'])) {
+if (isset($_POST['Delete'])) {
     try {
-        $_SESSION['prog_id'] = decrypt_data($_POST['View']);
-        if($_SESSION['prog_id'] == 1){
-            safe_redirect("../assess-cert.php");
-        }else if($_SESSION['prog_id'] == 2){
-            safe_redirect("../foreign-lang.php");
-        }else if($_SESSION['prog_id'] == 3){
-            safe_redirect("../cert-prog.php");
-        }else if($_SESSION['prog_id'] == 4){
-            safe_redirect("../short-term.php");
-        }else if($_SESSION['prog_id'] == 5){
-            safe_redirect("../micro-course.php");
-        }
+        $id = decrypt_data($_POST['Delete']);
+        $db->executeDelete('tbl_cert_prog', 'cp_id = :cp_id', ['cp_id' => $id]);
         
+        if ($db->affectedRows > 0) {
+            Alert::success(array(
+                'title' => 'Delete Successful',
+                'html'  => 'Sub-program successfully deleted.',
+                'path'  => $redirect_path
+            ));
+        } else {
+            Alert::error(array(
+                'title' => 'Delete Failed',
+                'html'  => 'No sub-program found with the provided ID.',
+                'path'  => $redirect_path
+            ));
+        }
     } catch (DBException $e) {
         // Handle the database error
         Alert::error(array(

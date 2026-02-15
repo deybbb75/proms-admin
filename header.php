@@ -37,6 +37,15 @@ include 'head.php';
                 <!--- Sidemenu -->
                 <ul class="side-nav" id="side-nav">
 
+                    <li class="side-nav-title side-nav-item">Main Navigation</li>
+
+                    <li class="side-nav-item">
+                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/index.php" class="side-nav-link">
+                            <i class="mdi mdi-home"></i>
+                            <span> Dashboard </span>
+                        </a>
+                    </li>
+
                     <li class="side-nav-title side-nav-item">Reservation Utilities</li>
 
                     <li class="side-nav-item">
@@ -80,6 +89,13 @@ include 'head.php';
                         <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/pages/team.php" class="side-nav-link">
                             <i class="mdi mdi-account-group"></i>
                             <span> Our Team </span>
+                        </a>
+                    </li>
+
+                    <li class="side-nav-item">
+                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/pages/student.php" class="side-nav-link">
+                            <i class="mdi mdi-school"></i>
+                            <span> Student Accounts </span>
                         </a>
                     </li>
 

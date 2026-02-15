@@ -25,7 +25,7 @@
         <!-- third party css end -->
 
         <!-- App css -->
-        <link href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/assets/css/default.min.css" rel="stylesheet" type="text/css" id="app-style"/>
+        <link href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/assets/css/default.min.css" rel="stylesheet" type="text/css"/>
         <link href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
         <link href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/assets/css/app.min.css" rel="stylesheet" type="text/css" id="app-style"/>
 
@@ -33,7 +33,7 @@
         <link href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/assets/plugins/sweetalert2/dist/sweetalert2.min.css" rel="stylesheet" />
 
         <!-- Custom CSS -->
-         <link href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/assets/css/custom.css" rel="stylesheet" type="text/css" id="app-style"/>
+        <link href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/assets/css/custom.css" rel="stylesheet" type="text/css"/>
 
         <!-- FilePond Css -->
         <link rel="stylesheet" href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css">

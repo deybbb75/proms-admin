@@ -2,16 +2,22 @@
 include '../../includes/init.php';
 $db = DB::getInstance();
 
-$redirect_path = '../program.php';
+$redirect_path = '../micro-course.php';
 
 if (isset($_POST['Save'])) {
     try {
         // Check if the required fields are set
         $requiredFields = [
-            'prog_name' => 'Program Name', 
-            'prog_desc' => 'Program Description',
-            'status' => 'Status'
+            'prog_title'        => 'Program Title',
+            'description'       => 'Description',
+            'course_title'      => 'Course Title',
+            'duration'          => 'Duration',
+            'developer'         => 'Developer',
+            'developer_email'   => 'Developer Email',
+            'objective'         => 'Objective',
+            'status'            => 'Status'
         ];
+
         $missing        = validateRequiredFields($requiredFields, $_POST);
         if ($missing) {
             Alert::error(array(
@@ -21,9 +27,10 @@ if (isset($_POST['Save'])) {
             ));
         }
 
-        // Check for duplicate prog_name
-        $message = $db->hasDuplicate('SELECT prog_name FROM tbl_program WHERE prog_name = :prog_name', [
-            'prog_name' => $_POST['prog_name']
+        // Check for duplicate title
+        $message = $db->hasDuplicate('SELECT prog_title, course_title FROM tbl_micro_course WHERE prog_title = :prog_title AND course_title = :course_title', [
+            'prog_title' => $_POST['prog_title'],
+            'course_title' => $_POST['course_title']
         ]);
         if ($message) {
             Alert::error(array(
@@ -35,15 +42,25 @@ if (isset($_POST['Save'])) {
 
         // Prepare the SQL array for insertion
         $sqlArray = array(
-            'prog_name'  => $_POST['prog_name'],
-            'prog_desc'   => $_POST['prog_desc'],
-            'status'  => $_POST['status'],
+            'prog_title'        => $_POST['prog_title'],
+            'description'       => $_POST['description'],
+            'course_title'      => $_POST['course_title'],
+            'course_1'          => $_POST['course_1'] ?? null,
+            'course_2'          => $_POST['course_2'] ?? null,
+            'course_3'          => $_POST['course_3'] ?? null,
+            'duration'          => $_POST['duration'],
+            'credit_unit'       => $_POST['credit_unit'] ?? 0,
+            'developer'         => $_POST['developer'],
+            'developer_email'   => $_POST['developer_email'],
+            'objective'         => $_POST['objective'],
+            'policy'            => json_encode($_POST['policy'] ?? []),
+            'status'            => $_POST['status'],
         );
 
         if(isset($_SESSION['img_input'])){
             if($_SESSION['img_input']['status'] == 'Success') {
-                $sqlArray['prog_img'] = $_SESSION['img_input']['content'];
-                $sqlArray['prog_img_type'] = $_SESSION['img_input']['type'];
+                $sqlArray['img'] = $_SESSION['img_input']['content'];
+                $sqlArray['img_type'] = $_SESSION['img_input']['type'];
             }else{
                 Alert::error([
                     'title' => 'Image Upload Error',
@@ -60,15 +77,13 @@ if (isset($_POST['Save'])) {
         }
 
         // Execute the insert operation
-        $db->executeInsert($sqlArray, 'tbl_program');
-
-        $lastInsertId = $db->lastInsertedId();
+        $db->executeInsert($sqlArray, 'tbl_micro_course');
         
         // Check if the insert was successful
         if ($db->affectedRows > 0) {
             Alert::success(array(
                 'title' => 'Save Successful',
-                'html'  => 'Program successfully saved.',
+                'html'  => 'Sub-program successfully saved.',
                 'path'  => $redirect_path
             ));
         }
@@ -79,8 +94,6 @@ if (isset($_POST['Save'])) {
             'html'  => 'Something went wrong on our end.',
             'path'  => $redirect_path
         ));
-
-        // echo $e->getMessage();
     } catch (Exception $e) {
         // Handle other exceptions
         Alert::error(array(
@@ -95,9 +108,16 @@ if (isset($_POST['Edit'])) {
     try {
         // Check if the required fields are set
         $requiredFields = [
-            'prog_name' => 'Program Name',
-            'status' => 'Status'
+            'prog_title'        => 'Program Title',
+            'description'       => 'Description',
+            'course_title'      => 'Course Title',
+            'duration'          => 'Duration',
+            'developer'         => 'Developer',
+            'developer_email'   => 'Developer Email',
+            'objective'         => 'Objective',
+            'status'            => 'Status'
         ];
+
         $missing        = validateRequiredFields($requiredFields, $_POST);
         if ($missing) {
             Alert::error(array(
@@ -108,11 +128,12 @@ if (isset($_POST['Edit'])) {
         }
 
        // Decrypt the id
-        $prog_id  = decrypt_data($_POST['prog_id']);
-        // Check for duplicate prog_name
-        $message = $db->hasDuplicate('SELECT prog_name FROM tbl_program WHERE prog_name = :prog_name AND prog_id != :prog_id', [
-            'prog_name' => $_POST['prog_name'],
-            'prog_id' => $prog_id
+        $mc_id  = decrypt_data($_POST['mc_id']);
+        // Check for duplicate sub_prog_name
+        $message = $db->hasDuplicate('SELECT prog_title, course_title FROM tbl_micro_course WHERE prog_title = :prog_title AND course_title = :course_title AND mc_id != :mc_id', [
+            'prog_title' => $_POST['prog_title'],
+            'course_title' => $_POST['course_title'],
+            'mc_id' => $mc_id
         ]);
         if ($message) {
             Alert::error(array(
@@ -124,8 +145,19 @@ if (isset($_POST['Edit'])) {
 
         // Prepare the SQL array for insertion
         $sqlArray = array(
-            'prog_name'  => $_POST['prog_name'],
-            'status'  => $_POST['status'],
+            'prog_title'        => $_POST['prog_title'],
+            'description'       => $_POST['description'],
+            'course_title'      => $_POST['course_title'],
+            'course_1'          => $_POST['course_1'] ?? null,
+            'course_2'          => $_POST['course_2'] ?? null,
+            'course_3'          => $_POST['course_3'] ?? null,
+            'duration'          => $_POST['duration'],
+            'credit_unit'       => $_POST['credit_unit'] ?? 0,
+            'developer'         => $_POST['developer'],
+            'developer_email'   => $_POST['developer_email'],
+            'objective'         => $_POST['objective'],
+            'policy'            => json_encode($_POST['policy'] ?? []),
+            'status'            => $_POST['status'],
         );
 
         if(isset($_SESSION['img_input'])){
@@ -142,16 +174,15 @@ if (isset($_POST['Edit'])) {
         }
 
         // Execute the insert operation
-        $db->executeUpdate($sqlArray, 'tbl_program', 'prog_id = :prog_id', ['prog_id' => $prog_id]);
-        
-        // Check if the insert was successful
+        $db->executeUpdate($sqlArray, 'tbl_micro_course', 'mc_id = :mc_id', ['mc_id' => $mc_id]);
+
         if ($db->affectedRows > 0) {
             Alert::success(array(
                 'title' => 'Update Successful',
-                'html'  => 'Program successfully updated.',
+                'html'  => 'Sub-program successfully updated.',
                 'path'  => $redirect_path
             ));
-        }else {
+        } else {
             Alert::warning(array(
                 'title' => 'No Update Performed',
                 'html'  => 'Submitted data is identical to existing record.',
@@ -175,21 +206,24 @@ if (isset($_POST['Edit'])) {
     }
 }
 
-if (isset($_POST['View'])) {
+if (isset($_POST['Delete'])) {
     try {
-        $_SESSION['prog_id'] = decrypt_data($_POST['View']);
-        if($_SESSION['prog_id'] == 1){
-            safe_redirect("../assess-cert.php");
-        }else if($_SESSION['prog_id'] == 2){
-            safe_redirect("../foreign-lang.php");
-        }else if($_SESSION['prog_id'] == 3){
-            safe_redirect("../cert-prog.php");
-        }else if($_SESSION['prog_id'] == 4){
-            safe_redirect("../short-term.php");
-        }else if($_SESSION['prog_id'] == 5){
-            safe_redirect("../micro-course.php");
-        }
+        $id = decrypt_data($_POST['Delete']);
+        $db->executeDelete('tbl_micro_course', 'mc_id = :mc_id', ['mc_id' => $id]);
         
+        if ($db->affectedRows > 0) {
+            Alert::success(array(
+                'title' => 'Delete Successful',
+                'html'  => 'Sub-program successfully deleted.',
+                'path'  => $redirect_path
+            ));
+        } else {
+            Alert::error(array(
+                'title' => 'Delete Failed',
+                'html'  => 'No sub-program found with the provided ID.',
+                'path'  => $redirect_path
+            ));
+        }
     } catch (DBException $e) {
         // Handle the database error
         Alert::error(array(

@@ -1,10 +1,10 @@
 @charset "UTF-8";
 :root{
-    --primary-color: #a3202b;
-    --primary-hover-color: #b22f3a;
-    --primary-border-color: #85140f;
-    --primary-active-border-color: #780008;
-    --primary-rgb: 163, 32, 43;
+    --primary-color: #950101;               /* base */
+    --primary-hover-color: #a51a1a;         /* lighter */
+    --primary-border-color: #760000;        /* darker */
+    --primary-active-border-color: #5f0000; /* darkest */
+    --primary-rgb: 149, 1, 1;
 
     --secondary-color: #c9a401;
     --secondary-hover-color: #d9b51a;

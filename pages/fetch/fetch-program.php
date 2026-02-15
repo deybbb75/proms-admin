@@ -10,11 +10,10 @@ if (isset($_POST['id'])) {
     if ($program) {
         $prog_id = encrypt_data($program->prog_id);
         $prog_name  = $program->prog_name;
-        $prog_desc  = $program->prog_desc;
         $status = $program->status;
-        $image = $program->prog_img;
+        $image = $program->img;
         $image_data = base64_encode($image);
-        $image_type = $program->prog_img_type;
+        $image_type = $program->img_type;
         $image_src  = "data:{$image_type};base64,{$image_data}";
     }
 }
@@ -25,12 +24,6 @@ if (isset($_POST['id'])) {
     <div class="col-md-12">
         <label for="prog_name" class="form-label required">Program Name</label>
         <input type="text" id="prog_name" name="prog_name" class="form-control" placeholder="Program Title" value="<?= $prog_name ?? '' ?>">
-    </div>
-</div>
-<div class="row">
-    <div class="col-sm-12">
-        <label for="emp_no" class="form-label required">Program Description</label>
-        <textarea class="form-control auto-grow-textarea" id="prog_desc" name="prog_desc" rows="5" placeholder="Program Description"><?= $prog_desc ?? '' ?></textarea>
     </div>
 </div>
 <div class="row">
