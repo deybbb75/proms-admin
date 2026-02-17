@@ -62,9 +62,9 @@ $_SESSION['max_requirement'] = 10;
                                 </td>
                                 <td>
                                     <?php
-                                        $schedule_query = $db->query("SELECT * FROM tbl_schedule WHERE cp_id = :cp_id ORDER BY sched_order ASC", ["cp_id" => $line->cp_id]);
+                                        $schedules = json_decode($line->schedule, true);
 
-                                        if($db->numRows($schedule_query) == 0){
+                                        if(empty($schedules)){
                                     ?>
                                     <p style="color: red; font-style: italic;">No Schedule Available</p>
                                     <?php
@@ -72,9 +72,9 @@ $_SESSION['max_requirement'] = 10;
                                     ?>
                                     <ul style="padding-left: 1rem;">
                                     <?php
-                                            while ($sched_line = $db->fetchNextObject($schedule_query)) {
+                                            foreach ($schedules as $schedule) {
                                     ?>
-                                        <li><?= e($sched_line->day) ?>, <?= e(date("h:i A", strtotime($sched_line->start_time))) ?> - <?= e(date("h:i A", strtotime($sched_line->end_time))) ?></li>
+                                        <li><?= e($schedule['day']) ?>, <?= e(date("h:i A", strtotime($schedule['start_time']))) ?> - <?= e(date("h:i A", strtotime($schedule['end_time']))) ?></li>
                                     <?php
                                             }
                                     ?>
@@ -176,7 +176,7 @@ $_SESSION['max_requirement'] = 10;
             <span class="font-13 text-muted">End Time</span>
         </div>
         <div class="col-lg-1 mb-3">
-            <button type="button" class="btn btn-danger w-100" data-remove-item><i class="mdi mdi-close"></i></button>
+            <button type="button" class="btn btn-danger w-100" onclick="removeOldItem(this, schedObj)"><i class="mdi mdi-close"></i></button>
         </div>
     </div>
 </template>
@@ -187,7 +187,7 @@ $_SESSION['max_requirement'] = 10;
             <textarea class="form-control auto-grow-textarea requirement" id="requirement" name="requirement" rows="3" placeholder="Requirement"></textarea>
         </div>
         <div class="col-lg-1 col-md-2 col-12 mb-2">
-            <button type="button" class="btn btn-danger w-100" data-remove-item><i class="mdi mdi-close"></i></button>
+            <button type="button" class="btn btn-danger w-100" onclick="removeOldItem(this, reqObj)"><i class="mdi mdi-close"></i></button>
         </div>
     </div>
 </template>
@@ -210,6 +210,26 @@ function updateImage(action){
     }
 }
 
+const schedObj = {
+    fieldMap: {
+        "select.day": "schedule[0][day]",
+        "input.start-time": "schedule[0][start_time]",
+        "input.end-time": "schedule[0][end_time]"
+    },
+    maxItems: <?= $_SESSION['max_schedule'] ?>,
+    templateId: "schedule-template",
+    confirmTitle: "Are you sure you want to delete this schedule?"
+};
+
+const reqObj = {
+    fieldMap: {
+        "textarea.requirement": "requirement"
+    },
+    maxItems: <?= $_SESSION['max_requirement'] ?>,
+    templateId: "requirement-template",
+    confirmTitle: "Are you sure you want to delete this requirement?"
+};
+
 function fetchCustom(){
     initFilePond(
         'img_input',
@@ -217,43 +237,8 @@ function fetchCustom(){
         'Only JPG files are allowed',
         ['#save_changes']
     );
-
-    createDynamicList({
-
-        templateId: "schedule-template",
-        containerId: "schedule-container",
-        addBtnId: "add-sched-btn",
-        addBtnContainerId: "add-sched-btn-container",
-        itemSelector: ".row",
-        maxItems: <?= $_SESSION['max_schedule'] ?>,
-        confirmTitle: "Are you sure you want to delete this schedule?",
-
-        fieldMap: {
-            "select.day": "schedule[0][day]",
-            "input.start-time": "schedule[0][start_time]",
-            "input.end-time": "schedule[0][end_time]"
-        },
-
-        afterAdd: container => reInitUI($(container))
-
-    });
-
-    createDynamicList({
-
-        templateId: "requirement-template",
-        containerId: "requirement-container",
-        addBtnId: "add-req-btn",
-        addBtnContainerId: "add-req-btn-container",
-        itemSelector: ".row",
-        maxItems: <?= $_SESSION['max_requirement'] ?>,
-        confirmTitle: "Are you sure you want to delete this requirement?",
-
-        fieldMap: {
-            "textarea.requirement": "requirement"
-        },
-
-        afterAdd: container => reInitUI($(container))
-
-    });
 }
+
+
+
 </script>

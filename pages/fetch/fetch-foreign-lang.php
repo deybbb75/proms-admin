@@ -31,7 +31,7 @@ if (isset($_POST['id'])) {
 </div>
 <div class="row">
     <label class="form-label required" style="font-weight: 600;">Program Offering/s</label>
-    <div class="col-sm-12" id="offering-container" style="padding-bottom: 0px;">
+    <div class="col-sm-12" style="padding-bottom: 0px;">
         <?php
             if(!isset($offering)){
         ?>
@@ -50,7 +50,7 @@ if (isset($_POST['id'])) {
                 <textarea class="form-control auto-grow-textarea offering" id="offering" name="offering[<?= $i ?>]" rows="3" placeholder="Offering"><?= $offering[$i] ?? '' ?></textarea>
             </div>
             <div class="col-lg-1 mb-2">
-                <button type="button" class="btn btn-danger w-100" data-remove-item><i class="mdi mdi-close"></i></button>
+                <button type="button" class="btn btn-danger w-100" onclick="removeOldItem(this, offeringObj)"><i class="mdi mdi-close"></i></button>
             </div>
         </div>
         <?php
@@ -59,13 +59,13 @@ if (isset($_POST['id'])) {
         ?>
     </div>
     
-    <div class="col-sm-12" id="add-offering-btn-container">
-        <button type="button" class="btn btn-sm btn-info w-100" id="add-offering-btn"><i class="mdi mdi-plus"></i> Add Offering</button>
+    <div class="col-sm-12">
+        <button type="button" class="btn btn-sm btn-info w-100" onclick="addNewItem(this, offeringObj)"><i class="mdi mdi-plus"></i> Add Offering</button>
     </div>
 </div>
 <div class="row">
     <label class="form-label required" style="font-weight: 600;">Competency Level/s</label>
-    <div class="col-sm-12" id="level-container" style="padding-bottom: 0px;">
+    <div class="col-sm-12" style="padding-bottom: 0px;">
         <?php
             if(!isset($level)){
         ?>
@@ -84,7 +84,7 @@ if (isset($_POST['id'])) {
                 <textarea class="form-control auto-grow-textarea level" id="level" name="level[<?= $i ?>]" rows="3" placeholder="Level"><?= $level[$i] ?? '' ?></textarea>
             </div>
             <div class="col-lg-1 mb-2">
-                <button type="button" class="btn btn-danger w-100" data-remove-item><i class="mdi mdi-close"></i></button>
+                <button type="button" class="btn btn-danger w-100" onclick="removeOldItem(this, levelObj)"><i class="mdi mdi-close"></i></button>
             </div>
         </div>
         <?php
@@ -93,13 +93,13 @@ if (isset($_POST['id'])) {
         ?>
     </div>
     
-    <div class="col-sm-12" id="add-level-btn-container">
-        <button type="button" class="btn btn-sm btn-info w-100" id="add-level-btn"><i class="mdi mdi-plus"></i> Add Level</button>
+    <div class="col-sm-12">
+        <button type="button" class="btn btn-sm btn-info w-100" onclick="addNewItem(this, levelObj)"><i class="mdi mdi-plus"></i> Add Level</button>
     </div>
 </div>
 <div class="row">
     <label class="form-label required" style="font-weight: 600;">Program Duration/s</label>
-    <div class="col-sm-12" id="duration-container" style="padding-bottom: 0px;">
+    <div class="col-sm-12" style="padding-bottom: 0px;">
         <?php
             if(!isset($duration)){
         ?>
@@ -118,7 +118,7 @@ if (isset($_POST['id'])) {
                 <textarea class="form-control auto-grow-textarea duration" id="duration" name="duration[<?= $i ?>]" rows="3" placeholder="Duration"><?= $duration[$i] ?? '' ?></textarea>
             </div>
             <div class="col-lg-1 mb-2">
-                <button type="button" class="btn btn-danger w-100" data-remove-item><i class="mdi mdi-close"></i></button>
+                <button type="button" class="btn btn-danger w-100" onclick="removeOldItem(this, durationObj)"><i class="mdi mdi-close"></i></button>
             </div>
         </div>
         <?php
@@ -127,13 +127,13 @@ if (isset($_POST['id'])) {
         ?>
     </div>
     
-    <div class="col-sm-12" id="add-duration-btn-container">
-        <button type="button" class="btn btn-sm btn-info w-100" id="add-duration-btn"><i class="mdi mdi-plus"></i> Add Duration</button>
+    <div class="col-sm-12">
+        <button type="button" class="btn btn-sm btn-info w-100" onclick="addNewItem(this, durationObj)"><i class="mdi mdi-plus"></i> Add Duration</button>
     </div>
 </div>
 <div class="row">
     <label class="form-label required" style="font-weight: 600;">Mode/s of Study</label>
-    <div class="col-sm-12" id="mode-container" style="padding-bottom: 0px;">
+    <div class="col-sm-12" style="padding-bottom: 0px;">
         <?php
             if(!isset($mode)){
         ?>
@@ -152,7 +152,7 @@ if (isset($_POST['id'])) {
                 <textarea class="form-control auto-grow-textarea mode" id="mode" name="mode[<?= $i ?>]" rows="3" placeholder="Mode"><?= $mode[$i] ?? '' ?></textarea>
             </div>
             <div class="col-lg-1 mb-2">
-                <button type="button" class="btn btn-danger w-100" data-remove-item><i class="mdi mdi-close"></i></button>
+                <button type="button" class="btn btn-danger w-100" onclick="removeOldItem(this, modeObj)"><i class="mdi mdi-close"></i></button>
             </div>
         </div>
         <?php
@@ -161,13 +161,13 @@ if (isset($_POST['id'])) {
         ?>
     </div>
     
-    <div class="col-sm-12" id="add-mode-btn-container">
-        <button type="button" class="btn btn-sm btn-info w-100" id="add-mode-btn"><i class="mdi mdi-plus"></i> Add Mode</button>
+    <div class="col-sm-12">
+        <button type="button" class="btn btn-sm btn-info w-100" onclick="addNewItem(this, modeObj)"><i class="mdi mdi-plus"></i> Add Mode</button>
     </div>
 </div>
 <div class="row">
     <label class="form-label required" style="font-weight: 600;">Note/s</label>
-    <div class="col-sm-12" id="note-container" style="padding-bottom: 0px;">
+    <div class="col-sm-12" style="padding-bottom: 0px;">
         <?php
             if(!isset($note)){
         ?>
@@ -186,7 +186,7 @@ if (isset($_POST['id'])) {
                 <textarea class="form-control auto-grow-textarea note" id="note" name="note[<?= $i ?>]" rows="3" placeholder="Note"><?= $note[$i] ?? '' ?></textarea>
             </div>
             <div class="col-lg-1 mb-2">
-                <button type="button" class="btn btn-danger w-100" data-remove-item><i class="mdi mdi-close"></i></button>
+                <button type="button" class="btn btn-danger w-100" onclick="removeOldItem(this, noteObj)"><i class="mdi mdi-close"></i></button>
             </div>
         </div>
         <?php
@@ -195,8 +195,8 @@ if (isset($_POST['id'])) {
         ?>
     </div>
     
-    <div class="col-sm-12" id="add-note-btn-container">
-        <button type="button" class="btn btn-sm btn-info w-100" id="add-note-btn"><i class="mdi mdi-plus"></i> Add Note</button>
+    <div class="col-sm-12">
+        <button type="button" class="btn btn-sm btn-info w-100" onclick="addNewItem(this, noteObj)"><i class="mdi mdi-plus"></i> Add Note</button>
     </div>
 </div>
 <div class="row">

@@ -2,16 +2,18 @@
 include '../../includes/init.php';
 $db = DB::getInstance();
 
-$redirect_path = '../program.php';
+$redirect_path = '../ms-prog.php';
 
 if (isset($_POST['Save'])) {
     try {
         // Check if the required fields are set
         $requiredFields = [
-            'prog_name' => 'Program Name', 
-            'prog_desc' => 'Program Description',
-            'status' => 'Status'
+            'title'         => 'Title',
+            'description'   => 'Description',
+            'yt_link'       => 'Youtube Link',
+            'status'        => 'Status'
         ];
+
         $missing        = validateRequiredFields($requiredFields, $_POST);
         if ($missing) {
             Alert::error(array(
@@ -21,9 +23,9 @@ if (isset($_POST['Save'])) {
             ));
         }
 
-        // Check for duplicate prog_name
-        $message = $db->hasDuplicate('SELECT prog_name FROM tbl_program WHERE prog_name = :prog_name', [
-            'prog_name' => $_POST['prog_name']
+        // Check for duplicate title
+        $message = $db->hasDuplicate('SELECT title FROM tbl_ms_prog WHERE title = :title', [
+            'title' => $_POST['title']
         ]);
         if ($message) {
             Alert::error(array(
@@ -35,15 +37,19 @@ if (isset($_POST['Save'])) {
 
         // Prepare the SQL array for insertion
         $sqlArray = array(
-            'prog_name'  => $_POST['prog_name'],
-            'prog_desc'   => $_POST['prog_desc'],
-            'status'  => $_POST['status'],
+            'title'         => $_POST['title'],
+            'description'   => $_POST['description'],
+            'yt_link'       => $_POST['yt_link'],
+            'certification' => json_encode($_POST['cert'] ?? []),
+            'associate_cert' => json_encode($_POST['associate_cert'] ?? []),
+            'expert_cert'   => json_encode($_POST['expert_cert'] ?? []),
+            'status'        => $_POST['status'],
         );
 
         if(isset($_SESSION['img_input'])){
             if($_SESSION['img_input']['status'] == 'Success') {
-                $sqlArray['prog_img'] = $_SESSION['img_input']['content'];
-                $sqlArray['prog_img_type'] = $_SESSION['img_input']['type'];
+                $sqlArray['img'] = $_SESSION['img_input']['content'];
+                $sqlArray['img_type'] = $_SESSION['img_input']['type'];
             }else{
                 Alert::error([
                     'title' => 'Image Upload Error',
@@ -60,15 +66,13 @@ if (isset($_POST['Save'])) {
         }
 
         // Execute the insert operation
-        $db->executeInsert($sqlArray, 'tbl_program');
-
-        $lastInsertId = $db->lastInsertedId();
+        $db->executeInsert($sqlArray, 'tbl_ms_prog');
         
         // Check if the insert was successful
         if ($db->affectedRows > 0) {
             Alert::success(array(
                 'title' => 'Save Successful',
-                'html'  => 'Program successfully saved.',
+                'html'  => 'Sub-program successfully saved.',
                 'path'  => $redirect_path
             ));
         }
@@ -79,8 +83,6 @@ if (isset($_POST['Save'])) {
             'html'  => 'Something went wrong on our end.',
             'path'  => $redirect_path
         ));
-
-        // echo $e->getMessage();
     } catch (Exception $e) {
         // Handle other exceptions
         Alert::error(array(
@@ -95,9 +97,12 @@ if (isset($_POST['Edit'])) {
     try {
         // Check if the required fields are set
         $requiredFields = [
-            'prog_name' => 'Program Name',
-            'status' => 'Status'
+            'title'         => 'Title',
+            'description'   => 'Description',
+            'yt_link'       => 'Youtube Link',
+            'status'        => 'Status'
         ];
+
         $missing        = validateRequiredFields($requiredFields, $_POST);
         if ($missing) {
             Alert::error(array(
@@ -108,11 +113,11 @@ if (isset($_POST['Edit'])) {
         }
 
        // Decrypt the id
-        $prog_id  = decrypt_data($_POST['prog_id']);
-        // Check for duplicate prog_name
-        $message = $db->hasDuplicate('SELECT prog_name FROM tbl_program WHERE prog_name = :prog_name AND prog_id != :prog_id', [
-            'prog_name' => $_POST['prog_name'],
-            'prog_id' => $prog_id
+        $mp_id  = decrypt_data($_POST['mp_id']);
+        // Check for duplicate sub_prog_name
+        $message = $db->hasDuplicate('SELECT title FROM tbl_ms_prog WHERE title = :title AND mp_id != :mp_id', [
+            'title' => $_POST['title'],
+            'mp_id' => $mp_id
         ]);
         if ($message) {
             Alert::error(array(
@@ -124,8 +129,13 @@ if (isset($_POST['Edit'])) {
 
         // Prepare the SQL array for insertion
         $sqlArray = array(
-            'prog_name'  => $_POST['prog_name'],
-            'status'  => $_POST['status'],
+            'title'         => $_POST['title'],
+            'description'   => $_POST['description'],
+            'yt_link'       => $_POST['yt_link'],
+            'certification' => json_encode($_POST['cert'] ?? []),
+            'associate_cert' => json_encode($_POST['associate_cert'] ?? []),
+            'expert_cert'   => json_encode($_POST['expert_cert'] ?? []),
+            'status'        => $_POST['status'],
         );
 
         if(isset($_SESSION['img_input'])){
@@ -142,16 +152,15 @@ if (isset($_POST['Edit'])) {
         }
 
         // Execute the insert operation
-        $db->executeUpdate($sqlArray, 'tbl_program', 'prog_id = :prog_id', ['prog_id' => $prog_id]);
+        $db->executeUpdate($sqlArray, 'tbl_ms_prog', 'mp_id = :mp_id', ['mp_id' => $mp_id]);
         
-        // Check if the insert was successful
         if ($db->affectedRows > 0) {
             Alert::success(array(
                 'title' => 'Update Successful',
-                'html'  => 'Program successfully updated.',
+                'html'  => 'Sub-program successfully updated.',
                 'path'  => $redirect_path
             ));
-        }else {
+        } else {
             Alert::warning(array(
                 'title' => 'No Update Performed',
                 'html'  => 'Submitted data is identical to existing record.',
@@ -167,31 +176,34 @@ if (isset($_POST['Edit'])) {
         ));
     } catch (Exception $e) {
         // Handle other exceptions
-        Alert::error(array(
-            'title' => 'Error',
-            'html'  => 'Something went wrong with your request.',
-            'path'  => $redirect_path
-        ));
+        // Alert::error(array(
+        //     'title' => 'Error',
+        //     'html'  => 'Something went wrong with your request.',
+        //     'path'  => $redirect_path
+        // ));
+
+        echo $e->getMessage(); // For debugging purposes only. Remove or comment out in production.
     }
 }
 
-if (isset($_POST['View'])) {
+if (isset($_POST['Delete'])) {
     try {
-        $_SESSION['prog_id'] = decrypt_data($_POST['View']);
-        if($_SESSION['prog_id'] == 1){
-            safe_redirect("../assess-cert.php");
-        }else if($_SESSION['prog_id'] == 2){
-            safe_redirect("../foreign-lang.php");
-        }else if($_SESSION['prog_id'] == 3){
-            safe_redirect("../cert-prog.php");
-        }else if($_SESSION['prog_id'] == 4){
-            safe_redirect("../short-term.php");
-        }else if($_SESSION['prog_id'] == 5){
-            safe_redirect("../micro-course.php");
-        }else if($_SESSION['prog_id'] == 6){
-            safe_redirect("../ms-prog.php");
-        }
+        $id = decrypt_data($_POST['Delete']);
+        $db->executeDelete('tbl_ms_prog', 'mp_id = :mp_id', ['mp_id' => $id]);
         
+        if ($db->affectedRows > 0) {
+            Alert::success(array(
+                'title' => 'Delete Successful',
+                'html'  => 'Sub-program successfully deleted.',
+                'path'  => $redirect_path
+            ));
+        } else {
+            Alert::error(array(
+                'title' => 'Delete Failed',
+                'html'  => 'No sub-program found with the provided ID.',
+                'path'  => $redirect_path
+            ));
+        }
     } catch (DBException $e) {
         // Handle the database error
         Alert::error(array(

@@ -114,7 +114,7 @@ $_SESSION['max_requirement'] = 10;
             <textarea class="form-control auto-grow-textarea requirement" id="requirement" name="requirement" rows="3" placeholder="Requirement"></textarea>
         </div>
         <div class="col-lg-1 col-md-2 col-12 mb-2">
-            <button type="button" class="btn btn-danger w-100" data-remove-item><i class="mdi mdi-close"></i></button>
+            <button type="button" class="btn btn-danger w-100" onclick="removeOldItem(this, reqObj)"><i class="mdi mdi-close"></i></button>
         </div>
     </div>
 </template>
@@ -133,6 +133,15 @@ function updateImage(action){
     }
 }
 
+const reqObj = {
+    fieldMap: {
+        "textarea.requirement": "requirement"
+    },
+    maxItems: <?= $_SESSION['max_requirement'] ?>,
+    templateId: "requirement-template",
+    confirmTitle: "Are you sure you want to delete this requirement?"
+};
+
 function fetchCustom(){
     initFilePond(
         'img_input',
@@ -140,24 +149,6 @@ function fetchCustom(){
         'Only JPG files are allowed',
         ['#save_changes']
     );
-
-    createDynamicList({
-
-        templateId: "requirement-template",
-        containerId: "requirement-container",
-        addBtnId: "add-req-btn",
-        addBtnContainerId: "add-req-btn-container",
-        itemSelector: ".row",
-        maxItems: <?= $_SESSION['max_requirement'] ?>,
-        confirmTitle: "Are you sure you want to delete this requirement?",
-
-        fieldMap: {
-            "textarea.requirement": "requirement"
-        },
-
-        afterAdd: container => reInitUI($(container))
-
-    });
 }
 </script>
 <?php

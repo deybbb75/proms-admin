@@ -167,7 +167,7 @@ $_SESSION['max_policy'] = 10;
             <textarea class="form-control auto-grow-textarea policy" id="policy" name="policy" rows="3" placeholder="Policy"></textarea>
         </div>
         <div class="col-lg-1 col-md-2 col-12 mb-2">
-            <button type="button" class="btn btn-danger w-100" data-remove-item><i class="mdi mdi-close"></i></button>
+            <button type="button" class="btn btn-danger w-100" onclick="removeOldItem(this, policyObj)"><i class="mdi mdi-close"></i></button>
         </div>
     </div>
 </template>
@@ -186,6 +186,15 @@ function updateImage(action){
     }
 }
 
+const policyObj = {
+    fieldMap: {
+        "textarea.policy": "policy"
+    },
+    maxItems: <?= $_SESSION['max_policy'] ?>,
+    templateId: "policy-template",
+    confirmTitle: "Are you sure you want to delete this policy?"
+};
+
 function fetchCustom(){
     initFilePond(
         'img_input',
@@ -193,24 +202,6 @@ function fetchCustom(){
         'Only JPG files are allowed',
         ['#save_changes']
     );
-
-    createDynamicList({
-
-        templateId: "policy-template",
-        containerId: "policy-container",
-        addBtnId: "add-policy-btn",
-        addBtnContainerId: "add-policy-btn-container",
-        itemSelector: ".row",
-        maxItems: <?= $_SESSION['max_policy'] ?>,
-        confirmTitle: "Are you sure you want to delete this policy?",
-
-        fieldMap: {
-            "textarea.policy": "policy"
-        },
-
-        afterAdd: container => reInitUI($(container))
-
-    });
 }
 </script>
 <?php

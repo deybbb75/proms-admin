@@ -210,10 +210,10 @@ $_SESSION['max_note'] = 10;
 <template id="offering-template">
     <div class="row">
         <div class="col-lg-11 col-md-10 col-12 mb-2">
-            <input class="form-control offering" id="offering" name="offering" placeholder="Offering">
+            <textarea class="form-control auto-grow-textarea offering" id="offering" name="offering" rows="3" placeholder="Offering"></textarea>
         </div>
         <div class="col-lg-1 col-md-2 col-12 mb-2">
-            <button type="button" class="btn btn-danger w-100" data-remove-item><i class="mdi mdi-close"></i></button>
+            <button type="button" class="btn btn-danger w-100" onclick="removeOldItem(this, offeringObj)"><i class="mdi mdi-close"></i></button>
         </div>
     </div>
 </template>
@@ -221,10 +221,10 @@ $_SESSION['max_note'] = 10;
 <template id="level-template">
     <div class="row">
         <div class="col-lg-11 col-md-10 col-12 mb-2">
-            <input class="form-control level" id="level" name="level" placeholder="Level">
+            <textarea class="form-control auto-grow-textarea level" id="level" name="level" rows="3" placeholder="Level"></textarea>
         </div>
         <div class="col-lg-1 col-md-2 col-12 mb-2">
-            <button type="button" class="btn btn-danger w-100" data-remove-item><i class="mdi mdi-close"></i></button>
+            <button type="button" class="btn btn-danger w-100" onclick="removeOldItem(this, levelObj)"><i class="mdi mdi-close"></i></button>
         </div>
     </div>
 </template>
@@ -232,10 +232,10 @@ $_SESSION['max_note'] = 10;
 <template id="duration-template">
     <div class="row">
         <div class="col-lg-11 col-md-10 col-12 mb-2">
-            <input class="form-control duration" id="duration" name="duration" placeholder="Duration">
+             <textarea class="form-control auto-grow-textarea duration" id="duration" name="duration" rows="3" placeholder="Duration"></textarea>
         </div>
         <div class="col-lg-1 col-md-2 col-12 mb-2">
-            <button type="button" class="btn btn-danger w-100" data-remove-item><i class="mdi mdi-close"></i></button>
+            <button type="button" class="btn btn-danger w-100" onclick="removeOldItem(this, durationObj)"><i class="mdi mdi-close"></i></button>
         </div>
     </div>
 </template>
@@ -243,10 +243,10 @@ $_SESSION['max_note'] = 10;
 <template id="mode-template">
     <div class="row">
         <div class="col-lg-11 col-md-10 col-12 mb-2">
-            <input class="form-control mode" id="mode" name="mode" placeholder="Mode">
+             <textarea class="form-control auto-grow-textarea mode" id="mode" name="mode" rows="3" placeholder="Mode"></textarea>
         </div>
         <div class="col-lg-1 col-md-2 col-12 mb-2">
-            <button type="button" class="btn btn-danger w-100" data-remove-item><i class="mdi mdi-close"></i></button>
+            <button type="button" class="btn btn-danger w-100" onclick="removeOldItem(this, modeObj)"><i class="mdi mdi-close"></i></button>
         </div>
     </div>
 </template>
@@ -254,10 +254,10 @@ $_SESSION['max_note'] = 10;
 <template id="note-template">
     <div class="row">
         <div class="col-lg-11 col-md-10 col-12 mb-2">
-            <input class="form-control note" id="note" name="note" placeholder="Note">
+            <textarea class="form-control auto-grow-textarea note" id="note" name="note" rows="3" placeholder="Note"></textarea>
         </div>
         <div class="col-lg-1 col-md-2 col-12 mb-2">
-            <button type="button" class="btn btn-danger w-100" data-remove-item><i class="mdi mdi-close"></i></button>
+            <button type="button" class="btn btn-danger w-100" onclick="removeOldItem(this, noteObj)"><i class="mdi mdi-close"></i></button>
         </div>
     </div>
 </template>
@@ -276,104 +276,58 @@ function updateImage(action){
     }
 }
 
+const offeringObj = {
+    fieldMap: {
+        "textarea.offering": "offering"
+    },
+    maxItems: <?= $_SESSION['max_offering'] ?>,
+    templateId: "offering-template",
+    confirmTitle: "Are you sure you want to delete this offering?"
+};
+
+const levelObj = {
+    fieldMap: {
+        "textarea.level": "level"
+    },
+    maxItems: <?= $_SESSION['max_level'] ?>,
+    templateId: "level-template",
+    confirmTitle: "Are you sure you want to delete this level?"
+};
+
+const durationObj = {
+    fieldMap: {
+        "textarea.duration": "duration"
+    },
+    maxItems: <?= $_SESSION['max_duration'] ?>,
+    templateId: "duration-template",
+    confirmTitle: "Are you sure you want to delete this duration?"
+};
+
+const modeObj = {
+    fieldMap: {
+        "textarea.mode": "mode"
+    },
+    maxItems: <?= $_SESSION['max_mode'] ?>,
+    templateId: "mode-template",
+    confirmTitle: "Are you sure you want to delete this mode?"
+};
+
+const noteObj = {
+    fieldMap: {
+        "textarea.note": "note"
+    },
+    maxItems: <?= $_SESSION['max_note'] ?>,
+    templateId: "note-template",
+    confirmTitle: "Are you sure you want to delete this note?"
+};
+
 function fetchCustom(){
     initFilePond(
         'img_input',
         ['image/jpeg'],
         'Only JPG files are allowed',
         ['#save_changes']
-    );
-
-    createDynamicList({
-
-        templateId: "offering-template",
-        containerId: "offering-container",
-        addBtnId: "add-offering-btn",
-        addBtnContainerId: "add-offering-btn-container",
-        itemSelector: ".row",
-        maxItems: <?= $_SESSION['max_offering'] ?>,
-        confirmTitle: "Are you sure you want to delete this offering?",
-
-        fieldMap: {
-            "input.offering": "offering"
-        },
-
-        afterAdd: container => reInitUI($(container))
-
-    });
-
-    createDynamicList({
-
-        templateId: "level-template",
-        containerId: "level-container",
-        addBtnId: "add-level-btn",
-        addBtnContainerId: "add-level-btn-container",
-        itemSelector: ".row",
-        maxItems: <?= $_SESSION['max_level'] ?>,
-        confirmTitle: "Are you sure you want to delete this level?",
-
-        fieldMap: {
-            "input.level": "level"
-        },
-
-        afterAdd: container => reInitUI($(container))
-
-    });
-
-    createDynamicList({
-
-        templateId: "duration-template",
-        containerId: "duration-container",
-        addBtnId: "add-duration-btn",
-        addBtnContainerId: "add-duration-btn-container",
-        itemSelector: ".row",
-        maxItems: <?= $_SESSION['max_duration'] ?>,
-        confirmTitle: "Are you sure you want to delete this duration?",
-
-        fieldMap: {
-            "input.duration": "duration"
-        },
-
-        afterAdd: container => reInitUI($(container))
-
-    });
-
-    createDynamicList({
-
-        templateId: "mode-template",
-        containerId: "mode-container",
-        addBtnId: "add-mode-btn",
-        addBtnContainerId: "add-mode-btn-container",
-        itemSelector: ".row",
-        maxItems: <?= $_SESSION['max_mode'] ?>,
-        confirmTitle: "Are you sure you want to delete this mode?",
-
-        fieldMap: {
-            "input.mode": "mode"
-        },
-
-        afterAdd: container => reInitUI($(container))
-
-    });
-
-    createDynamicList({
-
-        templateId: "note-template",
-        containerId: "note-container",
-        addBtnId: "add-note-btn",
-        addBtnContainerId: "add-note-btn-container",
-        itemSelector: ".row",
-        maxItems: <?= $_SESSION['max_note'] ?>,
-        confirmTitle: "Are you sure you want to delete this note?",
-
-        fieldMap: {
-            "input.note": "note"
-        },
-
-        afterAdd: container => reInitUI($(container))
-
-    });
-    
+    );    
 }
 </script>
 <?php

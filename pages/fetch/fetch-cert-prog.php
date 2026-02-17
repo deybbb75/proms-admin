@@ -58,7 +58,7 @@ if (isset($_POST['id'])) {
 </div>
 <div class="row">
     <label class="form-label required" style="font-weight: 600;">Schedule</label>
-    <div class="col-sm-12" id="schedule-container" style="padding-bottom: 0px;">
+    <div class="col-sm-12" style="padding-bottom: 0px;">
         <?php
             if(!isset($schedule)){
         ?>
@@ -145,7 +145,7 @@ if (isset($_POST['id'])) {
                 <span class="font-13 text-muted">End Time</span>
             </div>
             <div class="col-lg-1 mb-3">
-                <button type="button" class="btn btn-danger w-100" data-remove-item><i class="mdi mdi-close"></i></button>
+                <button type="button" class="btn btn-danger w-100" onclick="removeOldItem(this, schedObj)"><i class="mdi mdi-close"></i></button>
             </div>
         </div>
         <?php
@@ -154,8 +154,8 @@ if (isset($_POST['id'])) {
         ?>
     </div>
     
-    <div class="col-sm-12" id="add-sched-btn-container">
-        <button type="button" class="btn btn-sm btn-info w-100" id="add-sched-btn"><i class="mdi mdi-plus"></i> Add Schedule</button>
+    <div class="col-sm-12">
+        <button type="button" class="btn btn-sm btn-info w-100" id="add-sched-btn" onclick="addNewItem(this, schedObj)"><i class="mdi mdi-plus"></i> Add Schedule</button>
     </div>
 </div>
 <div class="row">
@@ -184,7 +184,7 @@ if (isset($_POST['id'])) {
 </div>
 <div class="row">
     <label class="form-label required" style="font-weight: 600;">Requirement/s</label>
-    <div class="col-sm-12" id="requirement-container" style="padding-bottom: 0px;">
+    <div class="col-sm-12" style="padding-bottom: 0px;">
         <?php
             if(!isset($requirement)){
         ?>
@@ -203,7 +203,7 @@ if (isset($_POST['id'])) {
                 <textarea class="form-control auto-grow-textarea requirement" id="requirement" name="requirement[<?= $i ?>]" rows="3" placeholder="Requirement"><?= $requirement[$i] ?? '' ?></textarea>
             </div>
             <div class="col-lg-1 mb-2">
-                <button type="button" class="btn btn-danger w-100" data-remove-item><i class="mdi mdi-close"></i></button>
+                <button type="button" class="btn btn-danger w-100" onclick="removeOldItem(this, reqObj)"><i class="mdi mdi-close"></i></button>
             </div>
         </div>
         <?php
@@ -212,8 +212,8 @@ if (isset($_POST['id'])) {
         ?>
     </div>
     
-    <div class="col-sm-12" id="add-req-btn-container">
-        <button type="button" class="btn btn-sm btn-info w-100" id="add-req-btn"><i class="mdi mdi-plus"></i> Add Requirement</button>
+    <div class="col-sm-12">
+        <button type="button" class="btn btn-sm btn-info w-100" onclick="addNewItem(this, reqObj)"><i class="mdi mdi-plus"></i> Add Requirement</button>
     </div>
 </div>
 <div class="row">

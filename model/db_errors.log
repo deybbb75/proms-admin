@@ -386,3 +386,28 @@ Trace: #0 C:\xampp\htdocs\proms-admin\model\pdo.class.php(716): PDOStatement->ex
 #1 C:\xampp\htdocs\proms-admin\pages\controller\ctr-assess-cert.php(75): DB->executeInsert(Array, 'tbl_requirement')
 #2 {main}
 
+[2026-02-16 20:29:42] Error: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'proms.tbl_schedule' doesn't exist
+Trace: #0 C:\xampp\htdocs\proms-admin\model\pdo.class.php(352): PDOStatement->execute()
+#1 C:\xampp\htdocs\proms-admin\pages\cert-prog.php(65): DB->query('SELECT * FROM t...', Array)
+#2 {main}
+
+[2026-02-16 20:29:57] Error: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'proms.tbl_schedule' doesn't exist
+Trace: #0 C:\xampp\htdocs\proms-admin\model\pdo.class.php(352): PDOStatement->execute()
+#1 C:\xampp\htdocs\proms-admin\pages\cert-prog.php(65): DB->query('SELECT * FROM t...', Array)
+#2 {main}
+
+[2026-02-16 20:30:02] Error: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'proms.tbl_schedule' doesn't exist
+Trace: #0 C:\xampp\htdocs\proms-admin\model\pdo.class.php(352): PDOStatement->execute()
+#1 C:\xampp\htdocs\proms-admin\pages\cert-prog.php(65): DB->query('SELECT * FROM t...', Array)
+#2 {main}
+
+[2026-02-17 14:26:20] Error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'yt_link' in 'field list'
+Trace: #0 C:\xampp\htdocs\proms-admin\model\pdo.class.php(716): PDOStatement->execute()
+#1 C:\xampp\htdocs\proms-admin\pages\controller\ctr-ms-prog.php(69): DB->executeInsert(Array, 'tbl_cert_prog')
+#2 {main}
+
+[2026-02-17 14:28:53] Error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'yt_link' in 'field list'
+Trace: #0 C:\xampp\htdocs\proms-admin\model\pdo.class.php(716): PDOStatement->execute()
+#1 C:\xampp\htdocs\proms-admin\pages\controller\ctr-ms-prog.php(69): DB->executeInsert(Array, 'tbl_cert_prog')
+#2 {main}
+

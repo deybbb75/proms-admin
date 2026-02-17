@@ -129,7 +129,7 @@ $_SESSION['max_outline'] = 10;
             <textarea class="form-control auto-grow-textarea objective" id="objective" name="objective" rows="3" placeholder="Objective"></textarea>
         </div>
         <div class="col-lg-1 col-md-2 col-12 mb-2">
-            <button type="button" class="btn btn-danger w-100" onclick="removeObjective(this)"><i class="mdi mdi-close"></i></button>
+            <button type="button" class="btn btn-danger w-100" onclick="removeOldItem(this, ObjectiveObj)"><i class="mdi mdi-close"></i></button>
         </div>
     </div>
 </template>
@@ -140,7 +140,7 @@ $_SESSION['max_outline'] = 10;
             <textarea class="form-control auto-grow-textarea outline" id="outline" name="outline" rows="3" placeholder="Outline"></textarea>
         </div>
         <div class="col-lg-1 col-md-2 col-12 mb-2">
-            <button type="button" class="btn btn-danger w-100" data-remove-item><i class="mdi mdi-close"></i></button>
+            <button type="button" class="btn btn-danger w-100" onclick="removeOldItem(this, OutlineObj)"><i class="mdi mdi-close"></i></button>
         </div>
     </div>
 </template>
@@ -159,6 +159,24 @@ function updateImage(action){
     }
 }
 
+const ObjectiveObj = {
+    fieldMap: {
+        "textarea.objective": "objective"
+    },
+    maxItems: <?= $_SESSION['max_objective'] ?>,
+    templateId: "objective-template",
+    confirmTitle: "Are you sure you want to delete this objective?"
+};
+
+const OutlineObj = {
+    fieldMap: {
+        "textarea.outline": "outline"
+    },
+    maxItems: <?= $_SESSION['max_outline'] ?>,
+    templateId: "outline-template",
+    confirmTitle: "Are you sure you want to delete this outline?"
+};
+
 function fetchCustom(){
     initFilePond(
         'img_input',
@@ -166,42 +184,6 @@ function fetchCustom(){
         'Only JPG files are allowed',
         ['#save_changes']
     );
-
-    createDynamicList({
-
-        templateId: "objective-template",
-        containerId: "objective-container",
-        addBtnId: "add-objective-btn",
-        addBtnContainerId: "add-objective-btn-container",
-        itemSelector: ".row",
-        maxItems: <?= $_SESSION['max_objective'] ?>,
-        confirmTitle: "Are you sure you want to delete this objective?",
-
-        fieldMap: {
-            "textarea.objective": "objective"
-        },
-
-        afterAdd: container => reInitUI($(container))
-
-    });
-
-    createDynamicList({
-
-        templateId: "outline-template",
-        containerId: "outline-container",
-        addBtnId: "add-outline-btn",
-        addBtnContainerId: "add-outline-btn-container",
-        itemSelector: ".row",
-        maxItems: <?= $_SESSION['max_outline'] ?>,
-        confirmTitle: "Are you sure you want to delete this outline?",
-
-        fieldMap: {
-            "textarea.outline": "outline"
-        },
-
-        afterAdd: container => reInitUI($(container))
-
-    });
 }
 </script>
 <?php

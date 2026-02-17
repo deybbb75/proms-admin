@@ -49,7 +49,7 @@ if (isset($_POST['id'])) {
 </div>
 <div class="row">
     <label class="form-label required" style="font-weight: 600;">Objective/s</label>
-    <div class="col-sm-12" id="objective-container" style="padding-bottom: 0px;">
+    <div class="col-sm-12" style="padding-bottom: 0px;">
         <?php
             if(!isset($objective)){
         ?>
@@ -68,7 +68,7 @@ if (isset($_POST['id'])) {
                 <textarea class="form-control auto-grow-textarea objective" id="objective" name="objective[<?= $i ?>]" rows="3" placeholder="Objective"><?= $objective[$i] ?? '' ?></textarea>
             </div>
             <div class="col-lg-1 mb-2">
-                <button type="button" class="btn btn-danger w-100" data-remove-item><i class="mdi mdi-close"></i></button>
+                <button type="button" class="btn btn-danger w-100" onclick="removeOldItem(this, ObjectiveObj)"><i class="mdi mdi-close"></i></button>
             </div>
         </div>
         <?php
@@ -77,13 +77,13 @@ if (isset($_POST['id'])) {
         ?>
     </div>
     
-    <div class="col-sm-12" id="add-objective-btn-container">
-        <button type="button" class="btn btn-sm btn-info w-100" id="add-objective-btn"><i class="mdi mdi-plus"></i> Add Objective</button>
+    <div class="col-sm-12">
+        <button type="button" class="btn btn-sm btn-info w-100" onclick="addNewItem(this, ObjectiveObj)"><i class="mdi mdi-plus"></i> Add Objective</button>
     </div>
 </div>
 <div class="row">
     <label class="form-label required" style="font-weight: 600;">Outline/s</label>
-    <div class="col-sm-12" id="outline-container" style="padding-bottom: 0px;">
+    <div class="col-sm-12" style="padding-bottom: 0px;">
         <?php
             if(!isset($outline)){
         ?>
@@ -102,7 +102,7 @@ if (isset($_POST['id'])) {
                 <textarea class="form-control auto-grow-textarea outline" id="outline" name="outline[<?= $i ?>]" rows="3" placeholder="Outline"><?= $outline[$i] ?? '' ?></textarea>
             </div>
             <div class="col-lg-1 mb-2">
-                <button type="button" class="btn btn-danger w-100" data-remove-item><i class="mdi mdi-close"></i></button>
+                <button type="button" class="btn btn-danger w-100" onclick="removeOldItem(this, OutlineObj)"><i class="mdi mdi-close"></i></button>
             </div>
         </div>
         <?php
@@ -111,8 +111,8 @@ if (isset($_POST['id'])) {
         ?>
     </div>
     
-    <div class="col-sm-12" id="add-outline-btn-container">
-        <button type="button" class="btn btn-sm btn-info w-100" id="add-outline-btn"><i class="mdi mdi-plus"></i> Add Outline</button>
+    <div class="col-sm-12">
+        <button type="button" class="btn btn-sm btn-info w-100" onclick="addNewItem(this, OutlineObj)"><i class="mdi mdi-plus"></i> Add Outline</button>
     </div>
 </div>
 <div class="row">

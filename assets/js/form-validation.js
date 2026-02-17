@@ -2,10 +2,27 @@ function validateForm() {
     // =========================================================================
     // GROUPED RULES (your entire original rules reorganized)
     // =========================================================================
-    const indexedFields = (name, count, subkey) =>
-        Array.from({ length: count }, (_, i) => 
-            subkey ? `${name}[${i}][${subkey}]` : `${name}[${i}]`
-        );
+    /**
+     * Generate field names with flexible indexing and subkeys
+     * @param {string} baseName - the root field name
+     * @param {Array} structure - array of objects defining levels
+     *   { count?: number, key?: string } 
+     *   - count: number of items to index
+     *   - key: fixed subkey
+     */
+    const indexedFields = (baseName, structure = []) => {
+        if (!structure.length) return [baseName];
+
+        const [level, ...rest] = structure;
+        const indices = level.count != null ? Array.from({ length: level.count }, (_, i) => i) : [null];
+
+        return indices.flatMap(i => {
+            const part = i != null ? `[${i}]` : '';
+            const keyPart = level.key ? `[${level.key}]` : '';
+            const name = `${baseName}${part}${keyPart}`;
+            return indexedFields(name, rest);
+        });
+    };
     
     const groupedRules = [
         {
@@ -41,22 +58,34 @@ function validateForm() {
             fields: [
                 "start_date_1", 
                 "start_date_2",
-                ...indexedFields('schedule', 3, 'day'),
-                ...indexedFields('schedule', 3, 'start_time'),
-                ...indexedFields('schedule', 3, 'end_time'),
+                ...indexedFields('schedule', [{ count: 3, key: 'day' }]),
+                ...indexedFields('schedule', [{ count: 3, key: 'start_time' }]),
+                ...indexedFields('schedule', [{ count: 3, key: 'end_time' }]),
                 "main_fee",
                 "sub_fee",
                 "semester",
-                ...indexedFields("objective", 10),
-                ...indexedFields("outline", 10),
+                ...indexedFields('objective', [{ count: 10 }]),
+                ...indexedFields("outline", [{ count: 10 }]),
                 "duration",
-                ...indexedFields("policy", 10),
-                ...indexedFields("requirement", 10),
-                ...indexedFields("offering", 10),
-                ...indexedFields("level", 10),
-                ...indexedFields("duration", 10),
-                ...indexedFields("mode", 10),
-                ...indexedFields("note", 10),
+                ...indexedFields("policy", [{ count: 10 }]),
+                ...indexedFields("requirement", [{ count: 10 }]),
+                ...indexedFields("offering", [{ count: 10 }]),
+                ...indexedFields("level", [{ count: 10 }]),
+                ...indexedFields("duration", [{ count: 10 }]),
+                ...indexedFields("mode", [{ count: 10 }]),
+                ...indexedFields("note", [{ count: 10 }]),
+                ...indexedFields("cert", [{ count: 5, key: 'title' }]),
+                ...indexedFields('cert', [
+                    { count: 5, key: 'ctg' },
+                    { count: 5, key: 'title' }
+                ]),
+                ...indexedFields('cert', [
+                    { count: 5, key: 'ctg' },
+                    { count: 5, key: 'desc' }
+                ]),
+                ...indexedFields("associate_cert", [{ count: 10 }]),
+                ...indexedFields("expert_cert", [{ count: 10 }]),
+                "yt_link",
             ],
             rules: { required: true, noWhitespace: true }
         },

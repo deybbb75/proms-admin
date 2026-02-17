@@ -97,7 +97,7 @@ if (isset($_POST['id'])) {
 </div>
 <div class="row">
     <label class="form-label required" style="font-weight: 600;">Policies</label>
-    <div class="col-sm-12" id="policy-container" style="padding-bottom: 0px;">
+    <div class="col-sm-12" style="padding-bottom: 0px;">
         <?php
             if(!isset($policy)){
         ?>
@@ -116,7 +116,7 @@ if (isset($_POST['id'])) {
                 <textarea class="form-control auto-grow-textarea policy" id="policy" name="policy[<?= $i ?>]" rows="3" placeholder="Policy"><?= $policy[$i] ?? '' ?></textarea>
             </div>
             <div class="col-lg-1 mb-2">
-                <button type="button" class="btn btn-danger w-100" data-remove-item><i class="mdi mdi-close"></i></button>
+                <button type="button" class="btn btn-danger w-100" onclick="removeOldItem(this, policyObj)"><i class="mdi mdi-close"></i></button>
             </div>
         </div>
         <?php
@@ -125,8 +125,8 @@ if (isset($_POST['id'])) {
         ?>
     </div>
     
-    <div class="col-sm-12" id="add-policy-btn-container">
-        <button type="button" class="btn btn-sm btn-info w-100" id="add-policy-btn"><i class="mdi mdi-plus"></i> Add Policy</button>
+    <div class="col-sm-12">
+        <button type="button" class="btn btn-sm btn-info w-100" onclick="addNewItem(this, policyObj)"><i class="mdi mdi-plus"></i> Add Policy</button>
     </div>
 </div>
 <div class="row">
