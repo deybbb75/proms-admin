@@ -22,12 +22,12 @@
     <!-- third party js ends -->
 
     <!-- FilePond Plugins Js -->
-    <script src="https://unpkg.com/filepond-plugin-file-encode/dist/filepond-plugin-file-encode.min.js"></script>
-    <script src="https://unpkg.com/filepond-plugin-file-validate-size/dist/filepond-plugin-file-validate-size.min.js"></script>
-    <script src="https://unpkg.com/filepond-plugin-image-exif-orientation/dist/filepond-plugin-image-exif-orientation.min.js"></script>
-    <script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.js"></script>
-    <script src="https://unpkg.com/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.min.js"></script>
-    <script src="https://unpkg.com/filepond/dist/filepond.min.js"></script>
+    <script src="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/assets/plugins/filepond/filepond-plugin-file-encode/dist/filepond-plugin-file-encode.min.js"></script>
+    <script src="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/assets/plugins/filepond/filepond-plugin-file-validate-size/dist/filepond-plugin-file-validate-size.min.js"></script>
+    <script src="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/assets/plugins/filepond/filepond-plugin-image-exif-orientation/dist/filepond-plugin-image-exif-orientation.min.js"></script>
+    <script src="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/assets/plugins/filepond/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.js"></script>
+    <script src="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/assets/plugins/filepond/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.min.js"></script>
+    <script src="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/assets/plugins/filepond/filepond/dist/filepond.min.js"></script>
 
     <!-- demo app -->
     <!-- <script src="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/assets/js/pages/demo.dashboard.js"></script> -->
@@ -35,10 +35,10 @@
     <!-- end demo js-->
 
     <!-- 2️⃣ jQuery Validate -->
-    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
+    <script src="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/assets/plugins/jquery-validation/dist/jquery.validate.min.js"></script>
 
     <!-- (Optional but recommended) Additional methods -->
-    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/additional-methods.min.js"></script>
+    <script src="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/assets/plugins/jquery-validation/dist/additional-methods.min.js"></script>
 
     <!-- SweetAlert Plugin Js -->
     <script src="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/assets/plugins/sweetalert2/dist/sweetalert2.min.js"></script>
@@ -49,13 +49,13 @@
     <!-- end Custom JS -->
 
     <!-- Highcharts API -->
-    <script src="https://code.highcharts.com/highcharts.js"></script>
-    <script src="https://code.highcharts.com/modules/non-cartesian-zoom.js"></script>
-    <script src="https://code.highcharts.com/modules/mouse-wheel-zoom.js"></script>
-    <script src="https://code.highcharts.com/modules/exporting.js"></script>
-    <script src="https://code.highcharts.com/modules/export-data.js"></script>
-    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
-    <script src="https://code.highcharts.com/themes/adaptive.js"></script>
+    <script src="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/assets/plugins/highcharts/highcharts.js"></script>
+    <script src="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/assets/plugins/highcharts/modules/non-cartesian-zoom.js"></script>
+    <script src="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/assets/plugins/highcharts/modules/mouse-wheel-zoom.js"></script>
+    <script src="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/assets/plugins/highcharts/modules/exporting.js"></script>
+    <script src="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/assets/plugins/highcharts/modules/export-data.js"></script>
+    <script src="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/assets/plugins/highcharts/modules/accessibility.js"></script>
+    <script src="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/assets/plugins/highcharts/themes/adaptive.js"></script>
 
     <?php
         Alert::render();

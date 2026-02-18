@@ -120,6 +120,17 @@
         background-position: 50% 36px;
     }
 }
+.status-inactive{
+    display: inline-block;
+    padding: .25em .4em;
+    font-weight: 700;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+    border-radius: .25rem;
+    color:var(--danger-color);
+    background-color:rgba(var(--danger-rgb),.18)
+}
 
 .status-active{
     display: inline-block;

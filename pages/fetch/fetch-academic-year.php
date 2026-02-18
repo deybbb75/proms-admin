@@ -34,7 +34,7 @@ if (isset($_POST['id'])) {
 <div class="row">
     <div class="col-sm-6">
         <label for="semester" class="form-label required">Semester</label>
-        <select class="form-select select2" data-toggle="select2" name="semester" id="semester" data-placeholder="Select Semester">
+        <select class="form-select select2" data-toggle="select2" name="semester" data-search="true" id="semester" data-placeholder="Select Semester">
             <option value="<?= $semester ?? '' ?>" <?php if(!$status) echo 'disabled'; ?> selected>
                 <?= !empty($semester) ? $semester : '' ?>
             </option>

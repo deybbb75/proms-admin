@@ -10,14 +10,7 @@ $db = DB::getInstance();
     <div class="row">
         <div class="col-12">
             <div class="page-title-box">
-                <div class="page-title-right">
-                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#primary-header-modal"
-                        onclick="addItem({fetch_name: 'fetch-system-user'})">
-                        <i class="mdi mdi-plus"></i>
-                        <span class="add-btn-name">Add System User</span>
-                    </button>
-                </div>
-                <h4 class="page-title">SYSTEM USERS</h4>
+                <h4 class="page-title">PENDING RESERVATIONS</h4>
             </div>
         </div>
     </div>
@@ -27,11 +20,11 @@ $db = DB::getInstance();
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <div class="col-12" style="margin-bottom: 30px;">
-                        <label for="status" class="form-label required">Status</label>
-                        <div style="display: flex; gap: 10px;">
-                            <form action="">
-                                <select class="form-control select2" data-toggle="select2" name ="status" data-placeholder="Select Status">
+                    <div class="row">
+                        <div class="col-12" style="margin-bottom: 30px;">
+                            <label for="status" class="form-label">Academic Year Filter:</label>
+                            <form action="" id="acad_year" style="display: flex; gap: 10px;">
+                                <select class="form-control select2" data-toggle="select2" name ="status" data-placeholder="Select Academic Year">
                                     <option value="<?= $status ?? '' ?>" <?php if(empty($status)) echo 'disabled'; ?> selected>
                                         <?= !empty($status) ? $status : '' ?>
                                     </option>
@@ -119,3 +112,8 @@ $db = DB::getInstance();
 <?php
 include '../footer.php';
 ?>
+
+<script>
+    let container = document.getElementById('acad_year');
+    reInitUI($(container));
+</script>

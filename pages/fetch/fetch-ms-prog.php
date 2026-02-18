@@ -6,18 +6,22 @@ if (isset($_POST['id'])) {
     $id = decrypt_data($_POST['id']);
     $program = $db->queryUniqueObject('SELECT * FROM tbl_ms_prog WHERE mp_id = :mp_id', ['mp_id' => $id]);
     if ($program) {
-        $mp_id          = encrypt_data($program->mp_id);
-        $title          = $program->title;
-        $description    = $program->description;
-        $yt_link        = $program->yt_link;
-        $certification  = json_decode($program->certification, true);
-        $associate_cert = json_decode($program->associate_cert, true);
-        $expert_cert    = json_decode($program->expert_cert, true);
-        $status         = $program->status;
-        $image          = $program->img;
-        $image_data     = base64_encode($image);
-        $image_type     = $program->img_type;
-        $image_src      = "data:{$image_type};base64,{$image_data}";
+        $mp_id              = encrypt_data($program->mp_id);
+        $title              = $program->title;
+        $description        = $program->description;
+        $cert_image         = $program->cert_img;
+        $cert_image_data    = base64_encode($cert_image);
+        $cert_image_type    = $program->cert_img_type;
+        $cert_image_src     = "data:{$cert_image_type};base64,{$cert_image_data}";
+        $yt_link            = $program->yt_link;
+        $certification      = json_decode($program->certification, true);
+        $associate_cert     = json_decode($program->associate_cert, true);
+        $expert_cert        = json_decode($program->expert_cert, true);
+        $status             = $program->status;
+        $image              = $program->img;
+        $image_data         = base64_encode($image);
+        $image_type         = $program->img_type;
+        $image_src          = "data:{$image_type};base64,{$image_data}";
     }
 }
 ?>
@@ -33,6 +37,38 @@ if (isset($_POST['id'])) {
     <div class="col-md-12">
         <label for="description" class="form-label required">Description</label>
         <textarea class="form-control auto-grow-textarea" id="description" name="description" rows="5" placeholder="Description"><?= $description ?? '' ?></textarea>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <label for="cert" class="form-label required">Certificate</label>
+        <div id="cert-preview" style="display: <?= !empty($cert_image) ? 'block' : 'none' ?>;">
+            <img 
+                src="<?= $cert_image_src ?? '' ?>" 
+                class="img-fluid mx-auto d-block mt-2"
+                style="max-width: 100%; height: auto; border-radius: 20px;"
+                alt=""
+            >
+        <?php
+            if(!empty($cert_image)) {
+        ?>
+            <button type="button" class="btn btn-sm btn-info w-100 mt-2" onclick="updateCert('update')">Update Certificate</button>
+        <?php
+            }
+        ?>
+        </div>
+        <div id="cert-upload" style="display: <?= !empty($image) ? 'none' : 'block' ?>;">
+            <input type="file" id="cert_input" class="filepond" name="cert_input" data-max-file-size="10MB" data-max-files="3" />
+            <span class="font-10 text-muted"><b>Note: </b>Please upload an image of the certificate in <b>JPG</b> format. The file size must not exceed <b>10 MB</b>.</span>
+            <?php
+                if(!empty($cert_image)){
+            ?>
+                <button type="button" class="btn btn-sm btn-danger w-100 mt-2" onclick="updateCert('cancel')">Cancel</button>
+            <?php
+                }
+            ?>
+        </div>
+        
     </div>
 </div>
 <div class="row">

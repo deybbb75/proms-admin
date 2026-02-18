@@ -65,6 +65,25 @@ if (isset($_POST['Save'])) {
             ]);
         }
 
+        if(isset($_SESSION['cert_input'])){
+            if($_SESSION['cert_input']['status'] == 'Success') {
+                $sqlArray['cert_img'] = $_SESSION['cert_input']['content'];
+                $sqlArray['cert_img_type'] = $_SESSION['cert_input']['type'];
+            }else{
+                Alert::error([
+                    'title' => 'Image Upload Error',
+                    'html'  => $_SESSION['cert_input']['content'],
+                    'path'  => $redirect_path
+                ]);
+            }
+        }else{
+            Alert::error([
+                'title' => 'Certficate Upload Error',
+                'html'  => 'No certificate uploaded.',
+                'path'  => $redirect_path
+            ]);
+        }
+
         // Execute the insert operation
         $db->executeInsert($sqlArray, 'tbl_ms_prog');
         
@@ -149,6 +168,25 @@ if (isset($_POST['Edit'])) {
                     'path'  => $redirect_path
                 ]);
             }
+        }
+
+        if(isset($_SESSION['cert_input'])){
+            if($_SESSION['cert_input']['status'] == 'Success') {
+                $sqlArray['cert_img'] = $_SESSION['cert_input']['content'];
+                $sqlArray['cert_img_type'] = $_SESSION['cert_input']['type'];
+            }else{
+                Alert::error([
+                    'title' => 'Image Upload Error',
+                    'html'  => $_SESSION['cert_input']['content'],
+                    'path'  => $redirect_path
+                ]);
+            }
+        }else{
+            Alert::error([
+                'title' => 'Certficate Upload Error',
+                'html'  => 'No certificate uploaded.',
+                'path'  => $redirect_path
+            ]);
         }
 
         // Execute the insert operation

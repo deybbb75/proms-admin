@@ -191,6 +191,19 @@ function updateImage(action){
     }
 }
 
+function updateCert(action){
+    const cert_input_section = document.getElementById('cert-upload');
+    const preview = document.getElementById('cert-preview');
+
+    if(action === 'update'){
+        cert_input_section.style.display = 'block';
+        preview.style.display = 'none';
+    }else{
+        cert_input_section.style.display = 'none';
+        preview.style.display = 'block';
+    }
+}
+
 const certObj = {
     fieldMap: {
         "textarea.cert": "cert[0][title]",
@@ -235,6 +248,13 @@ const expertCertObj = {
 function fetchCustom(){
     initFilePond(
         'img_input',
+        ['image/jpeg'],
+        'Only JPG files are allowed',
+        ['#save_changes']
+    );
+
+    initFilePond(
+        'cert_input',
         ['image/jpeg'],
         'Only JPG files are allowed',
         ['#save_changes']

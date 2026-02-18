@@ -183,7 +183,7 @@ function reInitUI(container) {
     });
 
     // Toasts
-    $scope.find('[data-toggle="toast"]').toast();
+    // $scope.find('[data-toggle="toast"]').toast();
 
     // Show / hide password
     $scope.find('[data-password]').off('click').on('click', function () {
@@ -385,137 +385,6 @@ function runMatchHeight() {
 
 window.addEventListener("load", runMatchHeight);
 window.addEventListener("resize", runMatchHeight);
-
-// A reusable function to create dynamic lists (e.g. objectives, activities) with add/remove functionality
-// function createDynamicList(config) {
-
-//     const {
-//         templateId,
-//         containerId,
-//         addBtnId,
-//         addBtnContainerId,
-//         itemSelector,
-//         fieldMap,
-//         maxItems = Infinity,
-//         confirmTitle = "Delete item?",
-//         confirmText = "This action cannot be undone!",
-//         afterAdd = () => {},
-//         afterRemove = () => {}
-//     } = config;
-
-//     const template = document.getElementById(templateId);
-//     const container = document.getElementById(containerId);
-//     const addBtn = document.getElementById(addBtnId);
-//     const addBtnContainer = document.getElementById(addBtnContainerId);
-
-//     if (!template || !container || !addBtn) {
-//         console.warn("DynamicList init failed — missing elements");
-//         return;
-//     }
-
-//     // ---------- indexing ----------
-//     function reindex() {
-
-//         const rows = container.querySelectorAll(itemSelector);
-
-//         rows.forEach((row, index) => {
-
-//             Object.entries(fieldMap).forEach(([selector, name]) => {
-
-//                 const field = row.querySelector(selector);
-//                 if (field) {
-//                     if (/\[\d+\]/.test(name)) {
-//                         // Replace the first numeric index
-//                         field.name = name.replace(/\[\d+\]/, `[${index}]`);
-//                     } else {
-//                         // No numeric index, append one
-//                         field.name = `${name}[${index}]`;
-//                     }
-//                 }
-
-//             });
-
-//         });
-
-//         return rows.length;
-//     }
-
-//     // ---------- add button visibility ----------
-//     function updateAddVisibility(count) {
-
-//         if (!addBtnContainer) return;
-
-//         addBtnContainer.style.display =
-//             count >= maxItems ? "none" : "block";
-//     }
-
-//     // ---------- add item ----------
-//     function addItem() {
-
-//         const count = reindex();
-
-//         if (count >= maxItems) return;
-
-//         const clone = template.content.cloneNode(true);
-
-//         container.appendChild(clone);
-
-//         const newCount = reindex();
-//         updateAddVisibility(newCount);
-
-//         afterAdd(container);
-//     }
-
-//     // ---------- remove item ----------
-//     function removeItem(trigger) {
-
-//         Swal.fire({
-//             title: confirmTitle,
-//             text: confirmText,
-//             icon: "warning",
-//             showCancelButton: true,
-//             confirmButtonColor: "#FF2121"
-//         }).then(result => {
-
-//             if (!result.isConfirmed) return;
-
-//             const row = trigger.closest(itemSelector);
-//             if (!row) return;
-
-//             row.remove();
-
-//             const count = reindex();
-//             updateAddVisibility(count);
-
-//             afterRemove(container);
-
-//         });
-
-//     }
-
-//     // ---------- bind add ----------
-//     addBtn.addEventListener("click", () => addItem());
-
-//     // ---------- delegated remove ----------
-//     container.addEventListener("click", e => {
-
-//         const removeBtn = e.target.closest("[data-remove-item]");
-
-//         if (removeBtn) {
-//             removeItem(removeBtn);
-//         }
-
-//     });
-
-//     // ---------- initial state ----------
-//     updateAddVisibility(reindex());
-
-//     return {
-//         addItem,
-//         removeItem,
-//         reindex
-//     };
-// }
 
 // ---------- indexing ----------
 function reindex(fieldMap, container, itemSelector) {
