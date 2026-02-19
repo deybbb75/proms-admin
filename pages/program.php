@@ -14,7 +14,7 @@ $_SESSION['max_schedule'] = 3;
             <div class="page-title-box">
                 <!-- <div class="page-title-right">
                     <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#primary-header-modal"
-                        onclick="addItem({fetch_name: 'fetch-program', custom_function: fetchCustom})">
+                        onclick="addItem({fetch_file: 'fetch/fetch-program.php', custom_function: fetchCustom})">
                         <i class="mdi mdi-plus"></i>
                         <span class="add-btn-name">Add Program</span>
                     </button>
@@ -55,7 +55,7 @@ $_SESSION['max_schedule'] = 3;
                                             <i class="mdi mdi-eye"></i>
                                         </button>
                                         <button type="button" class="btn btn-success ms-1" data-bs-toggle="modal" data-bs-target="#primary-header-modal"
-                                            onclick="editItem({fetch_name: 'fetch-program', item_id: '<?= encrypt_data($line->prog_id) ?>', custom_function: fetchCustom})">
+                                            onclick="editItem({fetch_file: 'fetch/fetch-program.php', item_id: '<?= encrypt_data($line->prog_id) ?>', custom_function: fetchCustom})">
                                             <i class="mdi mdi-square-edit-outline"></i>
                                         </button>
                                     </center>

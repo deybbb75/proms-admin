@@ -10,7 +10,14 @@ $db = DB::getInstance();
     <div class="row">
         <div class="col-12">
             <div class="page-title-box">
-                <h4 class="page-title">PENDING RESERVATIONS</h4>
+                <div class="page-title-right">
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#primary-header-modal"
+                        onclick="addItem({fetch_file: 'fetch/fetch-banner.php', custom_function: fetchCustom})">
+                        <i class="mdi mdi-plus"></i>
+                        <span class="add-btn-name">Add Banner</span>
+                    </button>
+                </div>
+                <h4 class="page-title">BANNER</h4>
             </div>
         </div>
     </div>
@@ -20,54 +27,46 @@ $db = DB::getInstance();
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <div class="row">
-                        <div class="col-12" style="margin-bottom: 30px;">
-                            <label for="status" class="form-label">Academic Year Filter:</label>
-                            <form action="" id="acad_year" style="display: flex; gap: 10px;">
-                                <select class="form-control select2" data-toggle="select2" name ="status" data-placeholder="Select Academic Year">
-                                    <option value="<?= $status ?? '' ?>" <?php if(empty($status)) echo 'disabled'; ?> selected>
-                                        <?= !empty($status) ? $status : '' ?>
-                                    </option>
-                                    
-                                </select>
-                                <button class="btn btn-success" style="width: 200px;" onclick="addItem({fetch_file: 'fetch-system-user'})">
-                                    <span class="add-btn-name">Apply Filter</span>
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-
                     <table id="basic-datatable" class="table table-striped dt-responsive nowrap w-100">
                         <thead>
                             <tr>
-                                <th>Employee Number</th>
-                                <th>Full Name</th>
-                                <th>Email</th>
-                                <th>Role</th>
+                                <th>Image</th>
+                                <th>Image Type</th>
                                 <th>Status</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php
-                                $system_users_query = $db->query("SELECT * FROM tbl_system_user");
+                                $banner_query = $db->query("SELECT * FROM tbl_banner");
 
-                                while ($line = $db->fetchNextObject($system_users_query)) {
+                                while ($line = $db->fetchNextObject($banner_query)) {
                             ?>
                             <tr>
-                                <td><?= e($line->emp_no) ?></td>
-                                <td><?= e($line->fname) ?> <?= e($line->mname) ?> <?= e($line->lname) ?></td>
-                                <td><?= e($line->email) ?></td>
-                                <td><?= e($line->role) ?></td>
                                 <td>
-                                    <span class="status-<?= strtolower($line->status) ?>"><?= $line->status ?></span>
+                                    <?php
+                                        $image          = $line->img;
+                                        $image_data     = base64_encode($image);
+                                        $image_type     = $line->img_type;
+                                        $image_src      = "data:{$image_type};base64,{$image_data}";
+                                    ?>
+                                    <img 
+                                        src="<?= $image_src ?? '' ?>" 
+                                        class="img-fluid mx-auto d-block"
+                                        style="width: 300px; height: auto;"
+                                        alt=""
+                                    >
+                                </td>
+                                <td><?= e($line->img_type) ?></td>
+                                <td>
+                                    <span class="status-<?= strtolower($line->status) ?>"><?= e($line->status) ?></span>
                                 </td>
                                 <td>
                                     <center>
                                         <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#primary-header-modal"
-                                            onclick="editItem({fetch_file: 'fetch-system-user', item_id: '<?= encrypt_data($line->sys_id) ?>'})"><i class="mdi mdi-square-edit-outline"></i>
+                                            onclick="editItem({fetch_file: 'fetch/fetch-banner.php', item_id: '<?= encrypt_data($line->banner_id) ?>', custom_function: fetchCustom})"><i class="mdi mdi-square-edit-outline"></i>
                                         </button>
-                                        <button type="button" class="btn btn-danger ms-1" onclick="deleteItem('<?= encrypt_data($line->sys_id) ?>')">
+                                        <button type="button" class="btn btn-danger ms-1" onclick="deleteItem('<?= encrypt_data($line->banner_id) ?>')">
                                             <i class="mdi mdi-delete"></i>
                                         </button>
                                     </center>
@@ -77,7 +76,7 @@ $db = DB::getInstance();
                                 }
                             ?>
                         </tbody>
-                    </table>
+                    </table>               
                 </div> <!-- end card body-->
             </div> <!-- end card -->
         </div><!-- end col-->
@@ -89,9 +88,9 @@ $db = DB::getInstance();
 <div id="primary-header-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="primary-header-modalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <form action="controller/ctr-system-user.php" method="POST" id="form_validation">
+            <form action="controller/ctr-banner.php" method="POST" id="form_validation">
                 <div class="modal-header modal-colored-header bg-primary">
-                    <h4 class="modal-title" id="primary-header-modalLabel">System User Details</h4>
+                    <h4 class="modal-title" id="primary-header-modalLabel">Banner Details</h4>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -109,11 +108,16 @@ $db = DB::getInstance();
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
+<script>
+function fetchCustom(){
+    initFilePond(
+        'img_input',
+        ['image/jpeg'],
+        'Only JPG files are allowed',
+        ['#save_changes']
+    );
+}
+</script>
 <?php
 include '../footer.php';
 ?>
-
-<script>
-    let container = document.getElementById('acad_year');
-    reInitUI($(container));
-</script>

@@ -12,7 +12,7 @@ $db = DB::getInstance();
             <div class="page-title-box">
                 <div class="page-title-right">
                     <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#primary-header-modal"
-                        onclick="addItem({fetch_name: 'fetch-academic-year'})">
+                        onclick="addItem({fetch_file: 'fetch/fetch-academic-year.php'})">
                         <i class="mdi mdi-plus"></i>
                         <span class="add-btn-name">Add Academic Year</span>
                     </button>
@@ -51,7 +51,7 @@ $db = DB::getInstance();
                                 <td>
                                     <center>
                                         <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#primary-header-modal"
-                                            onclick="editItem({fetch_name: 'fetch-academic-year', item_id: '<?= encrypt_data($line->ay_id) ?>'})"><i class="mdi mdi-square-edit-outline"></i>
+                                            onclick="editItem({fetch_file: 'fetch/fetch-academic-year.php', item_id: '<?= encrypt_data($line->ay_id) ?>'})"><i class="mdi mdi-square-edit-outline"></i>
                                         </button>
                                         <button type="button" class="btn btn-danger ms-1" onclick="deleteItem('<?= encrypt_data($line->ay_id) ?>')">
                                             <i class="mdi mdi-delete"></i>

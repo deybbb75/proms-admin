@@ -90,7 +90,7 @@ function validateForm() {
             rules: { required: true, noWhitespace: true }
         },
         {
-            fields: ["year1", "year2"],
+            fields: ["start_year", "end_year"],
             rules: { required: true, noWhitespace: true, digits: true, min: 2025, max: 2100, step: 1 }
         },
         {
@@ -115,7 +115,8 @@ function validateForm() {
                 "course_title",
                 "objective",
                 "class_details",
-                "note"
+                "note",
+                "content"
             ],
             rules: { required: true, noWhitespace: true, descPattern: true }
         },

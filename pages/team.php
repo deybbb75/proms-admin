@@ -14,7 +14,7 @@ $_SESSION['max_schedule'] = 3;
             <div class="page-title-box">
                 <div class="page-title-right">
                     <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#primary-header-modal"
-                        onclick="addItem({fetch_name: 'fetch-team', custom_function: fetchCustom})">
+                        onclick="addItem({fetch_file: 'fetch/fetch-team.php', custom_function: fetchCustom})">
                         <i class="mdi mdi-plus"></i>
                         <span class="add-btn-name">Add Member</span>
                     </button>
@@ -53,7 +53,7 @@ $_SESSION['max_schedule'] = 3;
                                 <td>
                                     <center>
                                         <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#primary-header-modal"
-                                            onclick="editItem({fetch_name: 'fetch-team', item_id: '<?= encrypt_data($line->member_id) ?>', custom_function: fetchCustom})"><i class="mdi mdi-square-edit-outline"></i>
+                                            onclick="editItem({fetch_file: 'fetch/fetch-team.php', item_id: '<?= encrypt_data($line->member_id) ?>', custom_function: fetchCustom})"><i class="mdi mdi-square-edit-outline"></i>
                                         </button>
                                         <?php
                                             if($line->member_id != 1){ // Prevent deletion of default admin

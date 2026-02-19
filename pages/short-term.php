@@ -18,7 +18,7 @@ $_SESSION['max_outline'] = 10;
             <div class="page-title-box">
                 <div class="page-title-right">
                     <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#primary-header-modal"
-                        onclick="addItem({fetch_name: 'fetch-short-term', custom_function: fetchCustom})">
+                        onclick="addItem({fetch_file: 'fetch/fetch-short-term.php', custom_function: fetchCustom})">
                         <i class="mdi mdi-plus"></i>
                         <span class="add-btn-name">Add Sub-program</span>
                     </button>
@@ -73,7 +73,7 @@ $_SESSION['max_outline'] = 10;
                                 <td>
                                     <center>
                                         <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#primary-header-modal"
-                                            onclick="editItem({fetch_name: 'fetch-short-term', item_id: '<?= encrypt_data($line->st_id) ?>', custom_function: fetchCustom})">
+                                            onclick="editItem({fetch_file: 'fetch/fetch-short-term.php', item_id: '<?= encrypt_data($line->st_id) ?>', custom_function: fetchCustom})">
                                             <i class="mdi mdi-square-edit-outline"></i>
                                         </button>
                                         <button type="button" class="btn btn-danger ms-1" onclick="deleteItem('<?= encrypt_data($line->st_id) ?>')">

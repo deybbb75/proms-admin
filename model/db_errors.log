@@ -411,3 +411,9 @@ Trace: #0 C:\xampp\htdocs\proms-admin\model\pdo.class.php(716): PDOStatement->ex
 #1 C:\xampp\htdocs\proms-admin\pages\controller\ctr-ms-prog.php(69): DB->executeInsert(Array, 'tbl_cert_prog')
 #2 {main}
 
+[2026-02-19 09:24:43] Error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'content' in 'field list'
+Trace: #0 C:\Users\Dave\Documents\xampp\htdocs\proms-admin\model\pdo.class.php(381): PDOStatement->execute()
+#1 C:\Users\Dave\Documents\xampp\htdocs\proms-admin\model\pdo.class.php(817): DB->select('SELECT content ...', Array)
+#2 C:\Users\Dave\Documents\xampp\htdocs\proms-admin\pages\controller\ctr-about.php(88): DB->hasDuplicate('SELECT content ...', Array)
+#3 {main}
+

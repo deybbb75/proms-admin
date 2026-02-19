@@ -8,8 +8,8 @@ if (isset($_POST['Save'])) {
     try {
         // Check if the required fields are set
         $requiredFields = [
-            'year1' => 'Academic Year Start', 
-            'year2' => 'Academic Year End', 
+            'start_year' => 'Start Year', 
+            'end_year' => 'End Year', 
             'semester' => 'Semester', 
             'status' => 'Status'
         ];
@@ -22,7 +22,7 @@ if (isset($_POST['Save'])) {
             ));
         }
 
-        $year = $_POST['year1'] . '-' . $_POST['year2'];
+        $year = trim($_POST['start_year']) . ' - ' . trim($_POST['end_year']);
 
         // Check for duplicate academic year
         $message = $db->hasDuplicate('SELECT year FROM tbl_academic_year WHERE year = :year AND semester = :semester', [
@@ -83,8 +83,8 @@ if (isset($_POST['Edit'])) {
     try {
         // Check if the required fields are set
         $requiredFields = [
-            'year1' => 'Academic Year Start', 
-            'year2' => 'Academic Year End', 
+            'start_year' => 'Start Year', 
+            'end_year' => 'End Year', 
             'semester' => 'Semester', 
             'status' => 'Status'
         ];
@@ -97,7 +97,7 @@ if (isset($_POST['Edit'])) {
             ));
         }
 
-        $year = $_POST['year1'] . '-' . $_POST['year2'];
+        $year = trim($_POST['start_year']) . ' - ' . trim($_POST['end_year']);
 
         // Decrypt the id
         $ay_id  = decrypt_data($_POST['ay_id']);

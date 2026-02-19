@@ -14,7 +14,7 @@ $_SESSION['max_schedule'] = 3;
             <div class="page-title-box">
                 <div class="page-title-right">
                     <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#primary-header-modal"
-                        onclick="addItem({fetch_name: 'fetch-news', custom_function: fetchCustom})">
+                        onclick="addItem({fetch_file: 'fetch/fetch-news.php', custom_function: fetchCustom})">
                         <i class="mdi mdi-plus"></i>
                         <span class="add-btn-name">Add News/Event</span>
                     </button>
@@ -53,7 +53,7 @@ $_SESSION['max_schedule'] = 3;
                                 <td>
                                     <center>
                                         <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#primary-header-modal"
-                                            onclick="editItem({fetch_name: 'fetch-news', item_id: '<?= encrypt_data($line->news_id) ?>', custom_function: fetchCustom})"><i class="mdi mdi-square-edit-outline"></i>
+                                            onclick="editItem({fetch_file: 'fetch/fetch-news.php', item_id: '<?= encrypt_data($line->news_id) ?>', custom_function: fetchCustom})"><i class="mdi mdi-square-edit-outline"></i>
                                         </button>
                                         <button type="button" class="btn btn-danger ms-1" onclick="deleteItem('<?= encrypt_data($line->news_id) ?>')">
                                             <i class="mdi mdi-delete"></i>

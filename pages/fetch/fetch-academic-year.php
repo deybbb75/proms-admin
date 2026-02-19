@@ -8,6 +8,9 @@ if (isset($_POST['id'])) {
     if ($academic_year) {
         $ay_id = encrypt_data($academic_year->ay_id);
         $year  = $academic_year->year;
+        $years = explode('-', $year);
+        $start_year = trim($years[0]);
+        $end_year   = trim($years[1]);
         $semester  = $academic_year->semester;
         $status = $academic_year->status;
     }
@@ -20,13 +23,13 @@ if (isset($_POST['id'])) {
     <div class="col-sm-12" id="schedule-container">
         <div class="row">
             <div class="col-lg-5">
-                <input type="text" id="year1" name="year1" class="form-control" maxlength="4" placeholder="Academic Year Start" value="<?= $year1 ?? '' ?>">
+                <input type="text" id="start_year" name="start_year" class="form-control" maxlength="4" placeholder="Academic Year Start" value="<?= $start_year ?? '' ?>">
             </div>
             <div class="col-lg-2">
                 <p style="text-align: center; margin-bottom: 0px; margin-top: 5px;">TO</p>
             </div>
             <div class="col-lg-5">
-                <input type="text" id="year2" name="year2" class="form-control" maxlength="4" placeholder="Academic Year End" value="<?= $year2 ?? '' ?>">
+                <input type="text" id="end_year" name="end_year" class="form-control" maxlength="4" placeholder="Academic Year End" value="<?= $end_year ?? '' ?>">
             </div>
         </div>
     </div>

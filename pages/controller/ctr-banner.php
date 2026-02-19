@@ -2,16 +2,15 @@
 include '../../includes/init.php';
 $db = DB::getInstance();
 
-$redirect_path = '../news.php';
+$redirect_path = '../banner.php';
 
 if (isset($_POST['Save'])) {
     try {
         // Check if the required fields are set
         $requiredFields = [
-            'news_title' => 'News Title', 
-            'news_content' => 'News Content',
-            'status' => 'Status'
+            'status'        => 'Status'
         ];
+
         $missing        = validateRequiredFields($requiredFields, $_POST);
         if ($missing) {
             Alert::error(array(
@@ -21,29 +20,15 @@ if (isset($_POST['Save'])) {
             ));
         }
 
-        // Check for duplicate news_title
-        $message = $db->hasDuplicate('SELECT news_title FROM tbl_news WHERE news_title = :news_title', [
-            'news_title' => $_POST['news_title']
-        ]);
-        if ($message) {
-            Alert::error(array(
-                'title' => 'Duplicate Entry',
-                'html'  => $message,
-                'path'  => $redirect_path
-            ));
-        }
-
         // Prepare the SQL array for insertion
         $sqlArray = array(
-            'news_title'  => $_POST['news_title'],
-            'news_content'   => $_POST['news_content'],
-            'status'  => $_POST['status'],
+            'status'        => $_POST['status'],
         );
 
         if(isset($_SESSION['img_input'])){
             if($_SESSION['img_input']['status'] == 'Success') {
-                $sqlArray['news_img'] = $_SESSION['img_input']['content'];
-                $sqlArray['news_img_type'] = $_SESSION['img_input']['type'];
+                $sqlArray['img'] = $_SESSION['img_input']['content'];
+                $sqlArray['img_type'] = $_SESSION['img_input']['type'];
             }else{
                 Alert::error([
                     'title' => 'Image Upload Error',
@@ -60,13 +45,13 @@ if (isset($_POST['Save'])) {
         }
 
         // Execute the insert operation
-        $db->executeInsert($sqlArray, 'tbl_news');
+        $db->executeInsert($sqlArray, 'tbl_banner');
         
         // Check if the insert was successful
         if ($db->affectedRows > 0) {
             Alert::success(array(
                 'title' => 'Save Successful',
-                'html'  => 'News successfully saved.',
+                'html'  => 'Banner successfully saved.',
                 'path'  => $redirect_path
             ));
         }
@@ -77,8 +62,6 @@ if (isset($_POST['Save'])) {
             'html'  => 'Something went wrong on our end.',
             'path'  => $redirect_path
         ));
-
-        // echo $e->getMessage();
     } catch (Exception $e) {
         // Handle other exceptions
         Alert::error(array(
@@ -93,10 +76,9 @@ if (isset($_POST['Edit'])) {
     try {
         // Check if the required fields are set
         $requiredFields = [
-            'news_title' => 'News Title', 
-            'news_content' => 'News Content',
-            'status' => 'Status'
+            'status'        => 'Status'
         ];
+
         $missing        = validateRequiredFields($requiredFields, $_POST);
         if ($missing) {
             Alert::error(array(
@@ -107,31 +89,17 @@ if (isset($_POST['Edit'])) {
         }
 
        // Decrypt the id
-        $news_id  = decrypt_data($_POST['news_id']);
-        // Check for duplicate news_title
-        $message = $db->hasDuplicate('SELECT news_title FROM tbl_news WHERE news_title = :news_title AND news_id != :news_id', [
-            'news_title' => $_POST['news_title'],
-            'news_id' => $news_id
-        ]);
-        if ($message) {
-            Alert::error(array(
-                'title' => 'Duplicate Entry',
-                'html'  => $message,
-                'path'  => $redirect_path
-            ));
-        }
+        $banner_id  = decrypt_data($_POST['banner_id']);
 
         // Prepare the SQL array for insertion
         $sqlArray = array(
-            'news_title'  => $_POST['news_title'],
-            'news_content'   => $_POST['news_content'],
-            'status'  => $_POST['status'],
+            'status'        => $_POST['status'],
         );
 
         if(isset($_SESSION['img_input'])){
             if($_SESSION['img_input']['status'] == 'Success') {
-                $sqlArray['news_img'] = $_SESSION['img_input']['content'];
-                $sqlArray['news_img_type'] = $_SESSION['img_input']['type'];
+                $sqlArray['img'] = $_SESSION['img_input']['content'];
+                $sqlArray['img_type'] = $_SESSION['img_input']['type'];
             }else{
                 Alert::error([
                     'title' => 'Image Upload Error',
@@ -142,16 +110,15 @@ if (isset($_POST['Edit'])) {
         }
 
         // Execute the insert operation
-        $db->executeUpdate($sqlArray, 'tbl_news', 'news_id = :news_id', ['news_id' => $news_id]);
+        $db->executeUpdate($sqlArray, 'tbl_banner', 'banner_id = :banner_id', ['banner_id' => $banner_id]);
         
-        // Check if the insert was successful
         if ($db->affectedRows > 0) {
             Alert::success(array(
                 'title' => 'Update Successful',
-                'html'  => 'News successfully updated.',
+                'html'  => 'Banner successfully updated.',
                 'path'  => $redirect_path
             ));
-        }else {
+        } else {
             Alert::warning(array(
                 'title' => 'No Update Performed',
                 'html'  => 'Submitted data is identical to existing record.',
@@ -178,18 +145,18 @@ if (isset($_POST['Edit'])) {
 if (isset($_POST['Delete'])) {
     try {
         $id = decrypt_data($_POST['Delete']);
-        $db->executeDelete('tbl_news', 'news_id = :news_id', ['news_id' => $id]);
+        $db->executeDelete('tbl_banner', 'banner_id = :banner_id', ['banner_id' => $id]);
         
         if ($db->affectedRows > 0) {
             Alert::success(array(
                 'title' => 'Delete Successful',
-                'html'  => 'News successfully deleted.',
+                'html'  => 'Banner successfully deleted.',
                 'path'  => $redirect_path
             ));
         } else {
             Alert::error(array(
                 'title' => 'Delete Failed',
-                'html'  => 'No news found with the provided ID.',
+                'html'  => 'No banner found with the provided ID.',
                 'path'  => $redirect_path
             ));
         }

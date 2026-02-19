@@ -1,5 +1,5 @@
 function addItem({
-    fetch_name: fetch_name,
+    fetch_file: fetch_file,
     item_id: item_id = [],
     custom_function: custom_function = () => {},
 }) {
@@ -11,7 +11,7 @@ function addItem({
 		data: {
 			add_id: item_id,
 		},
-		url: `fetch/${fetch_name}.php`,
+		url: fetch_file,
 		success: function (data) {
 			let $fetch = $(".fetched-data").html(data);
 			reInitUI($fetch);
@@ -21,7 +21,7 @@ function addItem({
 }
 
 function editItem({
-    fetch_name: fetch_name,
+    fetch_file: fetch_file,
     item_id: item_id,
     custom_function: custom_function = () => {},
 }) {
@@ -33,7 +33,7 @@ function editItem({
 		data: {
 			id: item_id,
 		},
-		url: `fetch/${fetch_name}.php`,
+		url: fetch_file,
 		success: function (data) {
 			let $fetch = $(".fetched-data").html(data);
 			reInitUI($fetch);

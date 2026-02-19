@@ -87,6 +87,27 @@ include 'head.php';
                     </li>
 
                     <li class="side-nav-item">
+                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/pages/banner.php" class="side-nav-link">
+                            <i class="mdi mdi-image-multiple"></i>
+                            <span> Banner </span>
+                        </a>
+                    </li>
+
+                    <li class="side-nav-item">
+                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/pages/about.php" class="side-nav-link">
+                            <i class="mdi mdi-account-question"></i>
+                            <span> About Us </span>
+                        </a>
+                    </li>
+
+                    <li class="side-nav-item">
+                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/pages/team.php" class="side-nav-link">
+                            <i class="mdi mdi-account-group"></i>
+                            <span> Our Team </span>
+                        </a>
+                    </li>
+
+                    <li class="side-nav-item">
                         <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/pages/program.php" class="side-nav-link">
                             <i class="mdi mdi-certificate"></i>
                             <span> Programs </span>
@@ -97,13 +118,6 @@ include 'head.php';
                         <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/pages/news.php" class="side-nav-link">
                             <i class="mdi mdi-newspaper"></i>
                             <span> News & Events </span>
-                        </a>
-                    </li>
-
-                    <li class="side-nav-item">
-                        <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/pages/team.php" class="side-nav-link">
-                            <i class="mdi mdi-account-group"></i>
-                            <span> Our Team </span>
                         </a>
                     </li>
 
