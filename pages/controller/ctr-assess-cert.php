@@ -8,10 +8,11 @@ if (isset($_POST['Save'])) {
     try {
         // Check if the required fields are set
         $requiredFields = [
-            'title'     => 'Title',
-            'main_fee'  => 'Tuition Fee',
-            'sub_fee'   => 'Processing Fee',
-            'status'    => 'Status'
+            'title'         => 'Title',
+            'description'   => 'Description',
+            'main_fee'      => 'Tuition Fee',
+            'sub_fee'       => 'Processing Fee',
+            'status'        => 'Status'
         ];
 
         $missing        = validateRequiredFields($requiredFields, $_POST);
@@ -38,6 +39,7 @@ if (isset($_POST['Save'])) {
         // Prepare the SQL array for insertion
         $sqlArray = array(
             'title'         => $_POST['title'],
+            'description'   => $_POST['description'],
             'main_fee'      => str_replace(',', '', $_POST['main_fee']),
             'sub_fee'       => str_replace(',', '', $_POST['sub_fee']),
             'requirement'   => json_encode($_POST['requirement'] ?? []),
@@ -95,7 +97,8 @@ if (isset($_POST['Edit'])) {
     try {
         // Check if the required fields are set
         $requiredFields = [
-            'title' => 'Title',
+            'title'         => 'Title',
+            'description'   => 'Description',
             'main_fee'      => 'Tuition Fee',
             'sub_fee'       => 'Processing Fee',
             'status'        => 'Status'
@@ -127,11 +130,12 @@ if (isset($_POST['Edit'])) {
 
         // Prepare the SQL array for insertion
         $sqlArray = array(
-            'title'     => $_POST['title'],
-            'main_fee'  => str_replace(',', '', $_POST['main_fee']),
-            'sub_fee'   => str_replace(',', '', $_POST['sub_fee']),
+            'title'         => $_POST['title'],
+            'description'   => $_POST['description'],
+            'main_fee'      => str_replace(',', '', $_POST['main_fee']),
+            'sub_fee'       => str_replace(',', '', $_POST['sub_fee']),
             'requirement'   => json_encode($_POST['requirement'] ?? []),
-            'status'    => $_POST['status'],
+            'status'        => $_POST['status'],
         );
 
         if(isset($_SESSION['img_input'])){

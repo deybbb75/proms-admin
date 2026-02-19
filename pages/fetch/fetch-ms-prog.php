@@ -7,17 +7,17 @@ if (isset($_POST['id'])) {
     $program = $db->queryUniqueObject('SELECT * FROM tbl_ms_prog WHERE mp_id = :mp_id', ['mp_id' => $id]);
     if ($program) {
         $mp_id              = encrypt_data($program->mp_id);
-        $title              = $program->title;
-        $description        = $program->description;
+        $title              = e($program->title);
+        $description        = e($program->description);
         $cert_image         = $program->cert_img;
         $cert_image_data    = base64_encode($cert_image);
         $cert_image_type    = $program->cert_img_type;
         $cert_image_src     = "data:{$cert_image_type};base64,{$cert_image_data}";
-        $yt_link            = $program->yt_link;
+        $yt_link            = e($program->yt_link);
         $certification      = json_decode($program->certification, true);
         $associate_cert     = json_decode($program->associate_cert, true);
         $expert_cert        = json_decode($program->expert_cert, true);
-        $status             = $program->status;
+        $status             = e($program->status);
         $image              = $program->img;
         $image_data         = base64_encode($image);
         $image_type         = $program->img_type;
@@ -112,7 +112,7 @@ if (isset($_POST['id'])) {
         ?>
         <div class="row main-item">
             <div class="col-10 mb-2">
-                <textarea class="form-control auto-grow-textarea cert" id="cert" name="cert[<?= $i ?>][title]" rows="3" placeholder="Certification"><?= $certification[$i]['title'] ?? '' ?></textarea>
+                <textarea class="form-control auto-grow-textarea cert" id="cert" name="cert[<?= $i ?>][title]" rows="3" placeholder="Certification"><?= e($certification[$i]['title']) ?? '' ?></textarea>
                 <div class="row mt-2">
                     <label class="form-label required" style="font-weight: 600;">Categories</label>
                     <div class="col-sm-12" style="padding-bottom: 0px;">
@@ -121,13 +121,13 @@ if (isset($_POST['id'])) {
                         ?>
                         <div class="row sub-item">
                             <div class="col-10 mb-2">
-                                <textarea class="form-control auto-grow-textarea title" id="title" name="cert[<?= $i ?>][ctg][<?= $j ?>][title]" rows="3" placeholder="Category Title"><?= $certification[$i]['ctg'][$j]['title'] ?? '' ?></textarea>
+                                <textarea class="form-control auto-grow-textarea title" id="title" name="cert[<?= $i ?>][ctg][<?= $j ?>][title]" rows="3" placeholder="Category Title"><?= e($certification[$i]['ctg'][$j]['title']) ?? '' ?></textarea>
                             </div>
                             <div class="col-2 mb-2">
                                 <button type="button" class="btn btn-danger w-100" onclick="removeOldItem(this, ctgObj)"><i class="mdi mdi-close"></i></button>
                             </div>
                             <div class="col-lg-12">
-                                <textarea class="form-control auto-grow-textarea desc" id="desc" name="cert[<?= $i ?>][ctg][<?= $j ?>][desc]" rows="3" placeholder="Category Description"><?= $certification[$i]['ctg'][$j]['desc'] ?? '' ?></textarea>
+                                <textarea class="form-control auto-grow-textarea desc" id="desc" name="cert[<?= $i ?>][ctg][<?= $j ?>][desc]" rows="3" placeholder="Category Description"><?= e($certification[$i]['ctg'][$j]['desc']) ?? '' ?></textarea>
                             </div>
                         </div>
                         <?php
@@ -172,7 +172,7 @@ if (isset($_POST['id'])) {
         ?>
         <div class="row">
             <div class="col-lg-11 mb-2">
-                <textarea class="form-control auto-grow-textarea associate_cert" id="associate_cert" name="associate_cert[<?= $i ?>]" rows="3" placeholder="Associate Certification"><?= $associate_cert[$i] ?? '' ?></textarea>
+                <textarea class="form-control auto-grow-textarea associate_cert" id="associate_cert" name="associate_cert[<?= $i ?>]" rows="3" placeholder="Associate Certification"><?= e($associate_cert[$i]) ?? '' ?></textarea>
             </div>
             <div class="col-lg-1 mb-2">
                 <button type="button" class="btn btn-danger w-100" onclick="removeOldItem(this, associateCertObj)"><i class="mdi mdi-close"></i></button>
@@ -206,7 +206,7 @@ if (isset($_POST['id'])) {
         ?>
         <div class="row">
             <div class="col-lg-11 mb-2">
-                <textarea class="form-control auto-grow-textarea expert_cert" id="expert_cert" name="expert_cert[<?= $i ?>]" rows="3" placeholder="Expert Certification"><?= $expert_cert[$i] ?? '' ?></textarea>
+                <textarea class="form-control auto-grow-textarea expert_cert" id="expert_cert" name="expert_cert[<?= $i ?>]" rows="3" placeholder="Expert Certification"><?= e($expert_cert[$i]) ?? '' ?></textarea>
             </div>
             <div class="col-lg-1 mb-2">
                 <button type="button" class="btn btn-danger w-100" onclick="removeOldItem(this, expertCertObj)"><i class="mdi mdi-close"></i></button>

@@ -8,10 +8,10 @@ if (isset($_POST['id'])) {
     $id = decrypt_data($_POST['id']);
     $program = $db->queryUniqueObject('SELECT * FROM tbl_program WHERE prog_id = :prog_id', ['prog_id' => $id]);
     if ($program) {
-        $prog_id = encrypt_data($program->prog_id);
-        $prog_name  = $program->prog_name;
-        $status = $program->status;
-        $image = $program->img;
+        $prog_id    = encrypt_data($program->prog_id);
+        $prog_name  = e($program->prog_name);
+        $status     = e($program->status);
+        $image      = $program->img;
         $image_data = base64_encode($image);
         $image_type = $program->img_type;
         $image_src  = "data:{$image_type};base64,{$image_data}";

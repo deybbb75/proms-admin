@@ -7,13 +7,13 @@ if (isset($_POST['id'])) {
     $program = $db->queryUniqueObject('SELECT * FROM tbl_foreign_lang WHERE fl_id = :fl_id', ['fl_id' => $id]);
     if ($program) {
         $fl_id          = encrypt_data($program->fl_id);
-        $title          = $program->title;
+        $title          = e($program->title);
         $offering       = json_decode($program->offering, true);
         $level          = json_decode($program->level, true);
         $duration       = json_decode($program->duration, true);
         $mode           = json_decode($program->mode, true);
         $note           = json_decode($program->note, true);
-        $status         = $program->status;
+        $status         = e($program->status);
         $image          = $program->img;
         $image_data     = base64_encode($image);
         $image_type     = $program->img_type;
@@ -37,7 +37,7 @@ if (isset($_POST['id'])) {
         ?>
         <div class="row">
             <div class="col-lg-12">
-                <textarea class="form-control auto-grow-textarea offering" id="offering" name="offering[0]" rows="3" placeholder="Offering"><?= $offering[0] ?? '' ?></textarea>
+                <textarea class="form-control auto-grow-textarea offering" id="offering" name="offering[0]" rows="3" placeholder="Offering"></textarea>
             </div>
         </div>
 
@@ -47,7 +47,7 @@ if (isset($_POST['id'])) {
         ?>
         <div class="row">
             <div class="col-lg-11 mb-2">
-                <textarea class="form-control auto-grow-textarea offering" id="offering" name="offering[<?= $i ?>]" rows="3" placeholder="Offering"><?= $offering[$i] ?? '' ?></textarea>
+                <textarea class="form-control auto-grow-textarea offering" id="offering" name="offering[<?= $i ?>]" rows="3" placeholder="Offering"><?= e($offering[$i]) ?? '' ?></textarea>
             </div>
             <div class="col-lg-1 mb-2">
                 <button type="button" class="btn btn-danger w-100" onclick="removeOldItem(this, offeringObj)"><i class="mdi mdi-close"></i></button>
@@ -71,7 +71,7 @@ if (isset($_POST['id'])) {
         ?>
         <div class="row">
             <div class="col-lg-12">
-                <textarea class="form-control auto-grow-textarea level" id="level" name="level[0]" rows="3" placeholder="Level"><?= $level[0] ?? '' ?></textarea>
+                <textarea class="form-control auto-grow-textarea level" id="level" name="level[0]" rows="3" placeholder="Level"></textarea>
             </div>
         </div>
 
@@ -81,7 +81,7 @@ if (isset($_POST['id'])) {
         ?>
         <div class="row">
             <div class="col-lg-11 mb-2">
-                <textarea class="form-control auto-grow-textarea level" id="level" name="level[<?= $i ?>]" rows="3" placeholder="Level"><?= $level[$i] ?? '' ?></textarea>
+                <textarea class="form-control auto-grow-textarea level" id="level" name="level[<?= $i ?>]" rows="3" placeholder="Level"><?= e($level[$i]) ?? '' ?></textarea>
             </div>
             <div class="col-lg-1 mb-2">
                 <button type="button" class="btn btn-danger w-100" onclick="removeOldItem(this, levelObj)"><i class="mdi mdi-close"></i></button>
@@ -105,7 +105,7 @@ if (isset($_POST['id'])) {
         ?>
         <div class="row">
             <div class="col-lg-12">
-                <textarea class="form-control auto-grow-textarea duration" id="duration" name="duration[0]" rows="3" placeholder="Duration"><?= $duration[0] ?? '' ?></textarea>
+                <textarea class="form-control auto-grow-textarea duration" id="duration" name="duration[0]" rows="3" placeholder="Duration"></textarea>
             </div>
         </div>
 
@@ -115,7 +115,7 @@ if (isset($_POST['id'])) {
         ?>
         <div class="row">
             <div class="col-lg-11 mb-2">
-                <textarea class="form-control auto-grow-textarea duration" id="duration" name="duration[<?= $i ?>]" rows="3" placeholder="Duration"><?= $duration[$i] ?? '' ?></textarea>
+                <textarea class="form-control auto-grow-textarea duration" id="duration" name="duration[<?= $i ?>]" rows="3" placeholder="Duration"><?= e($duration[$i]) ?? '' ?></textarea>
             </div>
             <div class="col-lg-1 mb-2">
                 <button type="button" class="btn btn-danger w-100" onclick="removeOldItem(this, durationObj)"><i class="mdi mdi-close"></i></button>
@@ -139,7 +139,7 @@ if (isset($_POST['id'])) {
         ?>
         <div class="row">
             <div class="col-lg-12">
-                <textarea class="form-control auto-grow-textarea mode" id="mode" name="mode[0]" rows="3" placeholder="Mode"><?= $mode[0] ?? '' ?></textarea>
+                <textarea class="form-control auto-grow-textarea mode" id="mode" name="mode[0]" rows="3" placeholder="Mode"></textarea>
             </div>
         </div>
 
@@ -149,7 +149,7 @@ if (isset($_POST['id'])) {
         ?>
         <div class="row">
             <div class="col-lg-11 mb-2">
-                <textarea class="form-control auto-grow-textarea mode" id="mode" name="mode[<?= $i ?>]" rows="3" placeholder="Mode"><?= $mode[$i] ?? '' ?></textarea>
+                <textarea class="form-control auto-grow-textarea mode" id="mode" name="mode[<?= $i ?>]" rows="3" placeholder="Mode"><?= e($mode[$i]) ?? '' ?></textarea>
             </div>
             <div class="col-lg-1 mb-2">
                 <button type="button" class="btn btn-danger w-100" onclick="removeOldItem(this, modeObj)"><i class="mdi mdi-close"></i></button>
@@ -173,7 +173,7 @@ if (isset($_POST['id'])) {
         ?>
         <div class="row">
             <div class="col-lg-12">
-                <textarea class="form-control auto-grow-textarea note" id="note" name="note[0]" rows="3" placeholder="Note"><?= $note[0] ?? '' ?></textarea>
+                <textarea class="form-control auto-grow-textarea note" id="note" name="note[0]" rows="3" placeholder="Note"></textarea>
             </div>
         </div>
 
@@ -183,7 +183,7 @@ if (isset($_POST['id'])) {
         ?>
         <div class="row">
             <div class="col-lg-11 mb-2">
-                <textarea class="form-control auto-grow-textarea note" id="note" name="note[<?= $i ?>]" rows="3" placeholder="Note"><?= $note[$i] ?? '' ?></textarea>
+                <textarea class="form-control auto-grow-textarea note" id="note" name="note[<?= $i ?>]" rows="3" placeholder="Note"><?= e($note[$i]) ?? '' ?></textarea>
             </div>
             <div class="col-lg-1 mb-2">
                 <button type="button" class="btn btn-danger w-100" onclick="removeOldItem(this, noteObj)"><i class="mdi mdi-close"></i></button>

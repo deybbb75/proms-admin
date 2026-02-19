@@ -7,11 +7,12 @@ if (isset($_POST['id'])) {
     $program = $db->queryUniqueObject('SELECT * FROM tbl_assess_cert WHERE ac_id = :ac_id', ['ac_id' => $id]);
     if ($program) {
         $ac_id          = encrypt_data($program->ac_id);
-        $title          = $program->title;
-        $main_fee       = number_format($program->main_fee, 2, '.', ',');
-        $sub_fee        = number_format($program->sub_fee, 2, '.', ',');
+        $title          = e($program->title);
+        $description    = e($program->description);
+        $main_fee       = e(number_format($program->main_fee, 2, '.', ','));
+        $sub_fee        = e(number_format($program->sub_fee, 2, '.', ','));
         $requirement    = json_decode($program->requirement, true);
-        $status         = $program->status;
+        $status         = e($program->status);
         $image          = $program->img;
         $image_data     = base64_encode($image);
         $image_type     = $program->img_type;
@@ -25,6 +26,12 @@ if (isset($_POST['id'])) {
     <div class="col-md-12">
         <label for="title" class="form-label required">Title</label>
         <input type="text" id="title" name="title" class="form-control" placeholder="Title" value="<?= $title ?? '' ?>">
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <label for="description" class="form-label required">Description</label>
+        <textarea class="form-control auto-grow-textarea" id="description" name="description" rows="5" placeholder="Description"><?= $description ?? '' ?></textarea>
     </div>
 </div>
 <div class="row">
@@ -57,7 +64,7 @@ if (isset($_POST['id'])) {
         ?>
         <div class="row">
             <div class="col-lg-11 mb-2">
-                <textarea class="form-control auto-grow-textarea requirement" id="requirement" name="requirement[<?= $i ?>]" rows="3" placeholder="Requirement"><?= $requirement[$i] ?? '' ?></textarea>
+                <textarea class="form-control auto-grow-textarea requirement" id="requirement" name="requirement[<?= $i ?>]" rows="3" placeholder="Requirement"><?= e($requirement[$i]) ?? '' ?></textarea>
             </div>
             <div class="col-lg-1 mb-2">
                 <button type="button" class="btn btn-danger w-100" onclick="removeOldItem(this, reqObj)"><i class="mdi mdi-close"></i></button>

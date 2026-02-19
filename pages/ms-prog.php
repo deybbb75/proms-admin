@@ -53,7 +53,7 @@ $_SESSION['max_expert_cert'] = 10;
                                 <td><?= e($line->title) ?></td>
                                 <td style="white-space: pre-line;"><?= e(truncateText($line->description)) ?></td>
                                 <td>
-                                    <span class="status-<?= strtolower($line->status) ?>"><?= $line->status ?></span>
+                                    <span class="status-<?= strtolower($line->status) ?>"><?= e($line->status) ?></span>
                                 </td>
                                 <td>
                                     <center>

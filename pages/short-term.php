@@ -68,7 +68,7 @@ $_SESSION['max_outline'] = 10;
                                     </div>
                                 </td>
                                 <td>
-                                    <span class="status-<?= strtolower($line->status) ?>"><?= $line->status ?></span>
+                                    <span class="status-<?= strtolower($line->status) ?>"><?= e($line->status) ?></span>
                                 </td>
                                 <td>
                                     <center>

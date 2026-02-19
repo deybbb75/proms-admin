@@ -7,12 +7,12 @@ if (isset($_POST['id'])) {
     $academic_year = $db->queryUniqueObject('SELECT * FROM tbl_academic_year WHERE ay_id = :ay_id', ['ay_id' => $id]);
     if ($academic_year) {
         $ay_id = encrypt_data($academic_year->ay_id);
-        $year  = $academic_year->year;
+        $year  = e($academic_year->year);
         $years = explode('-', $year);
         $start_year = trim($years[0]);
         $end_year   = trim($years[1]);
-        $semester  = $academic_year->semester;
-        $status = $academic_year->status;
+        $semester  = e($academic_year->semester);
+        $status = e($academic_year->status);
     }
 }
 ?>

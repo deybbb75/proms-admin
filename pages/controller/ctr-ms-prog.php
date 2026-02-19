@@ -181,12 +181,6 @@ if (isset($_POST['Edit'])) {
                     'path'  => $redirect_path
                 ]);
             }
-        }else{
-            Alert::error([
-                'title' => 'Certficate Upload Error',
-                'html'  => 'No certificate uploaded.',
-                'path'  => $redirect_path
-            ]);
         }
 
         // Execute the insert operation
@@ -214,13 +208,11 @@ if (isset($_POST['Edit'])) {
         ));
     } catch (Exception $e) {
         // Handle other exceptions
-        // Alert::error(array(
-        //     'title' => 'Error',
-        //     'html'  => 'Something went wrong with your request.',
-        //     'path'  => $redirect_path
-        // ));
-
-        echo $e->getMessage(); // For debugging purposes only. Remove or comment out in production.
+        Alert::error(array(
+            'title' => 'Error',
+            'html'  => 'Something went wrong with your request.',
+            'path'  => $redirect_path
+        ));
     }
 }
 

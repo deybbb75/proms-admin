@@ -50,7 +50,7 @@ $db = DB::getInstance();
                                 <td><?= e($line->email) ?></td>
                                 <td><?= e($line->role) ?></td>
                                 <td>
-                                    <span class="status-<?= strtolower($line->status) ?>"><?= $line->status ?></span>
+                                    <span class="status-<?= strtolower($line->status) ?>"><?= e($line->status) ?></span>
                                 </td>
                                 <td>
                                     <center>

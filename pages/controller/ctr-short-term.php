@@ -39,13 +39,13 @@ if (isset($_POST['Save'])) {
 
         // Prepare the SQL array for insertion
         $sqlArray = array(
-            'prog_title'         => $_POST['prog_title'],
-            'training_title'     => $_POST['training_title'],
-            'description'   => $_POST['description'],
-            'venue'         => $_POST['venue'],
-            'objective'      => json_encode($_POST['objective'] ?? []),
-            'outline'        => json_encode($_POST['outline'] ?? []),
-            'status'        => $_POST['status'],
+            'prog_title'        => $_POST['prog_title'],
+            'training_title'    => $_POST['training_title'],
+            'description'       => $_POST['description'],
+            'venue'             => $_POST['venue'],
+            'objective'         => json_encode($_POST['objective'] ?? []),
+            'outline'           => json_encode($_POST['outline'] ?? []),
+            'status'            => $_POST['status'],
         );
 
         if(isset($_SESSION['img_input'])){
@@ -133,13 +133,13 @@ if (isset($_POST['Edit'])) {
 
         // Prepare the SQL array for insertion
         $sqlArray = array(
-            'prog_title'         => $_POST['prog_title'],
-            'training_title'     => $_POST['training_title'],
-            'description'   => $_POST['description'],
-            'venue'         => $_POST['venue'],
-            'objective'      => json_encode($_POST['objective'] ?? []),
-            'outline'        => json_encode($_POST['outline'] ?? []),
-            'status'        => $_POST['status'],
+            'prog_title'        => $_POST['prog_title'],
+            'training_title'    => $_POST['training_title'],
+            'description'       => $_POST['description'],
+            'venue'             => $_POST['venue'],
+            'objective'         => json_encode($_POST['objective'] ?? []),
+            'outline'           => json_encode($_POST['outline'] ?? []),
+            'status'            => $_POST['status'],
         );
 
         if(isset($_SESSION['img_input'])){

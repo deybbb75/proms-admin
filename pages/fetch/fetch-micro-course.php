@@ -7,19 +7,19 @@ if (isset($_POST['id'])) {
     $program = $db->queryUniqueObject('SELECT * FROM tbl_micro_course WHERE mc_id = :mc_id', ['mc_id' => $id]);
     if ($program) {
         $mc_id              = encrypt_data($program->mc_id);
-        $prog_title         = $program->prog_title;
-        $description        = $program->description;
-        $course_title       = $program->course_title;
-        $course_1           = $program->course_1;
-        $course_2           = $program->course_2;
-        $course_3           = $program->course_3;
-        $duration           = $program->duration;
-        $credit_unit        = $program->credit_unit;
-        $developer          = $program->developer;
-        $developer_email    = $program->developer_email;
-        $objective          = $program->objective;
+        $prog_title         = e($program->prog_title);
+        $description        = e($program->description);
+        $course_title       = e($program->course_title);
+        $course_1           = e($program->course_1);
+        $course_2           = e($program->course_2);
+        $course_3           = e($program->course_3);
+        $duration           = e($program->duration);
+        $credit_unit        = e($program->credit_unit);
+        $developer          = e($program->developer);
+        $developer_email    = e($program->developer_email);
+        $objective          = e($program->objective);
         $policy             = json_decode($program->policy, true);
-        $status             = $program->status;
+        $status             = e($program->status);
         $image              = $program->img;
         $image_data         = base64_encode($image);
         $image_type         = $program->img_type;
@@ -103,7 +103,7 @@ if (isset($_POST['id'])) {
         ?>
         <div class="row">
             <div class="col-lg-12">
-                <textarea class="form-control auto-grow-textarea policy" id="policy" name="policy[0]" rows="3" placeholder="Policy"><?= $policy[0] ?? '' ?></textarea>
+                <textarea class="form-control auto-grow-textarea policy" id="policy" name="policy[0]" rows="3" placeholder="Policy"></textarea>
             </div>
         </div>
 
@@ -113,7 +113,7 @@ if (isset($_POST['id'])) {
         ?>
         <div class="row">
             <div class="col-lg-11 mb-2">
-                <textarea class="form-control auto-grow-textarea policy" id="policy" name="policy[<?= $i ?>]" rows="3" placeholder="Policy"><?= $policy[$i] ?? '' ?></textarea>
+                <textarea class="form-control auto-grow-textarea policy" id="policy" name="policy[<?= $i ?>]" rows="3" placeholder="Policy"><?= e($policy[$i]) ?? '' ?></textarea>
             </div>
             <div class="col-lg-1 mb-2">
                 <button type="button" class="btn btn-danger w-100" onclick="removeOldItem(this, policyObj)"><i class="mdi mdi-close"></i></button>

@@ -8,9 +8,10 @@ if (isset($_POST['Save'])) {
     try {
         // Check if the required fields are set
         $requiredFields = [
-            'member_name' => 'Member Name', 
-            'position' => 'Position',
-            'status' => 'Status'
+            'name'          => 'Member Name', 
+            'position'      => 'Position',
+            'member_order'  => 'Order',
+            'status'        => 'Status'
         ];
         $missing        = validateRequiredFields($requiredFields, $_POST);
         if ($missing) {
@@ -21,9 +22,9 @@ if (isset($_POST['Save'])) {
             ));
         }
 
-        // Check for duplicate member_name
-        $message = $db->hasDuplicate('SELECT member_name FROM tbl_member WHERE member_name = :member_name', [
-            'member_name' => $_POST['member_name']
+        // Check for duplicate name
+        $message = $db->hasDuplicate('SELECT name FROM tbl_member WHERE name = :name', [
+            'name' => $_POST['name']
         ]);
         if ($message) {
             Alert::error(array(
@@ -33,17 +34,34 @@ if (isset($_POST['Save'])) {
             ));
         }
 
+        $duplicate_order = $db->hasDuplicate('SELECT member_order FROM tbl_member WHERE status ="Active"');
+
+        if($duplicate_order){
+            $member_query = $db->query('SELECT * FROM tbl_member WHERE status = "Active" ORDER BY member_order');
+            $new_order = $_POST['member_order'];
+            while ($line = $db->fetchNextObject($member_query)) {
+                if($line->member_order >= $_POST['member_order']){
+                    $db->executeUpdate(['member_order'  => $new_order + 1], 'tbl_member', 'member_id = :member_id', ['member_id' => $line->member_id]);
+                }else{
+                    continue;
+                }
+
+                $new_order++;
+            }
+        }
+
         // Prepare the SQL array for insertion
         $sqlArray = array(
-            'member_name'  => $_POST['member_name'],
-            'position'   => $_POST['position'],
-            'status'  => $_POST['status'],
+            'name'          => $_POST['name'],
+            'position'      => $_POST['position'],
+            'member_order'  => $_POST['member_order'],
+            'status'        => $_POST['status'],
         );
 
         if(isset($_SESSION['img_input'])){
             if($_SESSION['img_input']['status'] == 'Success') {
-                $sqlArray['member_img'] = $_SESSION['img_input']['content'];
-                $sqlArray['member_img_type'] = $_SESSION['img_input']['type'];
+                $sqlArray['img'] = $_SESSION['img_input']['content'];
+                $sqlArray['img_type'] = $_SESSION['img_input']['type'];
             }else{
                 Alert::error([
                     'title' => 'Image Upload Error',
@@ -74,13 +92,11 @@ if (isset($_POST['Save'])) {
         }
     } catch (DBException $e) {
         // Handle the database error
-        // Alert::error(array(
-        //     'title' => 'Server Error',
-        //     'html'  => 'Something went wrong on our end.',
-        //     'path'  => $redirect_path
-        // ));
-
-        echo $e->getMessage();
+        Alert::error(array(
+            'title' => 'Server Error',
+            'html'  => 'Something went wrong on our end.',
+            'path'  => $redirect_path
+        ));
     } catch (Exception $e) {
         // Handle other exceptions
         Alert::error(array(
@@ -95,9 +111,10 @@ if (isset($_POST['Edit'])) {
     try {
         // Check if the required fields are set
         $requiredFields = [
-            'member_name' => 'Member Name', 
-            'position' => 'Position',
-            'status' => 'Status'
+            'name'          => 'Member Name', 
+            'position'      => 'Position',
+            'member_order'  => 'Order',
+            'status'        => 'Status'
         ];
         $missing        = validateRequiredFields($requiredFields, $_POST);
         if ($missing) {
@@ -110,9 +127,9 @@ if (isset($_POST['Edit'])) {
 
        // Decrypt the id
         $member_id  = decrypt_data($_POST['member_id']);
-        // Check for duplicate member_name
-        $message = $db->hasDuplicate('SELECT member_name FROM tbl_member WHERE member_name = :member_name AND member_id != :member_id', [
-            'member_name' => $_POST['member_name'],
+        // Check for duplicate name
+        $message = $db->hasDuplicate('SELECT name FROM tbl_member WHERE name = :name AND member_id != :member_id', [
+            'name' => $_POST['name'],
             'member_id' => $member_id
         ]);
         if ($message) {
@@ -123,17 +140,34 @@ if (isset($_POST['Edit'])) {
             ));
         }
 
+        $duplicate_order = $db->hasDuplicate('SELECT member_order FROM tbl_member WHERE status = "Active"');
+
+        if($duplicate_order){
+            $member_query = $db->query('SELECT * FROM tbl_member WHERE status = "Active" ORDER BY member_order');
+            $new_order = $_POST['member_order'];
+            while ($line = $db->fetchNextObject($member_query)) {
+                if($line->member_order >= $_POST['member_order']){
+                    $db->executeUpdate(['member_order'  => $new_order + 1], 'tbl_member', 'member_id = :member_id', ['member_id' => $line->member_id]);
+                }else{
+                    continue;
+                }
+
+                $new_order++;
+            }
+        }
+
         // Prepare the SQL array for insertion
         $sqlArray = array(
-            'member_name'  => $_POST['member_name'],
-            'position'   => $_POST['position'],
-            'status'  => $_POST['status'],
+            'name'          => $_POST['name'],
+            'position'      => $_POST['position'],
+            'member_order'  => $_POST['member_order'],
+            'status'        => $_POST['status'],
         );
 
         if(isset($_SESSION['img_input'])){
             if($_SESSION['img_input']['status'] == 'Success') {
-                $sqlArray['member_img'] = $_SESSION['img_input']['content'];
-                $sqlArray['member_img_type'] = $_SESSION['img_input']['type'];
+                $sqlArray['img'] = $_SESSION['img_input']['content'];
+                $sqlArray['img_type'] = $_SESSION['img_input']['type'];
             }else{
                 Alert::error([
                     'title' => 'Image Upload Error',
@@ -188,6 +222,14 @@ if (isset($_POST['Delete'])) {
             ));
         }
         $db->executeDelete('tbl_member', 'member_id = :member_id', ['member_id' => $id]);
+
+        $member_query = $db->query('SELECT * FROM tbl_member WHERE status = "Active" ORDER BY member_order');
+        $new_order = 1;
+        while ($line = $db->fetchNextObject($member_query)) {
+            $db->executeUpdate(['member_order'  => $new_order], 'tbl_member', 'member_id = :member_id', ['member_id' => $line->member_id]);
+
+            $new_order++;
+        }
         
         if ($db->affectedRows > 0) {
             Alert::success(array(

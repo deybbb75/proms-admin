@@ -7,18 +7,18 @@ if (isset($_POST['id'])) {
     $program = $db->queryUniqueObject('SELECT * FROM tbl_cert_prog WHERE cp_id = :cp_id', ['cp_id' => $id]);
     if ($program) {
         $cp_id          = encrypt_data($program->cp_id);
-        $title          = $program->title;
-        $description    = $program->description;
-        $class_details  = $program->class_details;
-        $start_date_1   = $program->start_date_1;
-        $start_date_2   = $program->start_date_2;
+        $title          = e($program->title);
+        $description    = e($program->description);
+        $class_details  = e($program->class_details);
+        $start_date_1   = e($program->start_date_1);
+        $start_date_2   = e($program->start_date_2);
         $schedule       = json_decode($program->schedule, true);
-        $venue          = $program->venue;
+        $venue          = e($program->venue);
         $main_fee       = number_format($program->main_fee, 2, '.', ',');
         $sub_fee        = number_format($program->sub_fee, 2, '.', ',');
-        $note           = $program->note;
+        $note           = e($program->note);
         $requirement    = json_decode($program->requirement, true);
-        $status         = $program->status;
+        $status         = e($program->status);
         $image          = $program->img;
         $image_data     = base64_encode($image);
         $image_type     = $program->img_type;
@@ -77,11 +77,11 @@ if (isset($_POST['id'])) {
                 <span class="font-13 text-muted">Day of the Week</span>
             </div>
             <div class="col-lg-4">
-                <input class="form-control start-time" id="start_time" type="time" name="schedule[0][start_time]" value="<?= $start_time[0] ?? '' ?>">
+                <input class="form-control start-time" id="start_time" type="time" name="schedule[0][start_time]">
                 <span class="font-13 text-muted">Start Time</span>
             </div>
             <div class="col-lg-4">
-                <input class="form-control end-time" id="end_time" type="time" name="schedule[0][end_time]" value="<?= $end_time[0] ?? '' ?>">
+                <input class="form-control end-time" id="end_time" type="time" name="schedule[0][end_time]">
                 <span class="font-13 text-muted">End Time</span>
             </div>
         </div>
@@ -137,11 +137,11 @@ if (isset($_POST['id'])) {
                 <span class="font-13 text-muted">Day of the Week</span>
             </div>
             <div class="col-lg-4">
-                <input class="form-control start-time" id="start_time" type="time" name="schedule[<?= $i ?>][start_time]" value="<?= $schedule[$i]['start_time'] ?? '' ?>">
+                <input class="form-control start-time" id="start_time" type="time" name="schedule[<?= $i ?>][start_time]" value="<?= e($schedule[$i]['start_time']) ?? '' ?>">
                 <span class="font-13 text-muted">Start Time</span>
             </div>
             <div class="col-lg-3">
-                <input class="form-control end-time" id="end_time" type="time" name="schedule[<?= $i ?>][end_time]" value="<?= $schedule[$i]['end_time'] ?? '' ?>">
+                <input class="form-control end-time" id="end_time" type="time" name="schedule[<?= $i ?>][end_time]" value="<?= e($schedule[$i]['end_time']) ?? '' ?>">
                 <span class="font-13 text-muted">End Time</span>
             </div>
             <div class="col-lg-1 mb-3">
@@ -200,7 +200,7 @@ if (isset($_POST['id'])) {
         ?>
         <div class="row">
             <div class="col-lg-11 mb-2">
-                <textarea class="form-control auto-grow-textarea requirement" id="requirement" name="requirement[<?= $i ?>]" rows="3" placeholder="Requirement"><?= $requirement[$i] ?? '' ?></textarea>
+                <textarea class="form-control auto-grow-textarea requirement" id="requirement" name="requirement[<?= $i ?>]" rows="3" placeholder="Requirement"><?= e($requirement[$i]) ?? '' ?></textarea>
             </div>
             <div class="col-lg-1 mb-2">
                 <button type="button" class="btn btn-danger w-100" onclick="removeOldItem(this, reqObj)"><i class="mdi mdi-close"></i></button>

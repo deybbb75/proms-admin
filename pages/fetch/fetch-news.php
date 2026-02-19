@@ -8,14 +8,14 @@ if (isset($_POST['id'])) {
     $id = decrypt_data($_POST['id']);
     $news = $db->queryUniqueObject('SELECT * FROM tbl_news WHERE news_id = :news_id', ['news_id' => $id]);
     if ($news) {
-        $news_id = encrypt_data($news->news_id);
-        $news_title  = $news->news_title;
-        $news_content  = $news->news_content;
-        $status = $news->status;
-        $image = $news->news_img;
-        $image_data = base64_encode($image);
-        $image_type = $news->news_img_type;
-        $image_src  = "data:{$image_type};base64,{$image_data}";
+        $news_id        = encrypt_data($news->news_id);
+        $news_title     = e($news->news_title);
+        $news_content   = e($news->news_content);
+        $status         = e($news->status);
+        $image          = $news->news_img;
+        $image_data     = base64_encode($image);
+        $image_type     = $news->news_img_type;
+        $image_src      = "data:{$image_type};base64,{$image_data}";
     }
 }
 ?>

@@ -41,7 +41,7 @@ function validateForm() {
             fields: [
                 "fname",
                 "lname",
-                "member_name",
+                "name",
                 "developer"
             ],
             rules: { required: true, noWhitespace: true, namePattern: true }
@@ -96,6 +96,10 @@ function validateForm() {
         {
             fields: ["dept_id", "div_id", "course_id", "role_id"],
             rules: { required: true, digits: true }
+        },
+        {
+            fields: ["member_order"],
+            rules: { required: true, positiveWholeNumber: true }
         },
         {
             fields: ["credit_unit"],
@@ -280,8 +284,8 @@ function validateForm() {
     }, "Please enter a credit card in the format XXXX-XXXX-XXXX-XXXX.");
 
     $.validator.addMethod("namePattern", function (value, element) {
-        return this.optional(element) || /^[a-zA-Z\s.\-]+$/.test(value);
-    }, "Please enter a valid name (letters, spaces, period, and dash only).");
+        return this.optional(element) || /^[a-zA-ZÑñ\s.\-]+$/.test(value);
+    }, "Please enter a valid name (letters, spaces, Ñ/ñ, period, and dash only).");
 
     $.validator.addMethod("letters", function (value, element) {
         return this.optional(element) || /^[a-zA-Z\s]+$/.test(value);
@@ -318,6 +322,10 @@ function validateForm() {
         today.setHours(0, 0, 0, 0);
         return selected <= today;
     }, "Date cannot be in the future.");
+
+    $.validator.addMethod("positiveWholeNumber", function (value, element) {
+        return this.optional(element) || /^[1-9]\d*$/.test(value);
+    }, "Please enter a valid order (positive whole number only).");
 }
 
 $(function () {

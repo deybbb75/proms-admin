@@ -29,11 +29,12 @@ $_SESSION['max_schedule'] = 3;
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <table id="basic-datatable" class="table table-striped dt-responsive nowrap w-100">
+                    <table id="team-datatable" class="table table-striped dt-responsive nowrap w-100">
                         <thead>
                             <tr>
                                 <th>Member Name</th>
                                 <th>Position</th>
+                                <th>Order</th>
                                 <th>Status</th>
                                 <th>Action</th>
                             </tr>
@@ -45,8 +46,9 @@ $_SESSION['max_schedule'] = 3;
                                 while ($line = $db->fetchNextObject($team_query)) {
                             ?>
                             <tr>
-                                <td><?= e($line->member_name) ?></td>
+                                <td><?= e($line->name) ?></td>
                                 <td><?= e(truncateText($line->position)) ?></td>
+                                <td><?= e($line->member_order) ?></td>
                                 <td>
                                     <span class="status-<?= strtolower($line->status) ?>"><?= e($line->status) ?></span>
                                 </td>
@@ -56,7 +58,7 @@ $_SESSION['max_schedule'] = 3;
                                             onclick="editItem({fetch_file: 'fetch/fetch-team.php', item_id: '<?= encrypt_data($line->member_id) ?>', custom_function: fetchCustom})"><i class="mdi mdi-square-edit-outline"></i>
                                         </button>
                                         <?php
-                                            if($line->member_id != 1){ // Prevent deletion of default admin
+                                            if($line->member_order != 1){ // Prevent deletion of default admin
                                         ?>
                                         <button type="button" class="btn btn-danger ms-1" onclick="deleteItem('<?= encrypt_data($line->member_id) ?>')">
                                             <i class="mdi mdi-delete"></i>
@@ -125,7 +127,26 @@ function fetchCustom(){
         ['#save_changes']
     );
 }
+
+
 </script>
 <?php
 include '../footer.php';
 ?>
+
+<script>
+    $("#team-datatable").DataTable({
+        keys: true,
+        order: [[2, "asc"]], // 👈 add this
+        language: {
+            paginate: {
+                previous: "<i class='mdi mdi-chevron-left'>",
+                next: "<i class='mdi mdi-chevron-right'>"
+            }
+        },
+        drawCallback: function () {
+            $(".dataTables_paginate > .pagination")
+                .addClass("pagination-rounded");
+        }
+    });
+</script>

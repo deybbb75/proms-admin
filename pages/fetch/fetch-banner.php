@@ -5,13 +5,13 @@ $db = DB::getInstance();
 if (isset($_POST['id'])) {
     $id = decrypt_data($_POST['id']);
     $banner = $db->queryUniqueObject('SELECT * FROM tbl_banner WHERE banner_id = :banner_id', ['banner_id' => $id]);
-    if ($program) {
-        $banner_id          = encrypt_data($program->banner_id);
-        $image          = $program->img;
+    if ($banner) {
+        $banner_id          = encrypt_data($banner->banner_id);
+        $image          = $banner->img;
         $image_data     = base64_encode($image);
-        $image_type     = $program->img_type;
+        $image_type     = $banner->img_type;
         $image_src      = "data:{$image_type};base64,{$image_data}";
-        $status         = $program->status;
+        $status         = $banner->status;
     }
 }
 ?>

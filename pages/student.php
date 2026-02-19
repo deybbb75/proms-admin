@@ -61,7 +61,7 @@ $db = DB::getInstance();
                                 <td><?= e($line->birthday) ?></td>
                                 <td><?= e('https://www.facebook.com/jerico.jdc') ?></td>
                                 <td>
-                                    <span class="status-<?= strtolower($line->status) ?>"><?= $line->status ?></span>
+                                    <span class="status-<?= strtolower($line->status) ?>"><?= e($line->status) ?></span>
                                 </td>
                                 <td>
                                     <center>

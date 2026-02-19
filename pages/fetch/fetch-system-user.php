@@ -7,13 +7,13 @@ if (isset($_POST['id'])) {
     $sys_user = $db->queryUniqueObject('SELECT * FROM tbl_system_user WHERE sys_id = :sys_id', ['sys_id' => $id]);
     if ($sys_user) {
         $sys_id = encrypt_data($sys_user->sys_id);
-        $fname  = $sys_user->fname;
-        $mname  = $sys_user->mname;
-        $lname  = $sys_user->lname;
-        $emp_no = $sys_user->emp_no;
-        $email  = $sys_user->email;
-        $role   = $sys_user->role;
-        $status = $sys_user->status;
+        $fname  = e($sys_user->fname);
+        $mname  = e($sys_user->mname);
+        $lname  = e($sys_user->lname);
+        $emp_no = e($sys_user->emp_no);
+        $email  = e($sys_user->email);
+        $role   = e($sys_user->role);
+        $status = e($sys_user->status);
     }
 }
 ?>

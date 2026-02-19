@@ -9,8 +9,8 @@ if (isset($_POST['id'])) {
     $about = $db->queryUniqueObject('SELECT * FROM tbl_about WHERE about_id = :about_id', ['about_id' => $id]);
     if ($about) {
         $about_id = encrypt_data($about->about_id);
-        $section  = $about->section;
-        $content  = $about->content;
+        $section  = e($about->section);
+        $content  = e($about->content);
     }
 }
 ?>

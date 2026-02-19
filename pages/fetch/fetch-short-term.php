@@ -7,13 +7,13 @@ if (isset($_POST['id'])) {
     $program = $db->queryUniqueObject('SELECT * FROM tbl_short_term WHERE st_id = :st_id', ['st_id' => $id]);
     if ($program) {
         $st_id          = encrypt_data($program->st_id);
-        $prog_title     = $program->prog_title;
-        $training_title = $program->training_title;
-        $description    = $program->description;
-        $venue          = $program->venue;
-        $objective       = json_decode($program->objective, true);
-        $outline       = json_decode($program->outline, true);
-        $status         = $program->status;
+        $prog_title     = e($program->prog_title);
+        $training_title = e($program->training_title);
+        $description    = e($program->description);
+        $venue          = e($program->venue);
+        $objective      = json_decode($program->objective, true);
+        $outline        = json_decode($program->outline, true);
+        $status         = e($program->status);
         $image          = $program->img;
         $image_data     = base64_encode($image);
         $image_type     = $program->img_type;
@@ -55,7 +55,7 @@ if (isset($_POST['id'])) {
         ?>
         <div class="row">
             <div class="col-lg-12">
-                <textarea class="form-control auto-grow-textarea objective" id="objective" name="objective[0]" rows="3" placeholder="Objective"><?= $objective[0] ?? '' ?></textarea>
+                <textarea class="form-control auto-grow-textarea objective" id="objective" name="objective[0]" rows="3" placeholder="Objective"></textarea>
             </div>
         </div>
 
@@ -65,7 +65,7 @@ if (isset($_POST['id'])) {
         ?>
         <div class="row">
             <div class="col-lg-11 mb-2">
-                <textarea class="form-control auto-grow-textarea objective" id="objective" name="objective[<?= $i ?>]" rows="3" placeholder="Objective"><?= $objective[$i] ?? '' ?></textarea>
+                <textarea class="form-control auto-grow-textarea objective" id="objective" name="objective[<?= $i ?>]" rows="3" placeholder="Objective"><?= e($objective[$i]) ?? '' ?></textarea>
             </div>
             <div class="col-lg-1 mb-2">
                 <button type="button" class="btn btn-danger w-100" onclick="removeOldItem(this, ObjectiveObj)"><i class="mdi mdi-close"></i></button>
@@ -99,7 +99,7 @@ if (isset($_POST['id'])) {
         ?>
         <div class="row">
             <div class="col-lg-11 mb-2">
-                <textarea class="form-control auto-grow-textarea outline" id="outline" name="outline[<?= $i ?>]" rows="3" placeholder="Outline"><?= $outline[$i] ?? '' ?></textarea>
+                <textarea class="form-control auto-grow-textarea outline" id="outline" name="outline[<?= $i ?>]" rows="3" placeholder="Outline"><?= e($outline[$i]) ?? '' ?></textarea>
             </div>
             <div class="col-lg-1 mb-2">
                 <button type="button" class="btn btn-danger w-100" onclick="removeOldItem(this, OutlineObj)"><i class="mdi mdi-close"></i></button>
