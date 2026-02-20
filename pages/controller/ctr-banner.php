@@ -25,14 +25,14 @@ if (isset($_POST['Save'])) {
             'status'        => $_POST['status'],
         );
 
-        if(isset($_SESSION['img_input'])){
-            if($_SESSION['img_input']['status'] == 'Success') {
-                $sqlArray['img'] = $_SESSION['img_input']['content'];
-                $sqlArray['img_type'] = $_SESSION['img_input']['type'];
+        if(isset($_SESSION['proms-admin']['img_input'])){
+            if($_SESSION['proms-admin']['img_input']['status'] == 'Success') {
+                $sqlArray['img'] = $_SESSION['proms-admin']['img_input']['content'];
+                $sqlArray['img_type'] = $_SESSION['proms-admin']['img_input']['type'];
             }else{
                 Alert::error([
                     'title' => 'Image Upload Error',
-                    'html'  => $_SESSION['img_input']['content'],
+                    'html'  => $_SESSION['proms-admin']['img_input']['content'],
                     'path'  => $redirect_path
                 ]);
             }
@@ -96,14 +96,14 @@ if (isset($_POST['Edit'])) {
             'status'        => $_POST['status'],
         );
 
-        if(isset($_SESSION['img_input'])){
-            if($_SESSION['img_input']['status'] == 'Success') {
-                $sqlArray['img'] = $_SESSION['img_input']['content'];
-                $sqlArray['img_type'] = $_SESSION['img_input']['type'];
+        if(isset($_SESSION['proms-admin']['img_input'])){
+            if($_SESSION['proms-admin']['img_input']['status'] == 'Success') {
+                $sqlArray['img'] = $_SESSION['proms-admin']['img_input']['content'];
+                $sqlArray['img_type'] = $_SESSION['proms-admin']['img_input']['type'];
             }else{
                 Alert::error([
                     'title' => 'Image Upload Error',
-                    'html'  => $_SESSION['img_input']['content'],
+                    'html'  => $_SESSION['proms-admin']['img_input']['content'],
                     'path'  => $redirect_path
                 ]);
             }

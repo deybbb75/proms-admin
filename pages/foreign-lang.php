@@ -5,11 +5,11 @@ $db = DB::getInstance();
 
 setActiveLink('program.php');
 
-$_SESSION['max_offering'] = 10;
-$_SESSION['max_level'] = 10;
-$_SESSION['max_duration'] = 10;
-$_SESSION['max_mode'] = 10;
-$_SESSION['max_note'] = 10;
+$_SESSION['proms-admin']['max_offering'] = 10;
+$_SESSION['proms-admin']['max_level'] = 10;
+$_SESSION['proms-admin']['max_duration'] = 10;
+$_SESSION['proms-admin']['max_mode'] = 10;
+$_SESSION['proms-admin']['max_note'] = 10;
 ?>
 
 <!-- Start Content-->
@@ -157,10 +157,10 @@ $_SESSION['max_note'] = 10;
                                 <td>
                                     <center>
                                         <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#primary-header-modal"
-                                            onclick="editItem({fetch_file: 'fetch/fetch-foreign-lang.php', item_id: '<?= encrypt_data($line->fl_id) ?>', custom_function: fetchCustom})">
+                                            onclick="editItem({fetch_file: 'fetch/fetch-foreign-lang.php', item_id: '<?= encrypt_data($line->sub_prog_id) ?>', custom_function: fetchCustom})">
                                             <i class="mdi mdi-square-edit-outline"></i>
                                         </button>
-                                        <button type="button" class="btn btn-danger ms-1" onclick="deleteItem('<?= encrypt_data($line->fl_id) ?>')">
+                                        <button type="button" class="btn btn-danger ms-1" onclick="deleteItem('<?= encrypt_data($line->sub_prog_id) ?>')">
                                             <i class="mdi mdi-delete"></i>
                                         </button>
                                     </center>
@@ -280,7 +280,7 @@ const offeringObj = {
     fieldMap: {
         "textarea.offering": "offering"
     },
-    maxItems: <?= $_SESSION['max_offering'] ?>,
+    maxItems: <?= $_SESSION['proms-admin']['max_offering'] ?>,
     templateId: "offering-template",
     confirmTitle: "Are you sure you want to delete this offering?"
 };
@@ -289,7 +289,7 @@ const levelObj = {
     fieldMap: {
         "textarea.level": "level"
     },
-    maxItems: <?= $_SESSION['max_level'] ?>,
+    maxItems: <?= $_SESSION['proms-admin']['max_level'] ?>,
     templateId: "level-template",
     confirmTitle: "Are you sure you want to delete this level?"
 };
@@ -298,7 +298,7 @@ const durationObj = {
     fieldMap: {
         "textarea.duration": "duration"
     },
-    maxItems: <?= $_SESSION['max_duration'] ?>,
+    maxItems: <?= $_SESSION['proms-admin']['max_duration'] ?>,
     templateId: "duration-template",
     confirmTitle: "Are you sure you want to delete this duration?"
 };
@@ -307,7 +307,7 @@ const modeObj = {
     fieldMap: {
         "textarea.mode": "mode"
     },
-    maxItems: <?= $_SESSION['max_mode'] ?>,
+    maxItems: <?= $_SESSION['proms-admin']['max_mode'] ?>,
     templateId: "mode-template",
     confirmTitle: "Are you sure you want to delete this mode?"
 };
@@ -316,7 +316,7 @@ const noteObj = {
     fieldMap: {
         "textarea.note": "note"
     },
-    maxItems: <?= $_SESSION['max_note'] ?>,
+    maxItems: <?= $_SESSION['proms-admin']['max_note'] ?>,
     templateId: "note-template",
     confirmTitle: "Are you sure you want to delete this note?"
 };

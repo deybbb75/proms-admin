@@ -3,7 +3,7 @@ include '../includes/init.php';
 include '../header.php';
 $db = DB::getInstance();
 
-$_SESSION['max_schedule'] = 3;
+$_SESSION['proms-admin']['max_schedule'] = 3;
 ?>
 <!-- Start Content-->
 <div class="container-fluid">

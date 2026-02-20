@@ -1,3 +1,3 @@
 <?php
-    unset($_SESSION['img_input']);
+    unset($_SESSION['proms-admin']['img_input']);
 ?>

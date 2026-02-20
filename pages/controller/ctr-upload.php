@@ -20,14 +20,14 @@ if (isset($_FILES['img_input'])) {
 
         $fileContent = file_get_contents($fileTmpPath);
 
-        $_SESSION['img_input']['content'] = $fileContent;
-        $_SESSION['img_input']['status'] = $result;
-        $_SESSION['img_input']['type'] = $fileType;
+        $_SESSION['proms-admin']['img_input']['content'] = $fileContent;
+        $_SESSION['proms-admin']['img_input']['status'] = $result;
+        $_SESSION['proms-admin']['img_input']['type'] = $fileType;
         
         $remarks_array['attachment_file'] = $fileContent;
     }else{
-        $_SESSION['img_input']['content'] = $result;
-        $_SESSION['img_input']['status'] = "Failed";
+        $_SESSION['proms-admin']['img_input']['content'] = $result;
+        $_SESSION['proms-admin']['img_input']['status'] = "Failed";
     }
 
     echo $fileContent;
@@ -43,14 +43,14 @@ if (isset($_FILES['img_input'])) {
 
         $fileContent = file_get_contents($fileTmpPath);
 
-        $_SESSION['cert_input']['content'] = $fileContent;
-        $_SESSION['cert_input']['status'] = $result;
-        $_SESSION['cert_input']['type'] = $fileType;
+        $_SESSION['proms-admin']['cert_input']['content'] = $fileContent;
+        $_SESSION['proms-admin']['cert_input']['status'] = $result;
+        $_SESSION['proms-admin']['cert_input']['type'] = $fileType;
         
         $remarks_array['attachment_file'] = $fileContent;
     }else{
-        $_SESSION['cert_input']['content'] = $result;
-        $_SESSION['cert_input']['status'] = "Failed";
+        $_SESSION['proms-admin']['cert_input']['content'] = $result;
+        $_SESSION['proms-admin']['cert_input']['status'] = "Failed";
     }
 
     echo $fileContent;

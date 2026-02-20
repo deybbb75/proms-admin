@@ -8,7 +8,7 @@ if (isset($_POST['Save'])) {
     try {
         // Check if the required fields are set
         $requiredFields = [
-            'prog_title'        => 'Program Title',
+            'title'        => 'Program Title',
             'description'       => 'Description',
             'course_title'      => 'Course Title',
             'duration'          => 'Duration',
@@ -28,8 +28,8 @@ if (isset($_POST['Save'])) {
         }
 
         // Check for duplicate title
-        $message = $db->hasDuplicate('SELECT prog_title, course_title FROM tbl_micro_course WHERE prog_title = :prog_title AND course_title = :course_title', [
-            'prog_title' => $_POST['prog_title'],
+        $message = $db->hasDuplicate('SELECT title, course_title FROM tbl_micro_course WHERE title = :title AND course_title = :course_title', [
+            'title' => $_POST['title'],
             'course_title' => $_POST['course_title']
         ]);
         if ($message) {
@@ -42,7 +42,7 @@ if (isset($_POST['Save'])) {
 
         // Prepare the SQL array for insertion
         $sqlArray = array(
-            'prog_title'        => $_POST['prog_title'],
+            'title'             => $_POST['title'],
             'description'       => $_POST['description'],
             'course_title'      => $_POST['course_title'],
             'course_1'          => $_POST['course_1'] ?? null,
@@ -57,14 +57,14 @@ if (isset($_POST['Save'])) {
             'status'            => $_POST['status'],
         );
 
-        if(isset($_SESSION['img_input'])){
-            if($_SESSION['img_input']['status'] == 'Success') {
-                $sqlArray['img'] = $_SESSION['img_input']['content'];
-                $sqlArray['img_type'] = $_SESSION['img_input']['type'];
+        if(isset($_SESSION['proms-admin']['img_input'])){
+            if($_SESSION['proms-admin']['img_input']['status'] == 'Success') {
+                $sqlArray['img'] = $_SESSION['proms-admin']['img_input']['content'];
+                $sqlArray['img_type'] = $_SESSION['proms-admin']['img_input']['type'];
             }else{
                 Alert::error([
                     'title' => 'Image Upload Error',
-                    'html'  => $_SESSION['img_input']['content'],
+                    'html'  => $_SESSION['proms-admin']['img_input']['content'],
                     'path'  => $redirect_path
                 ]);
             }
@@ -108,7 +108,7 @@ if (isset($_POST['Edit'])) {
     try {
         // Check if the required fields are set
         $requiredFields = [
-            'prog_title'        => 'Program Title',
+            'title'             => 'Program Title',
             'description'       => 'Description',
             'course_title'      => 'Course Title',
             'duration'          => 'Duration',
@@ -128,12 +128,12 @@ if (isset($_POST['Edit'])) {
         }
 
        // Decrypt the id
-        $mc_id  = decrypt_data($_POST['mc_id']);
+        $sub_prog_id  = decrypt_data($_POST['sub_prog_id']);
         // Check for duplicate sub_prog_name
-        $message = $db->hasDuplicate('SELECT prog_title, course_title FROM tbl_micro_course WHERE prog_title = :prog_title AND course_title = :course_title AND mc_id != :mc_id', [
-            'prog_title' => $_POST['prog_title'],
+        $message = $db->hasDuplicate('SELECT title, course_title FROM tbl_micro_course WHERE title = :title AND course_title = :course_title AND sub_prog_id != :sub_prog_id', [
+            'title' => $_POST['title'],
             'course_title' => $_POST['course_title'],
-            'mc_id' => $mc_id
+            'sub_prog_id' => $sub_prog_id
         ]);
         if ($message) {
             Alert::error(array(
@@ -145,7 +145,7 @@ if (isset($_POST['Edit'])) {
 
         // Prepare the SQL array for insertion
         $sqlArray = array(
-            'prog_title'        => $_POST['prog_title'],
+            'title'             => $_POST['title'],
             'description'       => $_POST['description'],
             'course_title'      => $_POST['course_title'],
             'course_1'          => $_POST['course_1'] ?? null,
@@ -160,21 +160,21 @@ if (isset($_POST['Edit'])) {
             'status'            => $_POST['status'],
         );
 
-        if(isset($_SESSION['img_input'])){
-            if($_SESSION['img_input']['status'] == 'Success') {
-                $sqlArray['img'] = $_SESSION['img_input']['content'];
-                $sqlArray['img_type'] = $_SESSION['img_input']['type'];
+        if(isset($_SESSION['proms-admin']['img_input'])){
+            if($_SESSION['proms-admin']['img_input']['status'] == 'Success') {
+                $sqlArray['img'] = $_SESSION['proms-admin']['img_input']['content'];
+                $sqlArray['img_type'] = $_SESSION['proms-admin']['img_input']['type'];
             }else{
                 Alert::error([
                     'title' => 'Image Upload Error',
-                    'html'  => $_SESSION['img_input']['content'],
+                    'html'  => $_SESSION['proms-admin']['img_input']['content'],
                     'path'  => $redirect_path
                 ]);
             }
         }
 
         // Execute the insert operation
-        $db->executeUpdate($sqlArray, 'tbl_micro_course', 'mc_id = :mc_id', ['mc_id' => $mc_id]);
+        $db->executeUpdate($sqlArray, 'tbl_micro_course', 'sub_prog_id = :sub_prog_id', ['sub_prog_id' => $sub_prog_id]);
 
         if ($db->affectedRows > 0) {
             Alert::success(array(
@@ -209,7 +209,7 @@ if (isset($_POST['Edit'])) {
 if (isset($_POST['Delete'])) {
     try {
         $id = decrypt_data($_POST['Delete']);
-        $db->executeDelete('tbl_micro_course', 'mc_id = :mc_id', ['mc_id' => $id]);
+        $db->executeDelete('tbl_micro_course', 'sub_prog_id = :sub_prog_id', ['sub_prog_id' => $id]);
         
         if ($db->affectedRows > 0) {
             Alert::success(array(

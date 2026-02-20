@@ -5,7 +5,7 @@ $db = DB::getInstance();
 
 setActiveLink('program.php');
 
-$_SESSION['max_policy'] = 10;
+$_SESSION['proms-admin']['max_policy'] = 10;
 ?>
 
 <!-- Start Content-->
@@ -54,7 +54,7 @@ $_SESSION['max_policy'] = 10;
                             <tr>
                                 <td>
                                     <div class="w-100 text-wrap">
-                                        <?= e($line->prog_title) ?>
+                                        <?= e($line->title) ?>
                                     </div>
                                 </td>
                                 <td>
@@ -111,10 +111,10 @@ $_SESSION['max_policy'] = 10;
                                 <td>
                                     <center>
                                         <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#primary-header-modal"
-                                            onclick="editItem({fetch_file: 'fetch/fetch-micro-course.php', item_id: '<?= encrypt_data($line->mc_id) ?>', custom_function: fetchCustom})">
+                                            onclick="editItem({fetch_file: 'fetch/fetch-micro-course.php', item_id: '<?= encrypt_data($line->sub_prog_id) ?>', custom_function: fetchCustom})">
                                             <i class="mdi mdi-square-edit-outline"></i>
                                         </button>
-                                        <button type="button" class="btn btn-danger ms-1" onclick="deleteItem('<?= encrypt_data($line->mc_id) ?>')">
+                                        <button type="button" class="btn btn-danger ms-1" onclick="deleteItem('<?= encrypt_data($line->sub_prog_id) ?>')">
                                             <i class="mdi mdi-delete"></i>
                                         </button>
                                     </center>
@@ -190,7 +190,7 @@ const policyObj = {
     fieldMap: {
         "textarea.policy": "policy"
     },
-    maxItems: <?= $_SESSION['max_policy'] ?>,
+    maxItems: <?= $_SESSION['proms-admin']['max_policy'] ?>,
     templateId: "policy-template",
     confirmTitle: "Are you sure you want to delete this policy?"
 };

@@ -40,14 +40,14 @@ if (isset($_POST['Save'])) {
             'status'  => $_POST['status'],
         );
 
-        if(isset($_SESSION['img_input'])){
-            if($_SESSION['img_input']['status'] == 'Success') {
-                $sqlArray['prog_img'] = $_SESSION['img_input']['content'];
-                $sqlArray['prog_img_type'] = $_SESSION['img_input']['type'];
+        if(isset($_SESSION['proms-admin']['img_input'])){
+            if($_SESSION['proms-admin']['img_input']['status'] == 'Success') {
+                $sqlArray['prog_img'] = $_SESSION['proms-admin']['img_input']['content'];
+                $sqlArray['prog_img_type'] = $_SESSION['proms-admin']['img_input']['type'];
             }else{
                 Alert::error([
                     'title' => 'Image Upload Error',
-                    'html'  => $_SESSION['img_input']['content'],
+                    'html'  => $_SESSION['proms-admin']['img_input']['content'],
                     'path'  => $redirect_path
                 ]);
             }
@@ -128,14 +128,14 @@ if (isset($_POST['Edit'])) {
             'status'  => $_POST['status'],
         );
 
-        if(isset($_SESSION['img_input'])){
-            if($_SESSION['img_input']['status'] == 'Success') {
-                $sqlArray['img'] = $_SESSION['img_input']['content'];
-                $sqlArray['img_type'] = $_SESSION['img_input']['type'];
+        if(isset($_SESSION['proms-admin']['img_input'])){
+            if($_SESSION['proms-admin']['img_input']['status'] == 'Success') {
+                $sqlArray['img'] = $_SESSION['proms-admin']['img_input']['content'];
+                $sqlArray['img_type'] = $_SESSION['proms-admin']['img_input']['type'];
             }else{
                 Alert::error([
                     'title' => 'Image Upload Error',
-                    'html'  => $_SESSION['img_input']['content'],
+                    'html'  => $_SESSION['proms-admin']['img_input']['content'],
                     'path'  => $redirect_path
                 ]);
             }
@@ -177,18 +177,18 @@ if (isset($_POST['Edit'])) {
 
 if (isset($_POST['View'])) {
     try {
-        $_SESSION['prog_id'] = decrypt_data($_POST['View']);
-        if($_SESSION['prog_id'] == 1){
+        $_SESSION['proms-admin']['prog_id'] = decrypt_data($_POST['View']);
+        if($_SESSION['proms-admin']['prog_id'] == 1){
             safe_redirect("../assess-cert.php");
-        }else if($_SESSION['prog_id'] == 2){
+        }else if($_SESSION['proms-admin']['prog_id'] == 2){
             safe_redirect("../foreign-lang.php");
-        }else if($_SESSION['prog_id'] == 3){
+        }else if($_SESSION['proms-admin']['prog_id'] == 3){
             safe_redirect("../cert-prog.php");
-        }else if($_SESSION['prog_id'] == 4){
+        }else if($_SESSION['proms-admin']['prog_id'] == 4){
             safe_redirect("../short-term.php");
-        }else if($_SESSION['prog_id'] == 5){
+        }else if($_SESSION['proms-admin']['prog_id'] == 5){
             safe_redirect("../micro-course.php");
-        }else if($_SESSION['prog_id'] == 6){
+        }else if($_SESSION['proms-admin']['prog_id'] == 6){
             safe_redirect("../ms-prog.php");
         }
         

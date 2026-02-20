@@ -5,8 +5,8 @@ $db = DB::getInstance();
 
 setActiveLink('program.php');
 
-$_SESSION['max_schedule'] = 3;
-$_SESSION['max_requirement'] = 10;
+$_SESSION['proms-admin']['max_schedule'] = 3;
+$_SESSION['proms-admin']['max_requirement'] = 10;
 ?>
 <!-- Start Content-->
 <div class="container-fluid">
@@ -102,10 +102,10 @@ $_SESSION['max_requirement'] = 10;
                                 <td>
                                     <center>
                                         <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#primary-header-modal"
-                                            onclick="editItem({fetch_file: 'fetch/fetch-cert-prog.php', item_id: '<?= encrypt_data($line->cp_id) ?>', custom_function: fetchCustom})">
+                                            onclick="editItem({fetch_file: 'fetch/fetch-cert-prog.php', item_id: '<?= encrypt_data($line->sub_prog_id) ?>', custom_function: fetchCustom})">
                                             <i class="mdi mdi-square-edit-outline"></i>
                                         </button>
-                                        <button type="button" class="btn btn-danger ms-1" onclick="deleteItem('<?= encrypt_data($line->cp_id) ?>')">
+                                        <button type="button" class="btn btn-danger ms-1" onclick="deleteItem('<?= encrypt_data($line->sub_prog_id) ?>')">
                                             <i class="mdi mdi-delete"></i>
                                         </button>
                                     </center>
@@ -216,7 +216,7 @@ const schedObj = {
         "input.start-time": "schedule[0][start_time]",
         "input.end-time": "schedule[0][end_time]"
     },
-    maxItems: <?= $_SESSION['max_schedule'] ?>,
+    maxItems: <?= $_SESSION['proms-admin']['max_schedule'] ?>,
     templateId: "schedule-template",
     confirmTitle: "Are you sure you want to delete this schedule?"
 };
@@ -225,7 +225,7 @@ const reqObj = {
     fieldMap: {
         "textarea.requirement": "requirement"
     },
-    maxItems: <?= $_SESSION['max_requirement'] ?>,
+    maxItems: <?= $_SESSION['proms-admin']['max_requirement'] ?>,
     templateId: "requirement-template",
     confirmTitle: "Are you sure you want to delete this requirement?"
 };

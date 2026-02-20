@@ -12,9 +12,9 @@ if (isset($_POST['id'])) {
         $news_title     = e($news->news_title);
         $news_content   = e($news->news_content);
         $status         = e($news->status);
-        $image          = $news->news_img;
+        $image          = $news->img;
         $image_data     = base64_encode($image);
-        $image_type     = $news->news_img_type;
+        $image_type     = $news->img_type;
         $image_src      = "data:{$image_type};base64,{$image_data}";
     }
 }

@@ -5,8 +5,8 @@ $db = DB::getInstance();
 
 setActiveLink('program.php');
 
-$_SESSION['max_objective'] = 10;
-$_SESSION['max_outline'] = 10;
+$_SESSION['proms-admin']['max_objective'] = 10;
+$_SESSION['proms-admin']['max_outline'] = 10;
 ?>
 
 <!-- Start Content-->
@@ -72,7 +72,7 @@ $_SESSION['max_outline'] = 10;
                                 <td>
                                     <div class="w-100 text-wrap">
                                         <?php
-                                            $objective_query = $db->query("SELECT * FROM tbl_objective WHERE st_id = :st_id ORDER BY objective_order ASC", ["st_id" => $line->st_id]);
+                                            $objective_query = $db->query("SELECT * FROM tbl_objective WHERE sub_prog_id = :sub_prog_id ORDER BY objective_order ASC", ["sub_prog_id" => $line->sub_prog_id]);
 
                                             if($db->numRows($objective_query) == 0){
                                         ?>
@@ -97,7 +97,7 @@ $_SESSION['max_outline'] = 10;
                                 <td>
                                     <div class="w-100">
                                         <?php
-                                            $outline_query = $db->query("SELECT * FROM tbl_outline WHERE st_id = :st_id ORDER BY outline_order ASC", ["st_id" => $line->st_id]);
+                                            $outline_query = $db->query("SELECT * FROM tbl_outline WHERE sub_prog_id = :sub_prog_id ORDER BY outline_order ASC", ["sub_prog_id" => $line->sub_prog_id]);
 
                                             if($db->numRows($outline_query) == 0){
                                         ?>
@@ -125,10 +125,10 @@ $_SESSION['max_outline'] = 10;
                                 <td>
                                     <center>
                                         <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#primary-header-modal"
-                                            onclick="editItem({fetch_file: 'fetch/fetch-short-term.php', item_id: '<?= encrypt_data($line->st_id) ?>', custom_function: fetchCustom})">
+                                            onclick="editItem({fetch_file: 'fetch/fetch-short-term.php', item_id: '<?= encrypt_data($line->sub_prog_id) ?>', custom_function: fetchCustom})">
                                             <i class="mdi mdi-square-edit-outline"></i>
                                         </button>
-                                        <button type="button" class="btn btn-danger ms-1" onclick="deleteItem('<?= encrypt_data($line->st_id) ?>')">
+                                        <button type="button" class="btn btn-danger ms-1" onclick="deleteItem('<?= encrypt_data($line->sub_prog_id) ?>')">
                                             <i class="mdi mdi-delete"></i>
                                         </button>
                                     </center>
@@ -204,7 +204,7 @@ function addObjective(objCounter) {
 
     objCounter++;
 
-    if (objCounter <= <?= $_SESSION['max_objective'] ?>) {
+    if (objCounter <= <?= $_SESSION['proms-admin']['max_objective'] ?>) {
         // Update the button's onclick with new counter
         document.getElementById('add-objective-btn').setAttribute("onclick", `addObjective(${objCounter})`);
 
@@ -218,7 +218,7 @@ function addObjective(objCounter) {
         container.appendChild(clone);
         reInitUI($(container));
     }
-    if ((objCounter + 1) == <?= $_SESSION['max_objective'] ?>) {
+    if ((objCounter + 1) == <?= $_SESSION['proms-admin']['max_objective'] ?>) {
         document.getElementById('add-objective-btn-container').style.display = "none";
     }
     console.log(objCounter);
@@ -258,7 +258,7 @@ function addOutline(outCounter) {
 
     outCounter++;
 
-    if (outCounter <= <?= $_SESSION['max_outline'] ?>) {
+    if (outCounter <= <?= $_SESSION['proms-admin']['max_outline'] ?>) {
         // Update the button's onclick with new counter
         document.getElementById('add-outline-btn').setAttribute("onclick", `addOutline(${outCounter})`);
 
@@ -272,7 +272,7 @@ function addOutline(outCounter) {
         container.appendChild(clone);
         reInitUI($(container));
     }
-    if ((outCounter + 1) == <?= $_SESSION['max_outline'] ?>) {
+    if ((outCounter + 1) == <?= $_SESSION['proms-admin']['max_outline'] ?>) {
         document.getElementById('add-outline-btn-container').style.display = "none";
     }
     console.log(outCounter);

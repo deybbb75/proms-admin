@@ -4,10 +4,10 @@ $db = DB::getInstance();
 
 if (isset($_POST['id'])) {
     $id = decrypt_data($_POST['id']);
-    $program = $db->queryUniqueObject('SELECT * FROM tbl_short_term WHERE st_id = :st_id', ['st_id' => $id]);
+    $program = $db->queryUniqueObject('SELECT * FROM tbl_short_term WHERE sub_prog_id = :sub_prog_id', ['sub_prog_id' => $id]);
     if ($program) {
-        $st_id          = encrypt_data($program->st_id);
-        $prog_title     = e($program->prog_title);
+        $sub_prog_id          = encrypt_data($program->sub_prog_id);
+        $title          = e($program->title);
         $training_title = e($program->training_title);
         $description    = e($program->description);
         $venue          = e($program->venue);
@@ -21,12 +21,12 @@ if (isset($_POST['id'])) {
     }
 }
 ?>
-<input type="hidden" name="st_id" value="<?= $st_id ?? '' ?>">
+<input type="hidden" name="sub_prog_id" value="<?= $sub_prog_id ?? '' ?>">
 
 <div class="row">
     <div class="col-md-12">
-        <label for="prog_title" class="form-label required">Program Title</label>
-        <input type="text" id="prog_title" name="prog_title" class="form-control" placeholder="Program Title" value="<?= $prog_title ?? '' ?>">
+        <label for="title" class="form-label required">Program Title</label>
+        <input type="text" id="title" name="title" class="form-control" placeholder="Program Title" value="<?= $title ?? '' ?>">
     </div>
 </div>
 <div class="row">

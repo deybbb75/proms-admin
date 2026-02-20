@@ -4,9 +4,9 @@ $db = DB::getInstance();
 
 if (isset($_POST['id'])) {
     $id = decrypt_data($_POST['id']);
-    $program = $db->queryUniqueObject('SELECT * FROM tbl_ms_prog WHERE mp_id = :mp_id', ['mp_id' => $id]);
+    $program = $db->queryUniqueObject('SELECT * FROM tbl_ms_prog WHERE sub_prog_id = :sub_prog_id', ['sub_prog_id' => $id]);
     if ($program) {
-        $mp_id              = encrypt_data($program->mp_id);
+        $sub_prog_id              = encrypt_data($program->sub_prog_id);
         $title              = e($program->title);
         $description        = e($program->description);
         $cert_image         = $program->cert_img;
@@ -25,7 +25,7 @@ if (isset($_POST['id'])) {
     }
 }
 ?>
-<input type="hidden" name="mp_id" value="<?= $mp_id ?? '' ?>">
+<input type="hidden" name="sub_prog_id" value="<?= $sub_prog_id ?? '' ?>">
 
 <div class="row">
     <div class="col-md-12">

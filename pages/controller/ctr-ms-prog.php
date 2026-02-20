@@ -46,14 +46,14 @@ if (isset($_POST['Save'])) {
             'status'        => $_POST['status'],
         );
 
-        if(isset($_SESSION['img_input'])){
-            if($_SESSION['img_input']['status'] == 'Success') {
-                $sqlArray['img'] = $_SESSION['img_input']['content'];
-                $sqlArray['img_type'] = $_SESSION['img_input']['type'];
+        if(isset($_SESSION['proms-admin']['img_input'])){
+            if($_SESSION['proms-admin']['img_input']['status'] == 'Success') {
+                $sqlArray['img'] = $_SESSION['proms-admin']['img_input']['content'];
+                $sqlArray['img_type'] = $_SESSION['proms-admin']['img_input']['type'];
             }else{
                 Alert::error([
                     'title' => 'Image Upload Error',
-                    'html'  => $_SESSION['img_input']['content'],
+                    'html'  => $_SESSION['proms-admin']['img_input']['content'],
                     'path'  => $redirect_path
                 ]);
             }
@@ -65,14 +65,14 @@ if (isset($_POST['Save'])) {
             ]);
         }
 
-        if(isset($_SESSION['cert_input'])){
-            if($_SESSION['cert_input']['status'] == 'Success') {
-                $sqlArray['cert_img'] = $_SESSION['cert_input']['content'];
-                $sqlArray['cert_img_type'] = $_SESSION['cert_input']['type'];
+        if(isset($_SESSION['proms-admin']['cert_input'])){
+            if($_SESSION['proms-admin']['cert_input']['status'] == 'Success') {
+                $sqlArray['cert_img'] = $_SESSION['proms-admin']['cert_input']['content'];
+                $sqlArray['cert_img_type'] = $_SESSION['proms-admin']['cert_input']['type'];
             }else{
                 Alert::error([
                     'title' => 'Image Upload Error',
-                    'html'  => $_SESSION['cert_input']['content'],
+                    'html'  => $_SESSION['proms-admin']['cert_input']['content'],
                     'path'  => $redirect_path
                 ]);
             }
@@ -132,11 +132,11 @@ if (isset($_POST['Edit'])) {
         }
 
        // Decrypt the id
-        $mp_id  = decrypt_data($_POST['mp_id']);
+        $sub_prog_id  = decrypt_data($_POST['sub_prog_id']);
         // Check for duplicate sub_prog_name
-        $message = $db->hasDuplicate('SELECT title FROM tbl_ms_prog WHERE title = :title AND mp_id != :mp_id', [
+        $message = $db->hasDuplicate('SELECT title FROM tbl_ms_prog WHERE title = :title AND sub_prog_id != :sub_prog_id', [
             'title' => $_POST['title'],
-            'mp_id' => $mp_id
+            'sub_prog_id' => $sub_prog_id
         ]);
         if ($message) {
             Alert::error(array(
@@ -157,34 +157,34 @@ if (isset($_POST['Edit'])) {
             'status'        => $_POST['status'],
         );
 
-        if(isset($_SESSION['img_input'])){
-            if($_SESSION['img_input']['status'] == 'Success') {
-                $sqlArray['img'] = $_SESSION['img_input']['content'];
-                $sqlArray['img_type'] = $_SESSION['img_input']['type'];
+        if(isset($_SESSION['proms-admin']['img_input'])){
+            if($_SESSION['proms-admin']['img_input']['status'] == 'Success') {
+                $sqlArray['img'] = $_SESSION['proms-admin']['img_input']['content'];
+                $sqlArray['img_type'] = $_SESSION['proms-admin']['img_input']['type'];
             }else{
                 Alert::error([
                     'title' => 'Image Upload Error',
-                    'html'  => $_SESSION['img_input']['content'],
+                    'html'  => $_SESSION['proms-admin']['img_input']['content'],
                     'path'  => $redirect_path
                 ]);
             }
         }
 
-        if(isset($_SESSION['cert_input'])){
-            if($_SESSION['cert_input']['status'] == 'Success') {
-                $sqlArray['cert_img'] = $_SESSION['cert_input']['content'];
-                $sqlArray['cert_img_type'] = $_SESSION['cert_input']['type'];
+        if(isset($_SESSION['proms-admin']['cert_input'])){
+            if($_SESSION['proms-admin']['cert_input']['status'] == 'Success') {
+                $sqlArray['cert_img'] = $_SESSION['proms-admin']['cert_input']['content'];
+                $sqlArray['cert_img_type'] = $_SESSION['proms-admin']['cert_input']['type'];
             }else{
                 Alert::error([
                     'title' => 'Image Upload Error',
-                    'html'  => $_SESSION['cert_input']['content'],
+                    'html'  => $_SESSION['proms-admin']['cert_input']['content'],
                     'path'  => $redirect_path
                 ]);
             }
         }
 
         // Execute the insert operation
-        $db->executeUpdate($sqlArray, 'tbl_ms_prog', 'mp_id = :mp_id', ['mp_id' => $mp_id]);
+        $db->executeUpdate($sqlArray, 'tbl_ms_prog', 'sub_prog_id = :sub_prog_id', ['sub_prog_id' => $sub_prog_id]);
         
         if ($db->affectedRows > 0) {
             Alert::success(array(
@@ -219,7 +219,7 @@ if (isset($_POST['Edit'])) {
 if (isset($_POST['Delete'])) {
     try {
         $id = decrypt_data($_POST['Delete']);
-        $db->executeDelete('tbl_ms_prog', 'mp_id = :mp_id', ['mp_id' => $id]);
+        $db->executeDelete('tbl_ms_prog', 'sub_prog_id = :sub_prog_id', ['sub_prog_id' => $id]);
         
         if ($db->affectedRows > 0) {
             Alert::success(array(

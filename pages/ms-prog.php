@@ -5,10 +5,10 @@ $db = DB::getInstance();
 
 setActiveLink('program.php');
 
-$_SESSION['max_cert'] = 5;
-$_SESSION['max_ctg'] = 5;
-$_SESSION['max_associate_cert'] = 10;
-$_SESSION['max_expert_cert'] = 10;
+$_SESSION['proms-admin']['max_cert'] = 5;
+$_SESSION['proms-admin']['max_ctg'] = 5;
+$_SESSION['proms-admin']['max_associate_cert'] = 10;
+$_SESSION['proms-admin']['max_expert_cert'] = 10;
 ?>
 <!-- Start Content-->
 <div class="container-fluid">
@@ -58,10 +58,10 @@ $_SESSION['max_expert_cert'] = 10;
                                 <td>
                                     <center>
                                         <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#primary-header-modal"
-                                            onclick="editItem({fetch_file: 'fetch/fetch-ms-prog.php', item_id: '<?= encrypt_data($line->mp_id) ?>', custom_function: fetchCustom})">
+                                            onclick="editItem({fetch_file: 'fetch/fetch-ms-prog.php', item_id: '<?= encrypt_data($line->sub_prog_id) ?>', custom_function: fetchCustom})">
                                             <i class="mdi mdi-square-edit-outline"></i>
                                         </button>
-                                        <button type="button" class="btn btn-danger ms-1" onclick="deleteItem('<?= encrypt_data($line->mp_id) ?>')">
+                                        <button type="button" class="btn btn-danger ms-1" onclick="deleteItem('<?= encrypt_data($line->sub_prog_id) ?>')">
                                             <i class="mdi mdi-delete"></i>
                                         </button>
                                     </center>
@@ -210,7 +210,7 @@ const certObj = {
         "textarea.title": "cert[0][ctg][0][title]",
         "textarea.desc": "cert[0][ctg][0][desc]"
     },
-    maxItems: <?= $_SESSION['max_cert'] ?>,
+    maxItems: <?= $_SESSION['proms-admin']['max_cert'] ?>,
     templateId: "cert-template",
     confirmTitle: "Are you sure you want to delete this certification?",
     itemSelector: '.main-item'
@@ -221,7 +221,7 @@ const ctgObj = {
         "textarea.title": "[ctg][0][title]",
         "textarea.desc": "[ctg][0][desc]"
     },
-    maxItems: <?= $_SESSION['max_ctg'] ?>,
+    maxItems: <?= $_SESSION['proms-admin']['max_ctg'] ?>,
     templateId: "ctg-template",
     confirmTitle: "Are you sure you want to delete this category?",
     itemSelector: '.sub-item'
@@ -231,7 +231,7 @@ const associateCertObj = {
     fieldMap: {
         "textarea.associate_cert": "associate_cert"
     },
-    maxItems: <?= $_SESSION['max_associate_cert'] ?>,
+    maxItems: <?= $_SESSION['proms-admin']['max_associate_cert'] ?>,
     templateId: "associate-cert-template",
     confirmTitle: "Are you sure you want to delete this associate certification?"
 };
@@ -240,7 +240,7 @@ const expertCertObj = {
     fieldMap: {
         "textarea.expert_cert": "expert_cert"
     },
-    maxItems: <?= $_SESSION['max_expert_cert'] ?>,
+    maxItems: <?= $_SESSION['proms-admin']['max_expert_cert'] ?>,
     templateId: "expert-cert-template",
     confirmTitle: "Are you sure you want to delete this expert certification?"
 };

@@ -4,9 +4,9 @@ $db = DB::getInstance();
 
 if (isset($_POST['id'])) {
     $id = decrypt_data($_POST['id']);
-    $program = $db->queryUniqueObject('SELECT * FROM tbl_foreign_lang WHERE fl_id = :fl_id', ['fl_id' => $id]);
+    $program = $db->queryUniqueObject('SELECT * FROM tbl_foreign_lang WHERE sub_prog_id = :sub_prog_id', ['sub_prog_id' => $id]);
     if ($program) {
-        $fl_id          = encrypt_data($program->fl_id);
+        $sub_prog_id          = encrypt_data($program->sub_prog_id);
         $title          = e($program->title);
         $offering       = json_decode($program->offering, true);
         $level          = json_decode($program->level, true);
@@ -21,7 +21,7 @@ if (isset($_POST['id'])) {
     }
 }
 ?>
-<input type="hidden" name="fl_id" value="<?= $fl_id ?? '' ?>">
+<input type="hidden" name="sub_prog_id" value="<?= $sub_prog_id ?? '' ?>">
 
 <div class="row">
     <div class="col-md-12">
