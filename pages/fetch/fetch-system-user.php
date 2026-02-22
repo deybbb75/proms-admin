@@ -47,7 +47,7 @@ if (isset($_POST['id'])) {
     <div class="col-sm-6">
         <label for="role" class="form-label required">Role</label>
         <select class="form-select select2" data-toggle="select2" name ="role" id="role" data-placeholder="Select Role">
-            <option value="<?= $role ?? '' ?>" <?php if(!$status) echo 'disabled'; ?> selected>
+            <option value="<?= $role ?? '' ?>" selected>
                 <?= !empty($role) ? $role : '' ?>
             </option>
             <?php
@@ -67,7 +67,7 @@ if (isset($_POST['id'])) {
     <div class="col-sm-6">
         <label for="status" class="form-label required">Status</label>
         <select class="form-control select2" data-toggle="select2" name ="status" data-placeholder="Select Status">
-            <option value="<?= $status ?? '' ?>" <?php if(empty($status)) echo 'disabled'; ?> selected>
+            <option value="<?= $status ?? '' ?>" selected>
                 <?= !empty($status) ? $status : '' ?>
             </option>
             <?php

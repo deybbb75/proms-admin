@@ -25,7 +25,7 @@ if (isset($_POST['Save'])) {
         $year = trim($_POST['start_year']) . ' - ' . trim($_POST['end_year']);
 
         // Check for duplicate academic year
-        $message = $db->hasDuplicate('SELECT year FROM tbl_academic_year WHERE year = :year AND semester = :semester', [
+        $message = $db->hasDuplicate('SELECT year, semester FROM tbl_academic_year WHERE year = :year AND semester = :semester', [
             'year' => $year,
             'semester' => $_POST['semester']
         ]); 

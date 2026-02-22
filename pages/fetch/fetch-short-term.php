@@ -119,7 +119,7 @@ if (isset($_POST['id'])) {
     <div class="col-sm-12">
         <label for="status" class="form-label required">Status</label>
         <select class="form-control select2" data-toggle="select2" name ="status" data-placeholder="Select Status">
-            <option value="<?= $status ?? '' ?>" <?php if(empty($status)) echo 'disabled'; ?> selected>
+            <option value="<?= $status ?? '' ?>" selected>
                 <?= !empty($status) ? $status : '' ?>
             </option>
             <?php

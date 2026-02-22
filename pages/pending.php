@@ -2,6 +2,8 @@
 include '../includes/init.php';
 include '../header.php';
 $db = DB::getInstance();
+
+$_SESSION['proms-admin']['active_ay_id'] = $db->queryUniqueValue("SELECT ay_id FROM tbl_academic_year WHERE status = 'Active'");
 ?>
 <!-- Start Content-->
 <div class="container-fluid">
@@ -25,10 +27,17 @@ $db = DB::getInstance();
                             <label for="status" class="form-label">Academic Year Filter:</label>
                             <form action="" id="acad_year" style="display: flex; gap: 10px;">
                                 <select class="form-control select2" data-toggle="select2" name ="status" data-placeholder="Select Academic Year">
-                                    <option value="<?= $status ?? '' ?>" <?php if(empty($status)) echo 'disabled'; ?> selected>
-                                        <?= !empty($status) ? $status : '' ?>
+                                <?php
+                                $ay_query = $db->query("SELECT * FROM tbl_academic_year");
+
+                                while ($line = $db->fetchNextObject($ay_query)) {
+                                ?>
+                                    <option value="<?= $line->ay_id ?>" <?php if($_SESSION['proms-admin']['active_ay_id'] == $line->ay_id) echo 'selected'; ?>>
+                                        <?= $line->year ?> ( <?= $line->semester ?> )
                                     </option>
-                                    
+                                <?php
+                                }
+                                ?>
                                 </select>
                                 <button class="btn btn-success" style="width: 200px;" onclick="addItem({fetch_file: 'fetch-system-user'})">
                                     <span class="add-btn-name">Apply Filter</span>

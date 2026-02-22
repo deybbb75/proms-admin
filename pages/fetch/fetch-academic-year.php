@@ -37,8 +37,8 @@ if (isset($_POST['id'])) {
 <div class="row">
     <div class="col-sm-6">
         <label for="semester" class="form-label required">Semester</label>
-        <select class="form-select select2" data-toggle="select2" name="semester" data-search="true" id="semester" data-placeholder="Select Semester">
-            <option value="<?= $semester ?? '' ?>" <?php if(!$status) echo 'disabled'; ?> selected>
+        <select class="form-select select2" data-toggle="select2" name="semester" id="semester" data-placeholder="Select Semester">
+            <option value="<?= $semester ?? '' ?>" selected>
                 <?= !empty($semester) ? $semester : '' ?>
             </option>
             <?php
@@ -52,13 +52,18 @@ if (isset($_POST['id'])) {
                 <option value="2nd Semester">2nd Semester</option>
             <?php
                 }
+                if($semester != "Summer / Term Break") {
+            ?>
+                <option value="Summer / Term Break">Summer / Term Break</option>
+            <?php
+                }
             ?>
         </select>
     </div>
     <div class="col-sm-6">
         <label for="status" class="form-label required">Status</label>
         <select class="form-control select2" data-toggle="select2" name ="status" data-placeholder="Select Status">
-            <option value="<?= $status ?? '' ?>" <?php if(empty($status)) echo 'disabled'; ?> selected>
+            <option value="<?= $status ?? '' ?>" selected>
                 <?= !empty($status) ? $status : '' ?>
             </option>
             <?php
