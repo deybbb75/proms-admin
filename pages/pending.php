@@ -3,7 +3,16 @@ include '../includes/init.php';
 include '../header.php';
 $db = DB::getInstance();
 
-$_SESSION['proms-admin']['active_ay_id'] = $db->queryUniqueValue("SELECT ay_id FROM tbl_academic_year WHERE status = 'Active'");
+if(!isset($_SESSION['proms-admin']['pending_ay_id'])){
+    $_SESSION['proms-admin']['pending_ay_id'] = $db->queryUniqueValue("SELECT ay_id FROM tbl_academic_year WHERE status = 'Active'");
+}
+
+if(isset($_POST['ay_id'])){
+    $_SESSION['proms-admin']['pending_ay_id'] = $_POST['ay_id'];
+    safe_redirect('pending.php');
+}
+
+console($_SESSION['proms-admin']['pending_ay_id']);
 ?>
 <!-- Start Content-->
 <div class="container-fluid">
@@ -24,15 +33,15 @@ $_SESSION['proms-admin']['active_ay_id'] = $db->queryUniqueValue("SELECT ay_id F
                 <div class="card-body">
                     <div class="row">
                         <div class="col-12" style="margin-bottom: 30px;">
-                            <label for="status" class="form-label">Academic Year Filter:</label>
-                            <form action="" id="acad_year" style="display: flex; gap: 10px;">
-                                <select class="form-control select2" data-toggle="select2" name ="status" data-placeholder="Select Academic Year">
+                            <label for="ay_id" class="form-label">Academic Year Filter:</label>
+                            <form action="" method="POST" id="acad_year" style="display: flex; gap: 10px;">
+                                <select class="form-control select2" data-toggle="select2" name="ay_id" data-placeholder="Select Academic Year">
                                 <?php
                                 $ay_query = $db->query("SELECT * FROM tbl_academic_year");
 
                                 while ($line = $db->fetchNextObject($ay_query)) {
                                 ?>
-                                    <option value="<?= $line->ay_id ?>" <?php if($_SESSION['proms-admin']['active_ay_id'] == $line->ay_id) echo 'selected'; ?>>
+                                    <option value="<?= $line->ay_id ?>" <?php if($_SESSION['proms-admin']['pending_ay_id'] == $line->ay_id) echo 'selected'; ?>>
                                         <?= $line->year ?> ( <?= $line->semester ?> )
                                     </option>
                                 <?php
@@ -59,7 +68,7 @@ $_SESSION['proms-admin']['active_ay_id'] = $db->queryUniqueValue("SELECT ay_id F
                         </thead>
                         <tbody>
                             <?php
-                                $system_users_query = $db->query("SELECT * FROM tbl_system_user");
+                                $system_users_query = $db->query("SELECT * FROM tbl_reservation WHERE ay-id = :ay_id AND status ='PENDING'", ['ay_id' => $_SESSION['proms-admin']['pending_ay_id']]);
 
                                 while ($line = $db->fetchNextObject($system_users_query)) {
                             ?>

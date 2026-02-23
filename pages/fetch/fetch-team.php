@@ -43,7 +43,7 @@ if (isset($_POST['id'])) {
 <div class="row">
     <div class="col-sm-12">
         <label for="status" class="form-label required">Status</label>
-        <select class="form-control select2" data-toggle="select2" name ="status" data-placeholder="Select Status">
+        <select class="form-control select2" data-toggle="select2" name="status" data-placeholder="Select Status">
             <option value="<?= $status ?? '' ?>" selected>
                 <?= !empty($status) ? $status : '' ?>
             </option>

@@ -155,7 +155,7 @@ $_SESSION['proms-admin']['max_requirement'] = 10;
 <template id="schedule-template">
     <div class="row">
         <div class="col-lg-4">
-            <select class="form-control select2 day" data-toggle="select2" name ="day" data-placeholder="Select Day">
+            <select class="form-control select2 day" data-toggle="select2" name="day" data-placeholder="Select Day">
                 <option value="" disabled selected></option>
                 <option value="Sunday">Sunday</option>
                 <option value="Monday">Monday</option>
