@@ -1,5 +1,12 @@
 <?php
 include 'head.php';
+$db = DB::getInstance();
+
+if(!isset($_SESSION['proms-admin']['pending_ay_id'])){
+    $_SESSION['proms-admin']['pending_ay_id'] = $db->queryUniqueValue("SELECT ay_id FROM tbl_academic_year WHERE status = 'Active'");
+}
+
+$pending_count = $db->countOf("tbl_reservation","ay_id = :ay_id AND status = 'Pending'", ['ay_id' => $_SESSION['proms-admin']['pending_ay_id']]);
 ?>
 <body class="loading" data-layout-color="light" data-leftbar-theme="dark" data-layout-mode="fluid" data-rightbar-onstart="true">
     
@@ -51,7 +58,7 @@ include 'head.php';
                     <li class="side-nav-item">
                         <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/pages/pending.php" class="side-nav-link">
                             <i class="mdi mdi-file-clock"></i>
-                            <span class="badge bg-success float-end">4</span>
+                            <span class="badge bg-success float-end"><?= $pending_count ?></span>
                             <span>Pending List</span>
                         </a>
                     </li>

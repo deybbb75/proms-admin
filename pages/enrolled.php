@@ -3,12 +3,16 @@ include '../includes/init.php';
 include '../header.php';
 $db = DB::getInstance();
 
+if(!isset($_SESSION['proms-admin']['enrolled_ay_id'])){
+    $_SESSION['proms-admin']['enrolled_ay_id'] = $db->queryUniqueValue("SELECT ay_id FROM tbl_academic_year WHERE status = 'Active'");
+}
+
 if(isset($_POST['ay_id'])){
-    $_SESSION['proms-admin']['pending_ay_id'] = $_POST['ay_id'];
+    $_SESSION['proms-admin']['enrolled_ay_id'] = $_POST['ay_id'];
     safe_redirect('pending.php');
 }
 
-console($_SESSION['proms-admin']['pending_ay_id']);
+console($_SESSION['proms-admin']['enrolled_ay_id']);
 ?>
 <!-- Start Content-->
 <div class="container-fluid">
@@ -17,7 +21,7 @@ console($_SESSION['proms-admin']['pending_ay_id']);
     <div class="row">
         <div class="col-12">
             <div class="page-title-box">
-                <h4 class="page-title">PENDING RESERVATIONS</h4>
+                <h4 class="page-title">ENROLLED RESERVATIONS</h4>
             </div>
         </div>
     </div>
@@ -37,7 +41,7 @@ console($_SESSION['proms-admin']['pending_ay_id']);
 
                                 while ($line = $db->fetchNextObject($ay_query)) {
                                 ?>
-                                    <option value="<?= $line->ay_id ?>" <?php if($_SESSION['proms-admin']['pending_ay_id'] == $line->ay_id) echo 'selected'; ?>>
+                                    <option value="<?= $line->ay_id ?>" <?php if($_SESSION['proms-admin']['enrolled_ay_id'] == $line->ay_id) echo 'selected'; ?>>
                                         <?= $line->year ?> ( <?= $line->semester ?> )
                                     </option>
                                 <?php
@@ -65,7 +69,7 @@ console($_SESSION['proms-admin']['pending_ay_id']);
                         </thead>
                         <tbody>
                             <?php
-                                $reservation_query = $db->query("SELECT * FROM tbl_reservation WHERE ay_id = :ay_id AND status ='Pending'", ['ay_id' => $_SESSION['proms-admin']['pending_ay_id']]);
+                                $reservation_query = $db->query("SELECT * FROM tbl_reservation WHERE ay_id = :ay_id AND status ='Enrolled'", ['ay_id' => $_SESSION['proms-admin']['enrolled_ay_id']]);
 
                                 while ($line = $db->fetchNextObject($reservation_query)) {
                                     $student_no = $db->queryUniqueValue("SELECT student_no FROM tbl_student WHERE student_id = :student_id", ["student_id" => $line->student_id]);
@@ -108,27 +112,8 @@ console($_SESSION['proms-admin']['pending_ay_id']);
                                 <td><?= e($line->date_scheduled) ?></td>
                                 <td><?= e($line->datetime_reserved) ?></td>
                                 <td style="white-space: unset;">
-                                    <?php
-                                    if(!$student_no){
-                                    ?>
-                                    <button type="button" class="btn btn-success w-100" style="padding-block: 3px;" data-bs-toggle="modal" data-bs-target="#primary-header-modal"
-                                        onclick="addStudentNumber({fetch_file: 'fetch/fetch-student.php', item_id: '<?= encrypt_data($line->reserve_id) ?>'})">
-                                        Enrolled
-                                    </button>
-                                    <?php
-                                    }else{
-                                    ?>
-                                    <button type="button" class="btn btn-success w-100 mt-1" style="padding-block: 3px;" onclick="enrollStudent('<?= encrypt_data($line->reserve_id) ?>')">
-                                        Enrolled
-                                    </button>
-                                    <?php
-                                    }
-                                    ?>
-                                    <button type="button" class="btn btn-warning w-100 mt-1" style="padding-block: 3px;" onclick="reserveStudent('<?= encrypt_data($line->reserve_id) ?>')">
-                                        Reserved
-                                    </button>
-                                    <button type="button" class="btn btn-danger w-100 mt-1" style="padding-block: 3px;" onclick="expireStudent('<?= encrypt_data($line->reserve_id) ?>')">
-                                        Expired
+                                    <button type="button" class="btn btn-danger w-100 mt-1" style="padding-block: 3px;" onclick="revertStudent('<?= encrypt_data($line->reserve_id) ?>')">
+                                        Revert
                                     </button>
                                 </td>
                             </tr>
@@ -176,40 +161,8 @@ include '../footer.php';
 let container = document.getElementById('acad_year');
 reInitUI($(container));
 
-function addStudentNumber({
-    fetch_file: fetch_file,
-    item_id: item_id,
-}) {
-	// Reset the form and set the button to "Save"
-	$(".fetched-data").html("");
-	$("#save_changes").attr("name", "Add");
-	$.ajax({
-		type: "post",
-		data: {
-			id: item_id,
-		},
-		url: fetch_file,
-		success: function (data) {
-			let $fetch = $(".fetched-data").html(data);
-			reInitUI($fetch);
-		},
-	});
-}
-
-function enrollStudent(item_id) {
-    $("#action").attr("name", "Enroll");
-    $("#action").val(item_id);
-    $("#form_validation").submit();
-}
-
-function reserveStudent(item_id) {
-    $("#action").attr("name", "Reserve");
-    $("#action").val(item_id);
-    $("#form_validation").submit();
-}
-
-function expireStudent(item_id) {
-    $("#action").attr("name", "Expire");
+function revertStudent(item_id) {
+    $("#action").attr("name", "Revert");
     $("#action").val(item_id);
     $("#form_validation").submit();
 }
