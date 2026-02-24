@@ -59,7 +59,7 @@ $db = DB::getInstance();
                                 <td><?= e($line->email) ?></td>
                                 <td><?= e($line->mobile_no) ?></td>
                                 <td><?= e($line->birthday) ?></td>
-                                <td><?= e('https://www.facebook.com/jerico.jdc') ?></td>
+                                <td><?= e($line->fb_link) ?></td>
                                 <td>
                                     <span class="status-<?= strtolower($line->status) ?>"><?= e($line->status) ?></span>
                                 </td>
@@ -90,9 +90,9 @@ $db = DB::getInstance();
 <div id="primary-header-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="primary-header-modalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <form action="controller/ctr-system-user.php" method="POST" id="form_validation">
+            <form action="controller/ctr-student.php" method="POST" id="form_validation">
                 <div class="modal-header modal-colored-header bg-primary">
-                    <h4 class="modal-title" id="primary-header-modalLabel">System User Details</h4>
+                    <h4 class="modal-title" id="primary-header-modalLabel">Student Details</h4>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">

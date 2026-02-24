@@ -54,8 +54,8 @@ console($_SESSION['proms-admin']['pending_ay_id']);
                     <table id="basic-datatable" class="table table-striped dt-responsive nowrap w-100">
                         <thead>
                             <tr>
-                                <th>Student Number</th>
                                 <th>Student Name</th>
+                                <th>Student Number</th>
                                 <th>Program</th>
                                 <th>Sub-program</th>
                                 <th>Scheduled Date</th>
@@ -89,6 +89,7 @@ console($_SESSION['proms-admin']['pending_ay_id']);
                                     $sub_program = $db->queryUniqueValue("SELECT title FROM " . $table_name . " WHERE sub_prog_id = :sub_prog_id", ["sub_prog_id" => $line->sub_prog_id]);      
                             ?>
                             <tr>
+                                <td class="text-wrap"><?= e($student_name) ?></td>
                                 <td>
                                     <div class="w-100 text-wrap">
                                         <?php 
@@ -96,13 +97,12 @@ console($_SESSION['proms-admin']['pending_ay_id']);
                                             echo e($student_no);
                                         }else{
                                         ?>
-                                        <p style="color: red; font-style: italic;">No student number assigned yet</p>
+                                        <p style="color: red; font-style: italic;">Not Yet Assigned</p>
                                         <?php
                                         } 
                                         ?>
                                     </div>
                                 </td>
-                                <td class="text-wrap"><?= e($student_name) ?></td>
                                 <td class="text-wrap"><?= e($program) ?></td>
                                 <td class="text-wrap"><?= e($sub_program) ?></td>
                                 <td><?= e($line->date_scheduled) ?></td>
@@ -112,7 +112,7 @@ console($_SESSION['proms-admin']['pending_ay_id']);
                                     if(!$student_no){
                                     ?>
                                     <button type="button" class="btn btn-success w-100" style="padding-block: 3px;" data-bs-toggle="modal" data-bs-target="#primary-header-modal"
-                                        onclick="addStudentNumber({fetch_file: 'fetch/fetch-student.php', item_id: '<?= encrypt_data($line->reserve_id) ?>'})">
+                                        onclick="addStudentNumber({fetch_file: 'fetch/fetch-student-no.php', item_id: '<?= encrypt_data($line->reserve_id) ?>'})">
                                         Enrolled
                                     </button>
                                     <?php

@@ -38,6 +38,10 @@ function validateForm() {
             rules: { required: true, noWhitespace: true, minlength: 8, maxlength: 8, digits: true }
         },
         {
+            fields: ["student_number"],
+            rules: { minlength: 8, maxlength: 8, digits: true }
+        },
+        {
             fields: [
                 "fname",
                 "lname",
@@ -86,6 +90,7 @@ function validateForm() {
                 ...indexedFields("associate_cert", [{ count: 10 }]),
                 ...indexedFields("expert_cert", [{ count: 10 }]),
                 "yt_link",
+                "fb_link"
             ],
             rules: { required: true, noWhitespace: true }
         },
@@ -104,6 +109,10 @@ function validateForm() {
         {
             fields: ["credit_unit"],
             rules: { digits: true }
+        },
+        {
+            fields: ["mobile_no"],
+            rules: { required: true, noWhitespace: true, mobileNumber: true }
         },
         {
             fields: [
@@ -325,6 +334,10 @@ function validateForm() {
     $.validator.addMethod("positiveWholeNumber", function (value, element) {
         return this.optional(element) || /^[1-9]\d*$/.test(value);
     }, "Please enter a valid order (positive whole number only).");
+
+    $.validator.addMethod("mobileNumber", function (value, element) {
+        return this.optional(element) || /^\d{11}$/.test(value);
+    }, "Please enter a valid 11-digit mobile number.");
 }
 
 $(function () {
