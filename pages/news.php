@@ -14,7 +14,7 @@ $_SESSION['proms-admin']['max_schedule'] = 3;
             <div class="page-title-box">
                 <div class="page-title-right">
                     <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#primary-header-modal"
-                        onclick="addItem({fetch_file: 'fetch/fetch-news.php', custom_function: fetchCustom})">
+                        onclick="addItem({fetch_file: 'fetch/fetch-news.php', custom_function: () => fetchCustom()})">
                         <i class="mdi mdi-plus"></i>
                         <span class="add-btn-name">Add News/Event</span>
                     </button>
@@ -45,15 +45,28 @@ $_SESSION['proms-admin']['max_schedule'] = 3;
                                 while ($line = $db->fetchNextObject($news_query)) {
                             ?>
                             <tr>
-                                <td><?= e($line->news_title) ?></td>
-                                <td style="white-space: pre-line;"><?= e(truncateText($line->news_content)) ?></td>
+                                <td>
+                                    <div class="w-100 text-wrap">
+                                        <?= e($line->news_title) ?>
+                                    <div>
+                                </td>
+                                <td style="white-space: pre-line;"><?= e(truncateText($line->news_content, 200)) ?></td>
                                 <td>
                                     <span class="status-<?= strtolower($line->status) ?>"><?= e($line->status) ?></span>
                                 </td>
                                 <td>
                                     <center>
+                                        <?php
+                                            $image_data     = base64_encode($line->img);
+                                            $image_src      = "data:{$line->img_type};base64,{$image_data}";
+                                        ?>
                                         <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#primary-header-modal"
-                                            onclick="editItem({fetch_file: 'fetch/fetch-news.php', item_id: '<?= encrypt_data($line->news_id) ?>', custom_function: fetchCustom})"><i class="mdi mdi-square-edit-outline"></i>
+                                            onclick="editItem({
+                                                fetch_file: 'fetch/fetch-news.php', 
+                                                item_id: '<?= encrypt_data($line->news_id) ?>', 
+                                                custom_function: () => fetchCustom('<?= $image_src ?>')
+                                            })">
+                                            <i class="mdi mdi-square-edit-outline"></i>
                                         </button>
                                         <button type="button" class="btn btn-danger ms-1" onclick="deleteItem('<?= encrypt_data($line->news_id) ?>')">
                                             <i class="mdi mdi-delete"></i>
@@ -98,25 +111,12 @@ $_SESSION['proms-admin']['max_schedule'] = 3;
 </div><!-- /.modal -->
 
 <script>
-function updateImage(action){
-    const image_input_section = document.getElementById('image-upload');
-    const preview = document.getElementById('image-preview');
-
-    if(action === 'update'){
-        image_input_section.style.display = 'block';
-        preview.style.display = 'none';
-    }else{
-        image_input_section.style.display = 'none';
-        preview.style.display = 'block';
-    }
-}
-
-function fetchCustom(){
+function fetchCustom(img_src){
     initFilePond(
         'img_input',
         ['image/jpeg'],
-        'Only JPG files are allowed',
-        ['#save_changes']
+        ['#save_changes'],
+        img_src
     );
 }
 </script>

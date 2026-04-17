@@ -306,19 +306,6 @@ function removeOutline(element) {
     });
 }
 
-function updateImage(action){
-    const image_input_section = document.getElementById('image-upload');
-    const preview = document.getElementById('image-preview');
-
-    if(action === 'update'){
-        image_input_section.style.display = 'block';
-        preview.style.display = 'none';
-    }else{
-        image_input_section.style.display = 'none';
-        preview.style.display = 'block';
-    }
-}
-
 function fetchCustom(){
     initFilePond(
         'img_input',

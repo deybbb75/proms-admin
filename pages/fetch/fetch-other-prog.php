@@ -1,0 +1,162 @@
+<?php
+include '../../includes/init.php';
+$db = DB::getInstance();
+
+if (isset($_POST['id'])) {
+    $id = decrypt_data($_POST['id']);
+    $program = $db->queryUniqueObject('SELECT * FROM tbl_other_prog WHERE sub_prog_id = :sub_prog_id', ['sub_prog_id' => $id]);
+    if ($program) {
+        $sub_prog_id        = encrypt_data($program->sub_prog_id);
+        $prog_id            = encrypt_data($program->prog_id);
+        $title              = e($program->title);
+        $description        = e($program->description);
+        $course_title       = e($program->course_title);
+        $course_1           = e($program->course_1);
+        $course_2           = e($program->course_2);
+        $course_3           = e($program->course_3);
+        $duration           = e($program->duration);
+        $credit_unit        = e($program->credit_unit);
+        $developer          = e($program->developer);
+        $developer_email    = e($program->developer_email);
+        $objective          = e($program->objective);
+        $policy             = json_decode($program->policy, true);
+        $status             = e($program->status);
+        $image              = $program->img;
+        $image_data         = base64_encode($image);
+        $image_type         = $program->img_type;
+        $image_src          = "data:{$image_type};base64,{$image_data}";
+    }
+}
+?>
+<input type="hidden" name="sub_prog_id" value="<?= $sub_prog_id ?? '' ?>">
+<input type="hidden" name="prog_id" value="<?= $prog_id ?? encrypt_data($_SESSION['proms-admin']['prog_id']) ?>">
+
+<div class="row">
+    <div class="col-md-12">
+        <label for="title" class="form-label required">Program Title</label>
+        <input type="text" id="title" name="title" class="form-control" placeholder="Program Title" value="<?= $title ?? '' ?>">
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <label for="description" class="form-label required">Description</label>
+        <textarea class="form-control auto-grow-textarea" id="description" name="description" rows="5" placeholder="Description"><?= $description ?? '' ?></textarea>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <label for="title" class="form-label required">Course Title</label>
+        <input type="text" id="course_title" name="course_title" class="form-control" placeholder="Course Title" value="<?= $course_title ?? '' ?>">
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <label for="title" class="form-label">Course 1</label>
+        <input type="text" id="course_1" name="course_1" class="form-control" placeholder="Course 1 Title" value="<?= $course_1 ?? '' ?>">
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <label for="title" class="form-label">Course 2</label>
+        <input type="text" id="course_2" name="course_2" class="form-control" placeholder="Course 2 Title" value="<?= $course_2 ?? '' ?>">
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <label for="title" class="form-label">Course 3</label>
+        <input type="text" id="course_3" name="course_3" class="form-control" placeholder="Course 3 Title" value="<?= $course_3 ?? '' ?>">
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <label for="duration" class="form-label required">Duration</label>
+        <input type="text" id="duration" name="duration" class="form-control" placeholder="Duration" value="<?= $duration ?? '' ?>">
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <label for="credit_unit" class="form-label">Credit Unit</label>
+        <input type="number" id="credit_unit" name="credit_unit" class="form-control" placeholder="Credit Unit" value="<?= $credit_unit ?? '' ?>">
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <label for="developer" class="form-label required">Developer</label>
+        <input type="text" id="developer" name="developer" class="form-control" placeholder="Developer Name" value="<?= $developer ?? '' ?>">
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <label for="developer_email" class="form-label required">Developer Email</label>
+        <input type="email" id="developer_email" name="developer_email" class="form-control" placeholder="Developer Email" value="<?= $developer_email ?? '' ?>">
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <label for="objective" class="form-label required">Objective</label>
+        <textarea class="form-control auto-grow-textarea" id="objective" name="objective" rows="5" placeholder="Objective"><?= $objective ?? '' ?></textarea>
+    </div>
+</div>
+<div class="row">
+    <label class="form-label required" style="font-weight: 600;">Policies</label>
+    <div class="col-sm-12" style="padding-bottom: 0px;">
+        <?php
+            if(!isset($policy)){
+        ?>
+        <div class="row">
+            <div class="col-lg-12">
+                <textarea class="form-control auto-grow-textarea policy" id="policy" name="policy[0]" rows="3" placeholder="Policy"></textarea>
+            </div>
+        </div>
+
+        <?php
+            }else{
+                for ($i = 0; $i < count($policy); $i++) {
+        ?>
+        <div class="row">
+            <div class="col-lg-11 mb-2">
+                <textarea class="form-control auto-grow-textarea policy" id="policy" name="policy[<?= $i ?>]" rows="3" placeholder="Policy"><?= e($policy[$i]) ?? '' ?></textarea>
+            </div>
+            <div class="col-lg-1 mb-2">
+                <button type="button" class="btn btn-danger w-100" onclick="removeOldItem(this, policyObj)"><i class="mdi mdi-close"></i></button>
+            </div>
+        </div>
+        <?php
+                }
+            }
+        ?>
+    </div>
+    
+    <div class="col-sm-12">
+        <button type="button" class="btn btn-sm btn-info w-100" onclick="addNewItem(this, policyObj)"><i class="mdi mdi-plus"></i> Add Policy</button>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-12">
+        <label for="status" class="form-label required">Status</label>
+        <select class="form-control select2" data-toggle="select2" name="status" data-placeholder="Select Status">
+            <option value="<?= $status ?? '' ?>" selected>
+                <?= !empty($status) ? $status : '' ?>
+            </option>
+            <?php
+                if($status != "Active") {
+            ?>
+                <option value="Active">Active</option>
+            <?php
+                }
+                if($status != "Inactive") {
+            ?>
+                <option value="Inactive">Inactive</option>
+            <?php
+                }
+            ?>
+        </select>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <label for="img" class="form-label required">Image</label>
+        <input type="file" id="img_input" class="filepond" name="img_input" data-max-file-size="10MB"/>
+        <span class="font-10 text-muted"><b>Note: </b>Please upload an image in <b>JPG</b> format. The file size must not exceed <b>10 MB</b>.</span>
+    </div>
+</div>

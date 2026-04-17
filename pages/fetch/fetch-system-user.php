@@ -12,8 +12,11 @@ if (isset($_POST['id'])) {
         $lname  = e($sys_user->lname);
         $emp_no = e($sys_user->emp_no);
         $email  = e($sys_user->email);
-        $role   = e($sys_user->role);
         $status = e($sys_user->status);
+        $image          = $sys_user->img;
+        $image_data     = base64_encode($image);
+        $image_type     = $sys_user->img_type;
+        $image_src      = "data:{$image_type};base64,{$image_data}";
     }
 }
 ?>
@@ -43,28 +46,20 @@ if (isset($_POST['id'])) {
         <input type="email" id="email" name="email" class="form-control" placeholder="Email" value="<?= $email ?? '' ?>">
     </div>
 </div>
+<?php
+if (!isset($_POST['id'])) {
+?>
 <div class="row">
-    <div class="col-sm-6">
-        <label for="role" class="form-label required">Role</label>
-        <select class="form-select select2" data-toggle="select2" name="role" id="role" data-placeholder="Select Role">
-            <option value="<?= $role ?? '' ?>" selected>
-                <?= !empty($role) ? $role : '' ?>
-            </option>
-            <?php
-                if($role != "Admin") {
-            ?>
-                <option value="Admin">Admin</option>
-            <?php
-                }
-                if($role != "User") {
-            ?>
-                <option value="User">User</option>
-            <?php
-                }
-            ?>
-        </select>
+    <div class="col-sm-12">
+        <label for="create_password" class="form-label required">Password</label>
+        <input type="password" id="create_password" name="create_password" class="form-control" placeholder="Password">
     </div>
-    <div class="col-sm-6">
+</div>
+<?php
+}
+?>
+<div class="row">
+    <div class="col-sm-12">
         <label for="status" class="form-label required">Status</label>
         <select class="form-control select2" data-toggle="select2" name="status" data-placeholder="Select Status">
             <option value="<?= $status ?? '' ?>" selected>
@@ -83,5 +78,12 @@ if (isset($_POST['id'])) {
                 }
             ?>
         </select>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <label for="img" class="form-label">Image</label>
+        <input type="file" id="profile_input" class="filepond" name="profile_input" data-max-file-size="10MB"/>
+        <span class="font-10 text-muted"><b>Note: </b>Please upload an image in <b>JPG</b> format. The file size must not exceed <b>10 MB</b>.</span>
     </div>
 </div>

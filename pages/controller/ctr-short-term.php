@@ -49,7 +49,7 @@ if (isset($_POST['Save'])) {
         );
 
         if(isset($_SESSION['proms-admin']['img_input'])){
-            if($_SESSION['proms-admin']['img_input']['status'] == 'Success') {
+            if($_SESSION['proms-admin']['img_input']['result'] == 'success') {
                 $sqlArray['img'] = $_SESSION['proms-admin']['img_input']['content'];
                 $sqlArray['img_type'] = $_SESSION['proms-admin']['img_input']['type'];
             }else{
@@ -143,7 +143,7 @@ if (isset($_POST['Edit'])) {
         );
 
         if(isset($_SESSION['proms-admin']['img_input'])){
-            if($_SESSION['proms-admin']['img_input']['status'] == 'Success') {
+            if($_SESSION['proms-admin']['img_input']['result'] == 'success') {
                 $sqlArray['img'] = $_SESSION['proms-admin']['img_input']['content'];
                 $sqlArray['img_type'] = $_SESSION['proms-admin']['img_input']['type'];
             }else{

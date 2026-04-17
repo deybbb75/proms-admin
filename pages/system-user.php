@@ -12,7 +12,7 @@ $db = DB::getInstance();
             <div class="page-title-box">
                 <div class="page-title-right">
                     <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#primary-header-modal"
-                        onclick="addItem({fetch_file: 'fetch/fetch-system-user.php'})">
+                        onclick="addItem({fetch_file: 'fetch/fetch-system-user.php', custom_function: () => fetchCustom()})">
                         <i class="mdi mdi-plus"></i>
                         <span class="add-btn-name">Add System User</span>
                     </button>
@@ -33,7 +33,6 @@ $db = DB::getInstance();
                                 <th>Employee Number</th>
                                 <th>Full Name</th>
                                 <th>Email</th>
-                                <th>Role</th>
                                 <th>Status</th>
                                 <th>Action</th>
                             </tr>
@@ -48,14 +47,21 @@ $db = DB::getInstance();
                                 <td><?= e($line->emp_no) ?></td>
                                 <td><?= e($line->fname) ?> <?= e($line->mname) ?> <?= e($line->lname) ?></td>
                                 <td><?= e($line->email) ?></td>
-                                <td><?= e($line->role) ?></td>
                                 <td>
                                     <span class="status-<?= strtolower($line->status) ?>"><?= e($line->status) ?></span>
                                 </td>
                                 <td>
                                     <center>
+                                        <?php
+                                            $image_data     = base64_encode($line->img);
+                                            $image_src      = "data:{$line->img_type};base64,{$image_data}";
+                                        ?>
                                         <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#primary-header-modal"
-                                            onclick="editItem({fetch_file: 'fetch/fetch-system-user.php', item_id: '<?= encrypt_data($line->sys_id) ?>'})"><i class="mdi mdi-square-edit-outline"></i>
+                                            onclick="editItem({
+                                                fetch_file: 'fetch/fetch-system-user.php', 
+                                                item_id: '<?= encrypt_data($line->sys_id) ?>', 
+                                                custom_function: () => fetchCustom('<?= $image_src ?>')
+                                            })"><i class="mdi mdi-square-edit-outline"></i>
                                         </button>
                                         <button type="button" class="btn btn-danger ms-1" onclick="deleteItem('<?= encrypt_data($line->sys_id) ?>')">
                                             <i class="mdi mdi-delete"></i>
@@ -99,6 +105,16 @@ $db = DB::getInstance();
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
+<script>
+function fetchCustom(img_src){
+    initFilePond(
+        'profile_input',
+        ['image/jpeg'],
+        ['#save_changes'],
+        img_src
+    );
+}
+</script>
 <?php
 include '../footer.php';
 ?>

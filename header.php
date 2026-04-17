@@ -2,6 +2,10 @@
 include 'head.php';
 $db = DB::getInstance();
 
+if(!isset($_SESSION['proms-admin']['emp_no'])){
+    safe_redirect($GLOBALS['INF_CONFIG']['sitehost'] . "/login.php");
+}
+
 if(!isset($_SESSION['proms-admin']['pending_ay_id'])){
     $_SESSION['proms-admin']['pending_ay_id'] = $db->queryUniqueValue("SELECT ay_id FROM tbl_academic_year WHERE status = 'Active'");
 }
@@ -20,22 +24,22 @@ $pending_count = $db->countOf("tbl_reservation","ay_id = :ay_id AND status = 'Pe
         <div class="leftside-menu" id="leftside-menu">
 
             <!-- LOGO -->
-            <a href="index.html" class="logo text-center logo-light">
+            <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/index.php" class="logo text-center logo-light">
                 <span class="logo-lg">
-                    <img src="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/assets/images/logo/logo1-white.png" alt="" height="50">
+                    <img src="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/assets/images/logo/ctel-logo-name.png" alt="" height="50">
                 </span>
                 <span class="logo-sm">
-                    <img src="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/assets/images/logo/logo-small.png" alt="" height="50">
+                    <img src="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/assets/images/logo/ctel-logo.png" alt="" height="50">
                 </span>
             </a>
 
             <!-- LOGO -->
             <a href="index.html" class="logo text-center logo-dark">
                 <span class="logo-lg">
-                    <img src="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/assets/images/logo-dark.png" alt="" height="16">
+                    <img src="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/assets/images/logo/ctel-logo-name.png" alt="" height="50">
                 </span>
                 <span class="logo-sm">
-                    <img src="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/assets/images/logo_sm_dark.png" alt="" height="16">
+                    <img src="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/assets/images/logo/ctel-logo.png" alt="" height="50">
                 </span>
             </a>
 
@@ -58,7 +62,13 @@ $pending_count = $db->countOf("tbl_reservation","ay_id = :ay_id AND status = 'Pe
                     <li class="side-nav-item">
                         <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/pages/pending.php" class="side-nav-link">
                             <i class="mdi mdi-file-clock"></i>
+                            <?php
+                                if($pending_count){
+                            ?>
                             <span class="badge bg-success float-end"><?= $pending_count ?></span>
+                            <?php
+                                }
+                            ?>
                             <span>Pending List</span>
                         </a>
                     </li>
@@ -162,61 +172,25 @@ $pending_count = $db->countOf("tbl_reservation","ay_id = :ay_id AND status = 'Pe
                 <!-- Topbar Start -->
                 <div class="navbar-custom">
                     <ul class="list-unstyled topbar-menu float-end mb-0">
-                        <li class="notification-list">
-                            <a class="nav-link end-bar-toggle" href="javascript: void(0);">
-                                <i class="dripicons-gear noti-icon"></i>
-                            </a>
-                        </li>
-
                         <li class="dropdown notification-list">
                             <a class="nav-link dropdown-toggle nav-user arrow-none me-0" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false"
                                 aria-expanded="false">
                                 <span class="account-user-avatar"> 
-                                    <img src="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/assets/images/users/avatar-1.jpg" alt="user-image" class="rounded-circle">
+                                    <img src="<?= $_SESSION['proms-admin']['img_src'] ?? $GLOBALS['INF_CONFIG']['sitehost'] . '/assets/images/profile.jpg' ?>" alt="user-image" class="rounded-circle">
                                 </span>
                                 <span>
-                                    <span class="account-user-name">Dominic Keller</span>
-                                    <span class="account-position">Founder</span>
+                                    <span class="account-user-name" style="margin-top: 2px;"><?= $_SESSION['proms-admin']['fullname'] ?></span>
+                                    <span class="account-position">Admin</span>
                                 </span>
                             </a>
-                            <div class="dropdown-menu dropdown-menu-end dropdown-menu-animated topbar-dropdown-menu profile-dropdown">
-                                <!-- item-->
-                                <div class=" dropdown-header noti-title">
-                                    <h6 class="text-overflow m-0">Welcome !</h6>
-                                </div>
-
-                                <!-- item-->
-                                <a href="javascript:void(0);" class="dropdown-item notify-item">
-                                    <i class="mdi mdi-account-circle me-1"></i>
-                                    <span>My Account</span>
-                                </a>
-
-                                <!-- item-->
-                                <a href="javascript:void(0);" class="dropdown-item notify-item">
-                                    <i class="mdi mdi-account-edit me-1"></i>
-                                    <span>Settings</span>
-                                </a>
-
-                                <!-- item-->
-                                <a href="javascript:void(0);" class="dropdown-item notify-item">
-                                    <i class="mdi mdi-lifebuoy me-1"></i>
-                                    <span>Support</span>
-                                </a>
-
-                                <!-- item-->
-                                <a href="javascript:void(0);" class="dropdown-item notify-item">
-                                    <i class="mdi mdi-lock-outline me-1"></i>
-                                    <span>Lock Screen</span>
-                                </a>
-
-                                <!-- item-->
-                                <a href="javascript:void(0);" class="dropdown-item notify-item">
-                                    <i class="mdi mdi-logout me-1"></i>
-                                    <span>Logout</span>
+                        </li>
+                        <li>
+                            <div style="padding-top: 20px; padding-left: 10px; padding-right: 20px;">
+                                <a href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/clear.php">
+                                    <i class="mdi mdi-login-variant" style="font-size: 1.5em; color: #7b7b7b;"></i>
                                 </a>
                             </div>
                         </li>
-
                     </ul>
                     <button class="button-menu-mobile open-left">
                         <i class="mdi mdi-menu"></i>

@@ -238,45 +238,44 @@ function validateRequiredFields(array $requiredFields, $source = null)
     return $missing;
 }
 
-function checkFile(string $file_input_array): string
-{
-    // If input does not exist
-    if (!isset($_FILES[$file_input_array])) {
-        return "No file uploaded";
+function checkFile(array $options = []): array {
+    $file_input_name = $options['file_name'] ?? '';
+    $allowedMimeTypes = $options['allowed_mime'] ?? ["application/pdf" => "PDF"];
+    $maxSize = $options['max_size'] ?? 10; // MB
+
+    if (!isset($_FILES[$file_input_name])) {
+        return ['result' => "error", 'message' => "No file uploaded"];
     }
 
-    $file = $_FILES[$file_input_array];
+    $file = $_FILES[$file_input_name];
 
-    // If no file name or empty
     if (empty($file['name'])) {
-        return "No file name uploaded";
+        return ['result' => "error", 'message' => "No file uploaded"];
     }
 
-    // no file uploaded but field exists
-    if ($file['error'] !== UPLOAD_ERR_OK) {
-        return "{$file['name']} upload error!";
+    if ($file['error'] !== UPLOAD_ERR_OK || !is_uploaded_file($file['tmp_name'])) {
+        return ['result' => "error", 'message' => "{$file['name']} upload error!"];
     }
 
-    $tmp  = $file['tmp_name'] ?? '';
-    $size = $file['size'] ?? 0;
-    $type = $file['type'] ?? '';
-
-    // Size > 10 MB
-    if ($size > 10 * 1024 * 1024) {
-        return "{$file['name']} must be less than or equal to 10MB";
+    if ($file['size'] > $maxSize * 1024 * 1024) {
+        return ['result' => "error", 'message' => "{$file['name']} must be ≤ {$maxSize}MB"];
     }
 
-    // ensure valid file temp
-    if (!is_uploaded_file($tmp)) {
-        return "{$file['name']} upload error!";
+    $finfo = finfo_open(FILEINFO_MIME_TYPE);
+    $actualMime = finfo_file($finfo, $file['tmp_name']);
+    finfo_close($finfo);
+
+    if (!$actualMime || !array_key_exists($actualMime, $allowedMimeTypes)) {
+        $allowedTypesList = implode(", ", array_values($allowedMimeTypes));
+        return ['result' => "error", 'message' => "{$file['name']} must be a valid {$allowedTypesList} file"];
     }
 
-    // accept only PDF
-    if ($type !== "application/pdf") {
-        return "{$file['name']} must be a PDF file";
-    }
-
-    return "Success";
+    return [
+        'result'  => "success",
+        'name'    => basename($file['name']),
+        'type'    => $actualMime,
+        'content' => file_get_contents($file['tmp_name'])
+    ];
 }
 
 function truncateText($text, $limit = 1000): string

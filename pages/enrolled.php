@@ -73,7 +73,7 @@ console($_SESSION['proms-admin']['enrolled_ay_id']);
 
                                 while ($line = $db->fetchNextObject($reservation_query)) {
                                     $student_no = $db->queryUniqueValue("SELECT student_no FROM tbl_student WHERE student_id = :student_id", ["student_id" => $line->student_id]);
-                                    $student_name = $db->queryUniqueValue("SELECT CONCAT(fname, ' ', mname, ' ', lname) FROM tbl_student WHERE student_id = :student_id", ["student_id" => $line->student_id]);
+                                    $student_name = $db->queryUniqueValue("SELECT CONCAT(fname, ' ', IFNULL(mname, ''), ' ', lname) FROM tbl_student WHERE student_id = :student_id", ["student_id" => $line->student_id]);
                                     $program = $db->queryUniqueValue("SELECT prog_name FROM tbl_program WHERE prog_id = :prog_id", ["prog_id" => $line->prog_id]);
 
                                     if($line->prog_id == 1){

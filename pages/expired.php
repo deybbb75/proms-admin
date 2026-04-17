@@ -64,7 +64,6 @@ console($_SESSION['proms-admin']['expired_ay_id']);
                                 <th>Sub-program</th>
                                 <th>Scheduled Date</th>
                                 <th>Date/Time Reserved</th>
-                                <th width="10%">Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -73,7 +72,7 @@ console($_SESSION['proms-admin']['expired_ay_id']);
 
                                 while ($line = $db->fetchNextObject($reservation_query)) {
                                     $student_no = $db->queryUniqueValue("SELECT student_no FROM tbl_student WHERE student_id = :student_id", ["student_id" => $line->student_id]);
-                                    $student_name = $db->queryUniqueValue("SELECT CONCAT(fname, ' ', mname, ' ', lname) FROM tbl_student WHERE student_id = :student_id", ["student_id" => $line->student_id]);
+                                    $student_name = $db->queryUniqueValue("SELECT CONCAT(fname, ' ', IFNULL(mname, ''), ' ', lname) FROM tbl_student WHERE student_id = :student_id", ["student_id" => $line->student_id]);
                                     $program = $db->queryUniqueValue("SELECT prog_name FROM tbl_program WHERE prog_id = :prog_id", ["prog_id" => $line->prog_id]);
 
                                     if($line->prog_id == 1){
@@ -111,11 +110,6 @@ console($_SESSION['proms-admin']['expired_ay_id']);
                                 <td class="text-wrap"><?= e($sub_program) ?></td>
                                 <td><?= e($line->date_scheduled) ?></td>
                                 <td><?= e($line->datetime_reserved) ?></td>
-                                <td style="white-space: unset;">
-                                    <button type="button" class="btn btn-danger w-100 mt-1" style="padding-block: 3px;" onclick="revertStudent('<?= encrypt_data($line->reserve_id) ?>')">
-                                        Revert
-                                    </button>
-                                </td>
                             </tr>
                             <?php
                                 }

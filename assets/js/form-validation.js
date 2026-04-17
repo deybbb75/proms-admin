@@ -90,9 +90,26 @@ function validateForm() {
                 ...indexedFields("associate_cert", [{ count: 10 }]),
                 ...indexedFields("expert_cert", [{ count: 10 }]),
                 "yt_link",
-                "fb_link"
+                "fb_link",
+                "birthday",
+                "sched_date"
             ],
             rules: { required: true, noWhitespace: true }
+        },
+        {
+            fields: ["img_input", "password"],
+            rules: { required: true }
+        },
+        {
+            fields: ['create_password'],
+            rules: { required: true, noWhitespace: true, strongPassword: true }
+        },
+        {
+            fields: ["confirm_password"],
+            rules: { required: true, noWhitespace: true, equalTo: "#create_password" },
+            messages: {
+                equalTo: "Passwords do not match. Please try again."
+            }
         },
         {
             fields: ["start_year", "end_year"],
@@ -103,16 +120,16 @@ function validateForm() {
             rules: { required: true, digits: true }
         },
         {
+            fields: ["credit_unit"],
+            rules: { positiveWholeNumber: true }
+        },
+        {
             fields: ["member_order"],
             rules: { required: true, positiveWholeNumber: true }
         },
         {
-            fields: ["credit_unit"],
-            rules: { digits: true }
-        },
-        {
-            fields: ["mobile_no"],
-            rules: { required: true, noWhitespace: true, mobileNumber: true }
+            fields: ["slot_count"],
+            rules: { required: true, nonNegativeInteger: true }
         },
         {
             fields: [
@@ -141,6 +158,10 @@ function validateForm() {
             rules: { noWhitespace: true, descPattern: true }
         },
         {
+            fields: ["mobile_no"],
+            rules: { required: true, noWhitespace: true, mobileNumber: true }
+        },
+        {
             fields: ["year_level"],
             rules: { required: true, digits: true, min: 1, max: 6 }
         },
@@ -149,7 +170,7 @@ function validateForm() {
             rules: { requireYearLevel: true, min: 1, max: 6 }
         },
         {
-            fields: ["status", "role"],
+            fields: ["status", "role", "enroll_status"],
             rules: { required: true, letters: true, noWhitespace: true }
         },
         {
@@ -216,10 +237,14 @@ function validateForm() {
     // =========================================================================
 
     let finalRules = {};
+    let finalMessages = {};
 
     groupedRules.forEach(group => {
         group.fields.forEach(field => {
             finalRules[field] = group.rules;
+            if (group.messages) {
+                finalMessages[field] = group.messages;
+            }
         });
     });
 
@@ -244,7 +269,9 @@ function validateForm() {
                 .addClass("is-invalid");
 
             if ($(element).is("select.select2")) {
-                $(element).prev().children().first().children().first().addClass("is-invalid").removeClass("is-valid");
+                $(element).next().children().first().children().first().addClass("is-invalid").removeClass("is-valid");
+            }else if ($(element).is("input.filepond--browser")) {
+                $(element).parent().addClass("is-invalid").removeClass("is-valid");
             }
         },
 
@@ -254,7 +281,9 @@ function validateForm() {
                 .addClass("is-valid");
 
             if ($(element).is("select.select2")) {
-                $(element).prev().children().first().children().first().removeClass("is-invalid").addClass("is-valid");
+                $(element).next().children().first().children().first().removeClass("is-invalid").addClass("is-valid");
+            }else if ($(element).is("input.filepond--browser")) {
+                $(element).parent().removeClass("is-invalid").addClass("is-valid");
             }
 
             // Remove error message when valid
@@ -265,13 +294,36 @@ function validateForm() {
             // Remove existing message to prevent duplicates
             element.next(".invalid-feedback").remove();
 
-            $('<div class="invalid-feedback"></div>')
-                .text(error.text())
-                .insertAfter(element);
+            if ($(element).is("select.select2")) {
+                element.next().next(".invalid-feedback").remove();
+
+                $('<div class="invalid-feedback"></div>')
+                    .text(error.text())
+                    .insertAfter($(element).next());
+            }else if ($(element).is("input.filepond--browser")) {
+                element.parent().next(".invalid-feedback").remove();
+                
+                $('<div class="invalid-feedback"></div>')
+                    .text(error.text())
+                    .insertAfter($(element).parent());
+            }else if ($(element).is("input.password")) {
+                const parent = element.parent();
+
+                // Remove existing message inside parent
+                parent.find(".invalid-feedback").remove();
+
+                $('<div class="invalid-feedback"></div>')
+                    .text(error.text())
+                    .appendTo(parent);
+            }else{
+                $('<div class="invalid-feedback"></div>')
+                    .text(error.text())
+                    .insertAfter(element);
+            }
         }
     });
 
-    $(".select2").on("change", function() {
+    $(".select2.form-control").on("change", function() {
         $(this).valid();
     });
 
@@ -338,6 +390,15 @@ function validateForm() {
     $.validator.addMethod("mobileNumber", function (value, element) {
         return this.optional(element) || /^\d{11}$/.test(value);
     }, "Please enter a valid 11-digit mobile number.");
+
+    $.validator.addMethod("nonNegativeInteger", function (value, element) {
+        return this.optional(element) || /^(0|[1-9]\d*)$/.test(value);
+    }, "Please enter a valid order (non-negative integer only).");
+
+    $.validator.addMethod("strongPassword", function(value, element) {
+        return this.optional(element) ||
+            /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&.])[A-Za-z\d@$!%*?&.]{8,}$/.test(value);
+    }, "Password must be at least 8 characters long and include uppercase, lowercase, number, and special character.");
 }
 
 $(function () {

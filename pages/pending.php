@@ -3,12 +3,14 @@ include '../includes/init.php';
 include '../header.php';
 $db = DB::getInstance();
 
+if(!isset($_SESSION['proms-admin']['pending_ay_id'])){
+    $_SESSION['proms-admin']['pending_ay_id'] = $db->queryUniqueValue("SELECT ay_id FROM tbl_academic_year WHERE status = 'Active'");
+}
+
 if(isset($_POST['ay_id'])){
     $_SESSION['proms-admin']['pending_ay_id'] = $_POST['ay_id'];
     safe_redirect('pending.php');
 }
-
-console($_SESSION['proms-admin']['pending_ay_id']);
 ?>
 <!-- Start Content-->
 <div class="container-fluid">
@@ -54,8 +56,8 @@ console($_SESSION['proms-admin']['pending_ay_id']);
                     <table id="basic-datatable" class="table table-striped dt-responsive nowrap w-100">
                         <thead>
                             <tr>
-                                <th>Student Name</th>
                                 <th>Student Number</th>
+                                <th>Student Name</th>
                                 <th>Program</th>
                                 <th>Sub-program</th>
                                 <th>Scheduled Date</th>
@@ -69,7 +71,7 @@ console($_SESSION['proms-admin']['pending_ay_id']);
 
                                 while ($line = $db->fetchNextObject($reservation_query)) {
                                     $student_no = $db->queryUniqueValue("SELECT student_no FROM tbl_student WHERE student_id = :student_id", ["student_id" => $line->student_id]);
-                                    $student_name = $db->queryUniqueValue("SELECT CONCAT(fname, ' ', mname, ' ', lname) FROM tbl_student WHERE student_id = :student_id", ["student_id" => $line->student_id]);
+                                    $student_name = $db->queryUniqueValue("SELECT CONCAT(fname, ' ', IFNULL(mname, ''), ' ', lname) FROM tbl_student WHERE student_id = :student_id", ["student_id" => $line->student_id]);
                                     $program = $db->queryUniqueValue("SELECT prog_name FROM tbl_program WHERE prog_id = :prog_id", ["prog_id" => $line->prog_id]);
 
                                     if($line->prog_id == 1){
@@ -89,7 +91,6 @@ console($_SESSION['proms-admin']['pending_ay_id']);
                                     $sub_program = $db->queryUniqueValue("SELECT title FROM " . $table_name . " WHERE sub_prog_id = :sub_prog_id", ["sub_prog_id" => $line->sub_prog_id]);      
                             ?>
                             <tr>
-                                <td class="text-wrap"><?= e($student_name) ?></td>
                                 <td>
                                     <div class="w-100 text-wrap">
                                         <?php 
@@ -97,39 +98,24 @@ console($_SESSION['proms-admin']['pending_ay_id']);
                                             echo e($student_no);
                                         }else{
                                         ?>
-                                        <p style="color: red; font-style: italic;">Not Yet Assigned</p>
+                                        <p style="color: red; font-style: italic;">No student number assigned yet</p>
                                         <?php
                                         } 
                                         ?>
                                     </div>
                                 </td>
+                                <td class="text-wrap"><?= e($student_name) ?></td>
                                 <td class="text-wrap"><?= e($program) ?></td>
                                 <td class="text-wrap"><?= e($sub_program) ?></td>
                                 <td><?= e($line->date_scheduled) ?></td>
                                 <td><?= e($line->datetime_reserved) ?></td>
                                 <td style="white-space: unset;">
-                                    <?php
-                                    if(!$student_no){
-                                    ?>
-                                    <button type="button" class="btn btn-success w-100" style="padding-block: 3px;" data-bs-toggle="modal" data-bs-target="#primary-header-modal"
-                                        onclick="addStudentNumber({fetch_file: 'fetch/fetch-student-no.php', item_id: '<?= encrypt_data($line->reserve_id) ?>'})">
-                                        Enrolled
-                                    </button>
-                                    <?php
-                                    }else{
-                                    ?>
-                                    <button type="button" class="btn btn-success w-100 mt-1" style="padding-block: 3px;" onclick="enrollStudent('<?= encrypt_data($line->reserve_id) ?>')">
-                                        Enrolled
-                                    </button>
-                                    <?php
-                                    }
-                                    ?>
-                                    <button type="button" class="btn btn-warning w-100 mt-1" style="padding-block: 3px;" onclick="reserveStudent('<?= encrypt_data($line->reserve_id) ?>')">
-                                        Reserved
-                                    </button>
-                                    <button type="button" class="btn btn-danger w-100 mt-1" style="padding-block: 3px;" onclick="expireStudent('<?= encrypt_data($line->reserve_id) ?>')">
-                                        Expired
-                                    </button>
+                                    <select class="customSelect" id="action_pending" data-placeholder="" onchange="actionPending(this.value, '<?= encrypt_data($line->reserve_id) ?>')">
+                                        <option value="" selected disabled>Select Action</option>    
+                                        <option value="<?php if(!$student_no){ echo "First Enroll"; }else{ echo "Enroll"; } ?>">Mark Enrolled</option>
+                                        <option value="Reserve">Reserve Slot</option>
+                                        <option value="Expire">Expire Reservation</option>
+                                    </select>
                                 </td>
                             </tr>
                             <?php
@@ -162,7 +148,8 @@ console($_SESSION['proms-admin']['pending_ay_id']);
                     <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-primary" id="save_changes">Save changes</button>
                 </div>
-                <input type="hidden" id="action" value="">
+                <input type="hidden" id="action" name="action" value="">
+                <input type="hidden" id="item_id" name="item_id" value="">
             </form>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
@@ -180,37 +167,111 @@ function addStudentNumber({
     fetch_file: fetch_file,
     item_id: item_id,
 }) {
-	// Reset the form and set the button to "Save"
-	$(".fetched-data").html("");
-	$("#save_changes").attr("name", "Add");
-	$.ajax({
-		type: "post",
-		data: {
-			id: item_id,
-		},
-		url: fetch_file,
-		success: function (data) {
-			let $fetch = $(".fetched-data").html(data);
-			reInitUI($fetch);
-		},
-	});
+    Swal.fire({
+        title: "Confirm student enrollment status?",
+        text: "This will set the student's status to Enrolled.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "var(--success-color)",
+        confirmButtonText: "Yes, mark as enrolled",
+        cancelButtonText: "Cancel"
+    }).then((result) => {
+		if (result.isConfirmed) {
+            let modal = new bootstrap.Modal(document.getElementById("primary-header-modal"));
+            modal.show();
+
+            // Reset the form and set the button to "Save"
+            $(".fetched-data").html("");
+            $("#save_changes").attr("name", "Add");
+            $.ajax({
+                type: "post",
+                data: {
+                    id: item_id,
+                },
+                url: fetch_file,
+                success: function (data) {
+                    let $fetch = $(".fetched-data").html(data);
+                    reInitUI($fetch);
+                },
+            });
+        } else if (result.isDismissed) {
+            $('#action_pending').val(null).trigger('change');
+        }
+    });
 }
 
 function enrollStudent(item_id) {
-    $("#action").attr("name", "Enroll");
-    $("#action").val(item_id);
-    $("#form_validation").submit();
+    Swal.fire({
+        title: "Confirm student enrollment status?",
+        text: "This will set the student's status to Enrolled.",
+        icon: "warning",
+        showCancelButton: true,
+        allowOutsideClick: false,
+        confirmButtonColor: "var(--success-color)",
+        confirmButtonText: "Yes, mark as enrolled",
+        cancelButtonText: "Cancel"
+    }).then((result) => {
+		if (result.isConfirmed) {
+            $("#action").val("Enrolled");
+            $("#item_id").val(item_id);
+            $("#form_validation").submit();
+        } else if (result.isDismissed) {
+            $('#action_pending').val(null).trigger('change');
+        }
+    });
 }
 
 function reserveStudent(item_id) {
-    $("#action").attr("name", "Reserve");
-    $("#action").val(item_id);
-    $("#form_validation").submit();
+    Swal.fire({
+        title: "Reserve this student's slot?",
+        text: "This will reserve the student's enrollment slot.",
+        icon: "warning",
+        showCancelButton: true,
+        allowOutsideClick: false,
+        confirmButtonColor: "var(--primary-color)",
+        confirmButtonText: "Yes, reserve slot",
+        cancelButtonText: "Cancel"
+    }).then((result) => {
+		if (result.isConfirmed) {
+            $("#action").val("Reserved");
+            $("#item_id").val(item_id);
+            $("#form_validation").submit();
+        } else if (result.isDismissed) {
+            $('#action_pending').val(null).trigger('change');
+        }
+    });
 }
 
 function expireStudent(item_id) {
-    $("#action").attr("name", "Expire");
-    $("#action").val(item_id);
-    $("#form_validation").submit();
+    Swal.fire({
+        title: "Mark reservation as expired?",
+        text: "Mark this reservation as expired? This action will notify the client.",
+        icon: "warning",
+        showCancelButton: true,
+        allowOutsideClick: false,
+        confirmButtonColor: "var(--danger-color)",
+        confirmButtonText: "Yes, mark as expired",
+        cancelButtonText: "Cancel",
+    }).then((result) => {
+		if (result.isConfirmed) {
+            $("#action").val("Expired");
+            $("#item_id").val(item_id);
+            $("#form_validation").submit();
+        } else if (result.isDismissed) {
+            $('#action_pending').val(null).trigger('change');
+        }
+    });
+}
+
+function actionPending(value, item_id){
+    if(value == "First Enroll"){
+        addStudentNumber({fetch_file: 'fetch/fetch-pending.php', item_id: item_id});
+    }else if(value == "Enroll"){
+        enrollStudent(item_id);
+    }else if(value == "Reserve"){
+        reserveStudent(item_id);
+    }else if(value == "Expire"){
+        expireStudent(item_id);
+    }
 }
 </script>

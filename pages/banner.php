@@ -12,7 +12,7 @@ $db = DB::getInstance();
             <div class="page-title-box">
                 <div class="page-title-right">
                     <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#primary-header-modal"
-                        onclick="addItem({fetch_file: 'fetch/fetch-banner.php', custom_function: fetchCustom})">
+                        onclick="addItem({fetch_file: 'fetch/fetch-banner.php', custom_function: () => fetchCustom()})">
                         <i class="mdi mdi-plus"></i>
                         <span class="add-btn-name">Add Banner</span>
                     </button>
@@ -64,7 +64,12 @@ $db = DB::getInstance();
                                 <td>
                                     <center>
                                         <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#primary-header-modal"
-                                            onclick="editItem({fetch_file: 'fetch/fetch-banner.php', item_id: '<?= encrypt_data($line->banner_id) ?>', custom_function: fetchCustom})"><i class="mdi mdi-square-edit-outline"></i>
+                                            onclick="editItem({
+                                                fetch_file: 'fetch/fetch-banner.php', 
+                                                item_id: '<?= encrypt_data($line->banner_id) ?>', 
+                                                custom_function: () => fetchCustom('<?= $image_src ?>')
+                                            })">
+                                            <i class="mdi mdi-square-edit-outline"></i>
                                         </button>
                                         <button type="button" class="btn btn-danger ms-1" onclick="deleteItem('<?= encrypt_data($line->banner_id) ?>')">
                                             <i class="mdi mdi-delete"></i>
@@ -109,12 +114,12 @@ $db = DB::getInstance();
 </div><!-- /.modal -->
 
 <script>
-function fetchCustom(){
+function fetchCustom(img_src){
     initFilePond(
         'img_input',
         ['image/jpeg'],
-        'Only JPG files are allowed',
-        ['#save_changes']
+        ['#save_changes'],
+        img_src
     );
 }
 </script>

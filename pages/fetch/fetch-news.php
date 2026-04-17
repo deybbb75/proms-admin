@@ -58,32 +58,7 @@ if (isset($_POST['id'])) {
 <div class="row">
     <div class="col-md-12">
         <label for="img" class="form-label required">Image</label>
-        <div id="image-preview" style="display: <?= !empty($image) ? 'block' : 'none' ?>;">
-            <img 
-                src="<?= $image_src ?? '' ?>" 
-                class="img-fluid mx-auto d-block mt-2"
-                style="max-width: 100%; height: auto; border-radius: 20px;"
-                alt=""
-            >
-        <?php
-            if(!empty($image)) {
-        ?>
-            <button type="button" class="btn btn-sm btn-info w-100 mt-2" onclick="updateImage('update')">Update Image</button>
-        <?php
-            }
-        ?>
-        </div>
-        <div id="image-upload" style="display: <?= !empty($image) ? 'none' : 'block' ?>;">
-            <input type="file" id="img_input" class="filepond" name="img_input" data-max-file-size="10MB" data-max-files="3" />
-            <span class="font-10 text-muted"><b>Note: </b>Please upload an image in <b>JPG</b> format. The file size must not exceed <b>10 MB</b>.</span>
-            <?php
-                if(!empty($image)){
-            ?>
-                <button type="button" class="btn btn-sm btn-danger w-100 mt-2" onclick="updateImage('cancel')">Cancel</button>
-            <?php
-                }
-            ?>
-        </div>
-        
+        <input type="file" id="img_input" class="filepond" name="img_input" data-max-file-size="10MB"/>
+        <span class="font-10 text-muted"><b>Note: </b>Please upload an image in <b>JPG</b> format. The file size must not exceed <b>10 MB</b>.</span>
     </div>
 </div>

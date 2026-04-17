@@ -2,12 +2,15 @@
     <html lang="en">
     <head>
         <meta charset="utf-8" />
-        <title>Dashboard | Hyper - Responsive Bootstrap 5 Admin Dashboard</title>
+        <title>LPU-B | PROMS</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description" />
         <meta content="Coderthemes" name="author" />
         <!-- App favicon -->
-        <link rel="shortcut icon" href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/assets/images/favicon.ico">
+        <link rel="shortcut icon" href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/assets/images/logo/logo-small.png">
+
+        <!-- Fonts -->
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Jost:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
 
         <!-- third party css -->
         <link href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/assets/css/vendor/jquery-jvectormap-1.2.2.css" rel="stylesheet" type="text/css" />
@@ -32,5 +35,6 @@
 
         <!-- FilePond Css -->
         <link rel="stylesheet" href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/assets/plugins/filepond/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css">
+        <link rel="stylesheet" href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/assets/plugins/filepond/filepond-plugin-file-poster/dist/filepond-plugin-file-poster.css">
         <link rel="stylesheet" href="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/assets/plugins/filepond/filepond/dist/filepond.min.css">
     </head>

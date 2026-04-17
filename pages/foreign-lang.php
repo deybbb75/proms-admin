@@ -21,7 +21,7 @@ $_SESSION['proms-admin']['max_note'] = 10;
             <div class="page-title-box">
                 <div class="page-title-right">
                     <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#primary-header-modal"
-                        onclick="addItem({fetch_file: 'fetch/fetch-foreign-lang.php', custom_function: fetchCustom})">
+                        onclick="addItem({fetch_file: 'fetch/fetch-foreign-lang.php', custom_function: () => fetchCustom()})">
                         <i class="mdi mdi-plus"></i>
                         <span class="add-btn-name">Add Sub-program</span>
                     </button>
@@ -156,8 +156,16 @@ $_SESSION['proms-admin']['max_note'] = 10;
                                 </td>
                                 <td>
                                     <center>
+                                        <?php
+                                            $image_data     = base64_encode($line->img);
+                                            $image_src      = "data:{$line->img_type};base64,{$image_data}";
+                                        ?>
                                         <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#primary-header-modal"
-                                            onclick="editItem({fetch_file: 'fetch/fetch-foreign-lang.php', item_id: '<?= encrypt_data($line->sub_prog_id) ?>', custom_function: fetchCustom})">
+                                            onclick="editItem({
+                                                fetch_file: 'fetch/fetch-foreign-lang.php', 
+                                                item_id: '<?= encrypt_data($line->sub_prog_id) ?>', 
+                                                custom_function: () => fetchCustom('<?= $image_src ?>')
+                                            })">
                                             <i class="mdi mdi-square-edit-outline"></i>
                                         </button>
                                         <button type="button" class="btn btn-danger ms-1" onclick="deleteItem('<?= encrypt_data($line->sub_prog_id) ?>')">
@@ -263,19 +271,6 @@ $_SESSION['proms-admin']['max_note'] = 10;
 </template>
 
 <script>
-function updateImage(action){
-    const image_input_section = document.getElementById('image-upload');
-    const preview = document.getElementById('image-preview');
-
-    if(action === 'update'){
-        image_input_section.style.display = 'block';
-        preview.style.display = 'none';
-    }else{
-        image_input_section.style.display = 'none';
-        preview.style.display = 'block';
-    }
-}
-
 const offeringObj = {
     fieldMap: {
         "textarea.offering": "offering"
@@ -321,15 +316,16 @@ const noteObj = {
     confirmTitle: "Are you sure you want to delete this note?"
 };
 
-function fetchCustom(){
+function fetchCustom(img_src){
     initFilePond(
         'img_input',
         ['image/jpeg'],
-        'Only JPG files are allowed',
-        ['#save_changes']
-    );    
+        ['#save_changes'],
+        img_src
+    );
 }
 </script>
+
 <?php
 include '../footer.php';
 ?>

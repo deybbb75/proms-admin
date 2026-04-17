@@ -92,7 +92,7 @@ $db = DB::getInstance();
         <div class="modal-content">
             <form action="controller/ctr-student.php" method="POST" id="form_validation">
                 <div class="modal-header modal-colored-header bg-primary">
-                    <h4 class="modal-title" id="primary-header-modalLabel">Student Details</h4>
+                    <h4 class="modal-title" id="primary-header-modalLabel">System User Details</h4>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">

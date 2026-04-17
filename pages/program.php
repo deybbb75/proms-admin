@@ -12,13 +12,13 @@ $_SESSION['proms-admin']['max_schedule'] = 3;
     <div class="row">
         <div class="col-12">
             <div class="page-title-box">
-                <!-- <div class="page-title-right">
+                <div class="page-title-right">
                     <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#primary-header-modal"
-                        onclick="addItem({fetch_file: 'fetch/fetch-program.php', custom_function: fetchCustom})">
+                        onclick="addItem({fetch_file: 'fetch/fetch-program.php', custom_function: () => fetchCustom()})">
                         <i class="mdi mdi-plus"></i>
                         <span class="add-btn-name">Add Program</span>
                     </button>
-                </div> -->
+                </div>
                 <h4 class="page-title">PROGRAMS</h4>
             </div>
         </div>
@@ -33,6 +33,7 @@ $_SESSION['proms-admin']['max_schedule'] = 3;
                         <thead>
                             <tr>
                                 <th>Program Name</th>
+                                <th>Enrollment Status</th>
                                 <th>Status</th>
                                 <th>Action</th>
                             </tr>
@@ -47,17 +48,37 @@ $_SESSION['proms-admin']['max_schedule'] = 3;
                                 <td><?= e($line->prog_name) ?></td>
                                 <!-- <td style="white-space: pre-line;"></td> -->
                                 <td>
+                                    <span class="status-<?= strtolower($line->status) ?>"><?= e($line->enroll_status) ?></span>
+                                </td>
+                                <td>
                                     <span class="status-<?= strtolower($line->status) ?>"><?= e($line->status) ?></span>
                                 </td>
                                 <td>
                                     <center>
+                                        <?php
+                                            $image_data     = base64_encode($line->img);
+                                            $image_src      = "data:{$line->img_type};base64,{$image_data}";
+                                        ?>
                                         <button type="button" class="btn btn-info" onclick="viewItem('<?= encrypt_data($line->prog_id) ?>')">
                                             <i class="mdi mdi-eye"></i>
                                         </button>
                                         <button type="button" class="btn btn-success ms-1" data-bs-toggle="modal" data-bs-target="#primary-header-modal"
-                                            onclick="editItem({fetch_file: 'fetch/fetch-program.php', item_id: '<?= encrypt_data($line->prog_id) ?>', custom_function: fetchCustom})">
+                                            onclick="editItem({
+                                                fetch_file: 'fetch/fetch-program.php', 
+                                                item_id: '<?= encrypt_data($line->prog_id) ?>', 
+                                                custom_function: () => fetchCustom('<?= $image_src ?>')
+                                            })">
                                             <i class="mdi mdi-square-edit-outline"></i>
                                         </button>
+                                        <?php
+                                            if($line->prog_id > 6) {
+                                        ?>
+                                        <button type="button" class="btn btn-danger ms-1" onclick="deleteItem('<?= encrypt_data($line->prog_id) ?>')">
+                                            <i class="mdi mdi-delete"></i>
+                                        </button>
+                                        <?php
+                                            }
+                                        ?>
                                     </center>
                                 </td>
                             </tr>
@@ -98,28 +119,16 @@ $_SESSION['proms-admin']['max_schedule'] = 3;
 </div><!-- /.modal -->
 
 <script>
-function updateImage(action){
-    const image_input_section = document.getElementById('image-upload');
-    const preview = document.getElementById('image-preview');
-
-    if(action === 'update'){
-        image_input_section.style.display = 'block';
-        preview.style.display = 'none';
-    }else{
-        image_input_section.style.display = 'none';
-        preview.style.display = 'block';
-    }
-}
-
-function fetchCustom(){
+function fetchCustom(img_src){
     initFilePond(
         'img_input',
         ['image/jpeg'],
-        'Only JPG files are allowed',
-        ['#save_changes']
+        ['#save_changes'],
+        img_src
     );
 }
 </script>
+
 <?php
 include '../footer.php';
 ?>

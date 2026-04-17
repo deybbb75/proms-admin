@@ -47,7 +47,7 @@ if (isset($_POST['Save'])) {
         );
 
         if(isset($_SESSION['proms-admin']['img_input'])){
-            if($_SESSION['proms-admin']['img_input']['status'] == 'Success') {
+            if($_SESSION['proms-admin']['img_input']['result'] == 'success') {
                 $sqlArray['img'] = $_SESSION['proms-admin']['img_input']['content'];
                 $sqlArray['img_type'] = $_SESSION['proms-admin']['img_input']['type'];
             }else{
@@ -139,7 +139,7 @@ if (isset($_POST['Edit'])) {
         );
 
         if(isset($_SESSION['proms-admin']['img_input'])){
-            if($_SESSION['proms-admin']['img_input']['status'] == 'Success') {
+            if($_SESSION['proms-admin']['img_input']['result'] == 'success') {
                 $sqlArray['img'] = $_SESSION['proms-admin']['img_input']['content'];
                 $sqlArray['img_type'] = $_SESSION['proms-admin']['img_input']['type'];
             }else{
@@ -203,6 +203,28 @@ if (isset($_POST['Delete'])) {
                 'path'  => $redirect_path
             ));
         }
+    } catch (DBException $e) {
+        // Handle the database error
+        Alert::error(array(
+            'title' => 'Server Error',
+            'html'  => 'Something went wrong on our end.',
+            'path'  => $redirect_path
+        ));
+    } catch (Exception $e) {
+        // Handle other exceptions
+        Alert::error(array(
+            'title' => 'Error',
+            'html'  => 'Something went wrong with your request.',
+            'path'  => $redirect_path
+        ));
+    }
+}
+
+if (isset($_POST['View'])) {
+    try {
+        $_SESSION['proms-admin']['sub_prog_id'] = decrypt_data($_POST['View']);
+        safe_redirect("../schedule.php");
+        
     } catch (DBException $e) {
         // Handle the database error
         Alert::error(array(

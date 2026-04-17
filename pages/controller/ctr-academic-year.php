@@ -50,6 +50,7 @@ if (isset($_POST['Save'])) {
         if($_POST['status'] == 'Active') {
             // Deactivate other academic years if the new one is set to Active
             $db->executeUpdate(['status' => 'Inactive'],'tbl_academic_year', 'ay_id != :ay_id', ['ay_id' => $db->lastInsertedId()]);
+            $_SESSION['proms-admin']['pending_ay_id'] = $db->lastInsertedId();
         }
         
         // Check if the insert was successful
@@ -124,14 +125,20 @@ if (isset($_POST['Edit'])) {
         );
         // Execute the update operation
         $db->executeUpdate($sqlArray, 'tbl_academic_year', 'ay_id = :ay_id', ['ay_id' => $ay_id]);
+        if ($db->affectedRows > 0) {
+            $updated = true;
+        }else{
+            $updated = false;
+        }
 
         if($_POST['status'] == 'Active') {
             // Deactivate other academic years if the new one is set to Active
             $db->executeUpdate(['status' => 'Inactive'],'tbl_academic_year', 'ay_id != :ay_id', ['ay_id' => $ay_id]);
+            $_SESSION['proms-admin']['pending_ay_id'] = $ay_id;
         }
 
         // Check if the update was successful
-        if ($db->affectedRows > 0) {
+        if ($updated) {
             Alert::success(array(
                 'title' => 'Update Successful',
                 'html'  => 'Academic Year successfully updated.',

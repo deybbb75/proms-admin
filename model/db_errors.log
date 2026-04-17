@@ -434,9 +434,143 @@ Trace: #0 C:\xampp\htdocs\proms-admin\model\pdo.class.php(381): PDOStatement->ex
 #2 C:\xampp\htdocs\proms-admin\pages\controller\ctr-pending.php(26): DB->hasDuplicate('SELECT student_...', Array)
 #3 {main}
 
-[2026-02-24 13:14:07] Error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'student_id' in 'where clause'
-Trace: #0 C:\Users\Dave\Documents\xampp\htdocs\proms-admin\model\pdo.class.php(381): PDOStatement->execute()
-#1 C:\Users\Dave\Documents\xampp\htdocs\proms-admin\model\pdo.class.php(817): DB->select('SELECT fname, m...', Array)
-#2 C:\Users\Dave\Documents\xampp\htdocs\proms-admin\pages\controller\ctr-student.php(31): DB->hasDuplicate('SELECT fname, m...', Array)
-#3 {main}
+[2026-02-26 19:49:50] Error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'program_id' in 'where clause'
+Trace: #0 C:\xampp\htdocs\proms-admin\model\pdo.class.php(577): PDOStatement->execute()
+#1 C:\xampp\htdocs\proms-admin\index.php(210): DB->countOf('tbl_reservation', 'ay_id = :ay_id ...', Array)
+#2 {main}
+
+[2026-02-26 19:50:38] Error: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ''' at line 1
+Trace: #0 C:\xampp\htdocs\proms-admin\model\pdo.class.php(577): PDOStatement->execute()
+#1 C:\xampp\htdocs\proms-admin\index.php(211): DB->countOf('tbl_reservation', 'ay_id = :ay_id ...', Array)
+#2 {main}
+
+[2026-02-26 19:50:40] Error: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ''' at line 1
+Trace: #0 C:\xampp\htdocs\proms-admin\model\pdo.class.php(577): PDOStatement->execute()
+#1 C:\xampp\htdocs\proms-admin\index.php(211): DB->countOf('tbl_reservation', 'ay_id = :ay_id ...', Array)
+#2 {main}
+
+[2026-02-26 19:50:40] Error: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ''' at line 1
+Trace: #0 C:\xampp\htdocs\proms-admin\model\pdo.class.php(577): PDOStatement->execute()
+#1 C:\xampp\htdocs\proms-admin\index.php(211): DB->countOf('tbl_reservation', 'ay_id = :ay_id ...', Array)
+#2 {main}
+
+[2026-02-26 19:50:41] Error: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ''' at line 1
+Trace: #0 C:\xampp\htdocs\proms-admin\model\pdo.class.php(577): PDOStatement->execute()
+#1 C:\xampp\htdocs\proms-admin\index.php(211): DB->countOf('tbl_reservation', 'ay_id = :ay_id ...', Array)
+#2 {main}
+
+[2026-02-26 19:50:42] Error: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ''' at line 1
+Trace: #0 C:\xampp\htdocs\proms-admin\model\pdo.class.php(577): PDOStatement->execute()
+#1 C:\xampp\htdocs\proms-admin\index.php(211): DB->countOf('tbl_reservation', 'ay_id = :ay_id ...', Array)
+#2 {main}
+
+[2026-02-26 19:50:51] Error: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ''' at line 1
+Trace: #0 C:\xampp\htdocs\proms-admin\model\pdo.class.php(577): PDOStatement->execute()
+#1 C:\xampp\htdocs\proms-admin\index.php(211): DB->countOf('tbl_reservation', 'ay_id = :ay_id ...', Array)
+#2 {main}
+
+[2026-02-26 19:51:23] Error: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ''' at line 1
+Trace: #0 C:\xampp\htdocs\proms-admin\model\pdo.class.php(577): PDOStatement->execute()
+#1 C:\xampp\htdocs\proms-admin\index.php(211): DB->countOf('tbl_reservation', 'ay_id = :ay_id ...', Array)
+#2 {main}
+
+[2026-02-26 19:51:49] Error: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ''' at line 1
+Trace: #0 C:\xampp\htdocs\proms-admin\model\pdo.class.php(577): PDOStatement->execute()
+#1 C:\xampp\htdocs\proms-admin\index.php(211): DB->countOf('tbl_reservation', 'ay_id = :ay_id ...', Array)
+#2 {main}
+
+[2026-02-26 19:52:28] Error: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ''' at line 1
+Trace: #0 C:\xampp\htdocs\proms-admin\model\pdo.class.php(577): PDOStatement->execute()
+#1 C:\xampp\htdocs\proms-admin\index.php(211): DB->countOf('tbl_reservation', 'ay_id = :ay_id ...', Array)
+#2 {main}
+
+[2026-02-26 19:53:34] Error: SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ''' at line 1
+Trace: #0 C:\xampp\htdocs\proms-admin\model\pdo.class.php(577): PDOStatement->execute()
+#1 C:\xampp\htdocs\proms-admin\index.php(211): DB->countOf('tbl_reservation', 'ay_id = :ay_id ...', Array)
+#2 {main}
+
+[2026-02-28 21:37:09] Error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'fullname' in 'field list'
+Trace: #0 C:\xampp\htdocs\proms-admin\model\pdo.class.php(716): PDOStatement->execute()
+#1 C:\xampp\htdocs\proms-admin\pages\controller\ctr-login.php(24): DB->executeInsert(Array, 'tbl_admin_logs')
+#2 {main}
+
+[2026-02-28 21:37:32] Error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'fullname' in 'field list'
+Trace: #0 C:\xampp\htdocs\proms-admin\model\pdo.class.php(716): PDOStatement->execute()
+#1 C:\xampp\htdocs\proms-admin\pages\controller\ctr-login.php(24): DB->executeInsert(Array, 'tbl_admin_logs')
+#2 {main}
+
+[2026-02-28 21:37:35] Error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'fullname' in 'field list'
+Trace: #0 C:\xampp\htdocs\proms-admin\model\pdo.class.php(716): PDOStatement->execute()
+#1 C:\xampp\htdocs\proms-admin\pages\controller\ctr-login.php(24): DB->executeInsert(Array, 'tbl_admin_logs')
+#2 {main}
+
+[2026-02-28 21:37:50] Error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'fullname' in 'field list'
+Trace: #0 C:\xampp\htdocs\proms-admin\model\pdo.class.php(716): PDOStatement->execute()
+#1 C:\xampp\htdocs\proms-admin\pages\controller\ctr-login.php(24): DB->executeInsert(Array, 'tbl_admin_logs')
+#2 {main}
+
+[2026-02-28 21:37:53] Error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'fullname' in 'field list'
+Trace: #0 C:\xampp\htdocs\proms-admin\model\pdo.class.php(716): PDOStatement->execute()
+#1 C:\xampp\htdocs\proms-admin\pages\controller\ctr-login.php(24): DB->executeInsert(Array, 'tbl_admin_logs')
+#2 {main}
+
+[2026-03-02 23:50:59] Error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'prog_id' in 'where clause'
+Trace: #0 C:\xampp\htdocs\proms-admin\model\pdo.class.php(543): PDOStatement->execute()
+#1 C:\xampp\htdocs\proms-admin\pages\program.php(61): DB->queryUniqueValue('SELECT img_type...', Array)
+#2 {main}
+
+[2026-03-04 20:13:07] Error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'sys_id' in 'where clause'
+Trace: #0 C:\xampp\htdocs\proms-admin\model\pdo.class.php(514): PDOStatement->execute()
+#1 C:\xampp\htdocs\proms-admin\pages\fetch\fetch-student.php(7): DB->queryUniqueObject('SELECT * FROM t...', Array)
+#2 {main}
+
+[2026-03-04 20:13:21] Error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'sys_id' in 'where clause'
+Trace: #0 C:\xampp\htdocs\proms-admin\model\pdo.class.php(514): PDOStatement->execute()
+#1 C:\xampp\htdocs\proms-admin\pages\fetch\fetch-student.php(7): DB->queryUniqueObject('SELECT * FROM t...', Array)
+#2 {main}
+
+[2026-03-08 00:08:16] Error: SQLSTATE[HY093]: Invalid parameter number: number of bound variables does not match number of tokens
+Trace: #0 C:\xampp\htdocs\proms-admin\model\pdo.class.php(543): PDOStatement->execute()
+#1 C:\xampp\htdocs\proms-admin\pages\schedule.php(6): DB->queryUniqueValue('SELECT title FR...', Array)
+#2 {main}
+
+[2026-03-08 00:08:34] Error: SQLSTATE[HY093]: Invalid parameter number: number of bound variables does not match number of tokens
+Trace: #0 C:\xampp\htdocs\proms-admin\model\pdo.class.php(543): PDOStatement->execute()
+#1 C:\xampp\htdocs\proms-admin\pages\schedule.php(6): DB->queryUniqueValue('SELECT title FR...', Array)
+#2 {main}
+
+[2026-03-08 00:09:18] Error: SQLSTATE[HY093]: Invalid parameter number: number of bound variables does not match number of tokens
+Trace: #0 C:\xampp\htdocs\proms-admin\model\pdo.class.php(543): PDOStatement->execute()
+#1 C:\xampp\htdocs\proms-admin\pages\schedule.php(6): DB->queryUniqueValue('SELECT title FR...', Array)
+#2 {main}
+
+[2026-03-08 00:09:27] Error: SQLSTATE[HY093]: Invalid parameter number: number of bound variables does not match number of tokens
+Trace: #0 C:\xampp\htdocs\proms-admin\model\pdo.class.php(543): PDOStatement->execute()
+#1 C:\xampp\htdocs\proms-admin\pages\schedule.php(6): DB->queryUniqueValue('SELECT title FR...', Array)
+#2 {main}
+
+[2026-03-08 02:42:47] Error: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'account_id' cannot be null
+Trace: #0 C:\xampp\htdocs\proms-admin\model\pdo.class.php(716): PDOStatement->execute()
+#1 C:\xampp\htdocs\proms-admin\pages\controller\ctr-forget-pass.php(54): DB->executeInsert(Array, 'tbl_pass_reset')
+#2 {main}
+
+[2026-03-08 03:02:15] Error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'sys_id' in 'where clause'
+Trace: #0 C:\xampp\htdocs\proms-admin\model\pdo.class.php(514): PDOStatement->execute()
+#1 C:\xampp\htdocs\proms-admin\pages\controller\ctr-reset-pass.php(9): DB->queryUniqueObject('SELECT * FROM t...', Array)
+#2 {main}
+
+[2026-03-23 19:54:46] Error: SQLSTATE[HY093]: Invalid parameter number: parameter was not defined
+Trace: #0 C:\xampp\htdocs\proms-admin\model\pdo.class.php(794): PDOStatement->execute()
+#1 C:\xampp\htdocs\proms-admin\pages\controller\ctr-student.php(119): DB->executeDelete('tbl_student', 'student_id = :s...', Array)
+#2 {main}
+
+[2026-03-30 19:38:42] Error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'prog_img' in 'field list'
+Trace: #0 C:\xampp\htdocs\proms-admin\model\pdo.class.php(716): PDOStatement->execute()
+#1 C:\xampp\htdocs\proms-admin\pages\controller\ctr-program.php(63): DB->executeInsert(Array, 'tbl_program')
+#2 {main}
+
+[2026-03-30 19:39:52] Error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'prog_img' in 'field list'
+Trace: #0 C:\xampp\htdocs\proms-admin\model\pdo.class.php(716): PDOStatement->execute()
+#1 C:\xampp\htdocs\proms-admin\pages\controller\ctr-program.php(63): DB->executeInsert(Array, 'tbl_program')
+#2 {main}
 

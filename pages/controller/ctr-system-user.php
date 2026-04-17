@@ -8,12 +8,12 @@ if (isset($_POST['Save'])) {
     try {
         // Check if the required fields are set
         $requiredFields = [
-            'emp_no' => 'LPU Number', 
-            'fname' => 'First Name', 
-            'lname' => 'Last Name', 
-            'email' => 'Email',
-            'role' => 'Role',
-            'status' => 'Status'
+            'emp_no'            => 'Employee Number', 
+            'fname'             => 'First Name', 
+            'lname'             => 'Last Name', 
+            'email'             => 'Email',
+            'create_password'   => 'Password',
+            'status'            => 'Status'
         ];
         $missing        = validateRequiredFields($requiredFields, $_POST);
         if ($missing) {
@@ -37,16 +37,47 @@ if (isset($_POST['Save'])) {
             ));
         }
 
+        $password = $_POST['create_password'];
+
+        $hash = password_hash(
+            $password,
+            PASSWORD_ARGON2ID,
+            [
+                'memory_cost' => 65536, // 64 MB
+                'time_cost'   => 3,     // iterations
+                'threads'     => 2
+            ]
+        );
+
+        if ($hash === false) {
+            throw new Exception('Password hashing failed');
+        }
+
         // Prepare the SQL array for insertion
         $sqlArray = array(
-            'emp_no'  => $_POST['emp_no'],
-            'fname'   => ucwords($_POST['fname']),
-            'mname'   => ucwords($_POST['mname']),
-            'lname'   => ucwords($_POST['lname']),
-            'email'   => $_POST['email'],
-            'role'    => $_POST['role'],
-            'status'  => $_POST['status'],
+            'emp_no'    => $_POST['emp_no'],
+            'fname'     => ucwords($_POST['fname']),
+            'mname'     => ucwords($_POST['mname']),
+            'lname'     => ucwords($_POST['lname']),
+            'email'     => $_POST['email'],
+            'password'  => $hash,
+            'status'    => $_POST['status'],
         );
+
+        if(isset($_SESSION['proms-admin']['img_input'])){
+            if($_SESSION['proms-admin']['img_input']['result'] == 'success') {
+                $sqlArray['img'] = $_SESSION['proms-admin']['img_input']['content'];
+                $sqlArray['img_type'] = $_SESSION['proms-admin']['img_input']['type'];
+            }else{
+                Alert::error([
+                    'title' => 'Image Upload Error',
+                    'html'  => $_SESSION['proms-admin']['img_input']['content'],
+                    'path'  => $redirect_path
+                ]);
+            }
+        }
+        
+
         // Execute the insert operation
         $db->executeInsert($sqlArray, 'tbl_system_user');
         
@@ -81,11 +112,10 @@ if (isset($_POST['Edit'])) {
     try {
         // Check if the required fields are set
         $requiredFields = [
-            'emp_no' => 'LPU Number', 
+            'emp_no' => 'Employee Number', 
             'fname' => 'First Name', 
             'lname' => 'Last Name', 
             'email' => 'Email', 
-            'role' => 'Role', 
             'status' => 'Status'
         ];
         $missing        = validateRequiredFields($requiredFields, $_POST);
@@ -116,13 +146,27 @@ if (isset($_POST['Edit'])) {
 
         // Prepare the SQL array for update
         $sqlArray = array(
+            'emp_no'  => ucwords($_POST['emp_no']),
             'fname'   => ucwords($_POST['fname']),
             'mname'   => ucwords($_POST['mname']),
             'lname'   => ucwords($_POST['lname']),
             'email'   => $_POST['email'],
-            'role'    => $_POST['role'],
             'status'  => $_POST['status'],
         );
+
+        if(isset($_SESSION['proms-admin']['img_input'])){
+            if($_SESSION['proms-admin']['img_input']['result'] == 'success') {
+                $sqlArray['img'] = $_SESSION['proms-admin']['img_input']['content'];
+                $sqlArray['img_type'] = $_SESSION['proms-admin']['img_input']['type'];
+            }else{
+                Alert::error([
+                    'title' => 'Image Upload Error',
+                    'html'  => $_SESSION['proms-admin']['img_input']['content'],
+                    'path'  => $redirect_path
+                ]);
+            }
+        }
+
         // Execute the update operation
         $db->executeUpdate($sqlArray, 'tbl_system_user', 'sys_id = :sys_id', ['sys_id' => $sys_id]);
 

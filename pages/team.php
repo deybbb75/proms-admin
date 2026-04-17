@@ -14,7 +14,7 @@ $_SESSION['proms-admin']['max_schedule'] = 3;
             <div class="page-title-box">
                 <div class="page-title-right">
                     <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#primary-header-modal"
-                        onclick="addItem({fetch_file: 'fetch/fetch-team.php', custom_function: fetchCustom})">
+                        onclick="addItem({fetch_file: 'fetch/fetch-team.php', custom_function: () => fetchCustom()})">
                         <i class="mdi mdi-plus"></i>
                         <span class="add-btn-name">Add Member</span>
                     </button>
@@ -54,8 +54,17 @@ $_SESSION['proms-admin']['max_schedule'] = 3;
                                 </td>
                                 <td>
                                     <center>
-                                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#primary-header-modal"
-                                            onclick="editItem({fetch_file: 'fetch/fetch-team.php', item_id: '<?= encrypt_data($line->member_id) ?>', custom_function: fetchCustom})"><i class="mdi mdi-square-edit-outline"></i>
+                                        <?php
+                                            $image_data     = base64_encode($line->img);
+                                            $image_src      = "data:{$line->img_type};base64,{$image_data}";
+                                        ?>
+                                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#primary-header-modal" id="editBtn"
+                                            onclick="editItem({
+                                                fetch_file: 'fetch/fetch-team.php', 
+                                                item_id: '<?= encrypt_data($line->member_id) ?>', 
+                                                custom_function: () => fetchCustom('<?= $image_src ?>')
+                                            })"
+                                            ><i class="mdi mdi-square-edit-outline"></i>
                                         </button>
                                         <?php
                                             if($line->member_order != 1){ // Prevent deletion of default admin
@@ -106,29 +115,14 @@ $_SESSION['proms-admin']['max_schedule'] = 3;
 </div><!-- /.modal -->
 
 <script>
-function updateImage(action){
-    const image_input_section = document.getElementById('image-upload');
-    const preview = document.getElementById('image-preview');
-
-    if(action === 'update'){
-        image_input_section.style.display = 'block';
-        preview.style.display = 'none';
-    }else{
-        image_input_section.style.display = 'none';
-        preview.style.display = 'block';
-    }
-}
-
-function fetchCustom(){
+function fetchCustom(img_src){
     initFilePond(
         'img_input',
         ['image/jpeg'],
-        'Only JPG files are allowed',
-        ['#save_changes']
+        ['#save_changes'],
+        img_src
     );
 }
-
-
 </script>
 <?php
 include '../footer.php';

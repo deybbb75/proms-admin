@@ -13649,6 +13649,9 @@ select.form-control:not([size]):not([multiple]){
 select.form-control-sm:not([size]):not([multiple]){
     height:calc(1.5em + .56rem + 2px)
 }
+.password-eye{
+    margin: 0 !important;
+}
 .password-eye:before{
     font-family:"Material Design Icons";
     content:"\f06d0";
@@ -13657,7 +13660,7 @@ select.form-control-sm:not([size]):not([multiple]){
     font-variant:normal;
     vertical-align:middle;
     line-height:1.2;
-    font-size:16px
+    font-size:16px;
 }
 .show-password .password-eye:before{
     content:"\f06d1"
@@ -15082,7 +15085,7 @@ body[data-layout-color=dark] #preloader{
     line-height:42px
 }
 body.authentication-bg{
-    background-image:url(../images/login-bg.jpg);
+    background-image:url(../images/login-bg.png);
     background-size:cover;
     background-position:center
 }
@@ -16449,7 +16452,7 @@ body[data-layout-color=dark] .timeline-show .time-show-name{
 .select2-container .select2-selection--single .select2-selection__rendered{
     display:block;
     padding-left:8px;
-    padding-right:20px;
+    padding-right:30px;
     overflow:hidden;
     text-overflow:ellipsis;
     white-space:nowrap

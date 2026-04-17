@@ -27,6 +27,7 @@
     <script src="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/assets/plugins/filepond/filepond-plugin-image-exif-orientation/dist/filepond-plugin-image-exif-orientation.min.js"></script>
     <script src="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/assets/plugins/filepond/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.js"></script>
     <script src="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/assets/plugins/filepond/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.min.js"></script>
+    <script src="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/assets/plugins/filepond/filepond-plugin-file-poster/dist/filepond-plugin-file-poster.js"></script>
     <script src="<?= $GLOBALS['INF_CONFIG']['sitehost'] ?>/assets/plugins/filepond/filepond/dist/filepond.min.js"></script>
 
     <!-- demo app -->

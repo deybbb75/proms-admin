@@ -94,8 +94,8 @@ function reInitUI(container) {
 		});
 
 		// 🔥 Move Select2 container BEFORE the select
-		var $select2Container = $select.next('.select2');
-		$select2Container.insertBefore($select);
+		// var $select2Container = $select.next('.select2');
+		// $select2Container.insertBefore($select);
 
         var value = $select.val();
         if (value !== null && value !== '' && value.length !== 0) {
@@ -103,7 +103,7 @@ function reInitUI(container) {
         }
 	});
 
-	$(".select2").on("change", function() {
+	$(".select2.form-control").on("change", function() {
 		$(this).valid();
 	});
 
@@ -212,97 +212,132 @@ function reInitUI(container) {
 
 // Initialize UI components on page load
 $(function () {
+    reInitUI();
+
 	setTimeout(function () {
 		$("#main-preloader").fadeOut();
 	}, 50);
 });
 
 // Initialize FilePond for the attachment input
-function initFilePond(inputId, acceptedFileType, errorMsg, buttons) {
-    // Register all FilePond plugins that will be used
-    FilePond.registerPlugin(
-        FilePondPluginFileEncode,              // Allows encoding files
-        FilePondPluginFileValidateSize,        // Allows file size validation
-        FilePondPluginImageExifOrientation,    // Fixes image rotation (not used for DOCX, but ok)
-        FilePondPluginImagePreview,            // Shows preview (not used for DOCX, but ok)
-        FilePondPluginFileValidateType         // Allows file type validation
-    );
+function initFilePond(inputId, acceptedFileType, buttons, imgSource = null) {
+	// Register all FilePond plugins that will be used
+	FilePond.registerPlugin(
+		FilePondPluginFileEncode,              // Allows encoding files
+		FilePondPluginFileValidateSize,        // Allows file size validation
+		FilePondPluginImageExifOrientation,    // Fixes image rotation (not used for DOCX, but ok)
+		FilePondPluginImagePreview,            // Shows preview (not used for DOCX, but ok)
+		FilePondPluginFileValidateType,         // Allows file type validation
+		FilePondPluginFilePoster			  // Allows showing uploaded file as poster
+	);
 
-    // Create the FilePond instance for the attachment input
-    remarksFile = FilePond.create(
-        document.getElementById(inputId),
-        {
-            // Only allow DOCX files
-            acceptedFileTypes: acceptedFileType,
+	if (!imgSource || imgSource == 'data:;base64,') {
+		// Create the FilePond instance for the attachment input
+		inputFile = FilePond.create(document.getElementById(inputId),
+			{
+				// imagePreviewMaxHeight: 200,
+				// Filter the file types that can be uploaded
+				acceptedFileTypes: acceptedFileType,
 
-            // Backend endpoints used by FilePond
-            server: {
-                process: 'controller/ctr-upload.php',   // Called when file is uploaded
-                revert: 'controller/ctr-revert.php'     // Called when file is removed
-            }
-        }
-    );
+                name: inputId,
 
-    // Customize FilePond error message for invalid file types
-    FilePond.setOptions({
-        labelFileTypeNotAllowed: errorMsg
-    });
+				// Backend endpoints used by FilePond
+				server: {
+					process: 'controller/ctr-file-upload.php',   // Called when file is uploaded
+					revert: 'controller/ctr-file-revert.php'     // Called when file is removed
+				}
+			}
+		);
+	} else {
+		inputFile = FilePond.create(document.getElementById(inputId), {
+			// Filter the file types that can be uploaded
+			acceptedFileTypes: acceptedFileType,
+
+			filePosterMaxHeight: 400,
+
+            name: inputId,
+
+			// Backend endpoints used by FilePond
+			server: {
+				process: 'controller/ctr-file-upload.php',   // Called when file is uploaded
+				revert: 'controller/ctr-file-revert.php'     // Called when file is removed
+			},
+
+			files: [
+				{
+					source: '12345', // your file ID (can be anything unique)
+					options: {
+						type: 'local', // VERY IMPORTANT
+						file: {
+							name: 'profile.jpg',
+							size: 123456,
+							type: 'image/jpeg'
+						},
+						metadata: {
+							poster: imgSource // URL to image on server
+						}
+					}
+				}
+			],
+			onremovefile: (error, file) => {
+				if (!error) {
+					// Call your PHP revert endpoint manually
+					fetch('controller/ctr-file-revert.php');
+				}
+			}
+		});
+	}
+
+	// Customize FilePond error message for invalid file types
+	// FilePond.setOptions({
+	// 	labelFileTypeNotAllowed: errorMsg
+	// });
 
 
-    /* =====================================================
-    FILE UPLOAD STATUS TRACKING
-    These events tell us when FilePond is uploading,
-    finished uploading, or when a new file is added.
-    ===================================================== */
+	/* =====================================================
+	FILE UPLOAD STATUS TRACKING
+	These events tell us when FilePond is uploading,
+	finished uploading, or when a new file is added.
+	===================================================== */
 
 
-    // Fires when ONE file finishes uploading to the server
-    remarksFile.on('processfile', (error, file) => {
+	// Fires when ONE file finishes uploading to the server
+	inputFile.on('processfile', (error, file) => {
 
-        // If the server returned an error
-        if (error) {
-            console.log('Upload failed:', file.filename);
-            return;
-        }
+		// If the server returned an error
+		if (error) {
+			console.log('Upload failed:', file.filename);
+			return;
+		}
 
-        // If upload was successful
-        console.log('Upload finished:', file.filename);
-    });
-
-
-    // Fires when ALL files have finished uploading
-    remarksFile.on('processfiles', () => {
-        console.log('All files uploaded');
-
-        // Enable the Approve and Return buttons
-        // (Now the form is safe to submit)
-        buttons.forEach(button => {
-            $(button).prop('disabled', false);
-        });
-    });
+		// If upload was successful
+		console.log('Upload finished:', file.filename);
+	});
 
 
-    // Fires when a new file is added (upload starts again)
-    remarksFile.on('addfile', () => {
+	inputFile.on('processfilestart', (file) => {
+		// Called when a file starts uploading
+		buttons.forEach(button => $(button).prop('disabled', true));
+	});
 
-        // Disable the buttons while upload is in progress
-        // to prevent submitting before upload finishes
-        buttons.forEach(button => {
-            $(button).prop('disabled', true);
-        });
-    });
+	inputFile.on('processfiles', () => {
+		// Called when all uploads are finished
+		buttons.forEach(button => $(button).prop('disabled', false));
+	});
 }
 
 window.addEventListener("load", () => {
-  const menu = document.getElementById("side-nav");
-  const activeItem = menu.querySelector(".menuitem-active");
+    const menu = document.getElementById("side-nav");
+    if(menu){
+        const activeItem = menu.querySelector(".menuitem-active");
 
-  if (activeItem) {
-    activeItem.scrollIntoView({
-      behavior: "auto",
-      block: "center"
-    });
-  }
+    if (activeItem) {
+            activeItem.scrollIntoView({
+            behavior: "auto",
+            block: "center"
+            });
+        }
+    }
 });
 
 // Highlight the active menu item based on the current URL path
@@ -338,23 +373,15 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // Match the height of the left sidebar to the wrapper content
-function matchHeight() {
-    const el1 = document.getElementById('wrapper');
-    const el2 = document.querySelector(
-    'body[data-leftbar-compact-mode="condensed"]:not(.authentication-bg) .wrapper .leftside-menu'
-    );
-
-    if(el1 && el2) {
-        if (el1.offsetHeight > el2.offsetHeight) {
-            el2.style.height = el1.offsetHeight + "px";
+function matchHeight(element1, element2, custom_function = () => {}) {
+    if(element1 && element2) {
+        if (element1.offsetHeight > element2.offsetHeight) {
+            element2.style.height = element1.offsetHeight + "px";
         }else{
-            el2.style.height = "fit-content";
+            custom_function();
         }
     }
 }
-
-window.addEventListener('resize', matchHeight);
-window.addEventListener('load', matchHeight);
 
 // Match the height of a group of elements (e.g. cards) to the tallest one
 function matchGroupHeight(selector) {
@@ -380,8 +407,35 @@ function matchGroupHeight(selector) {
 
 // Example usage
 function runMatchHeight() {
+    const element1 = document.getElementById('wrapper');
+    const parentElement2 = document.querySelector('.sidebar-enable');
+
+    if(parentElement2){
+        const element2 = parentElement2.querySelector('.leftside-menu');
+
+        function addtionalFunction(){
+            element2.style.height = "100vh";
+        }
+
+        matchHeight(element1, element2, addtionalFunction);
+    }else{
+        if(document.querySelector('.leftside-menu')){
+            document.querySelector('.leftside-menu').style.height = "100vh";
+        }
+    }
+    
     matchGroupHeight(".prog_title");
 }
+
+if(document.querySelector(".button-menu-mobile")){
+    document.querySelector(".button-menu-mobile").addEventListener("click", function() {
+        setTimeout(function() {
+        runMatchHeight();
+        }, 0);
+        
+    });
+}
+
 
 window.addEventListener("load", runMatchHeight);
 window.addEventListener("resize", runMatchHeight);

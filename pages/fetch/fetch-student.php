@@ -7,15 +7,15 @@ if (isset($_POST['id'])) {
     $student = $db->queryUniqueObject('SELECT * FROM tbl_student WHERE student_id = :student_id', ['student_id' => $id]);
     if ($student) {
         $student_id = encrypt_data($student->student_id);
-        $fname  = e($student->fname);
-        $mname  = e($student->mname);
-        $lname  = e($student->lname);
+        $fname      = e($student->fname);
+        $mname      = e($student->mname);
+        $lname      = e($student->lname);
         $student_no = e($student->student_no);
-        $email  = e($student->email);
-        $mobile_no   = e($student->mobile_no);
+        $email      = e($student->email);
+        $mobile_no  = e($student->mobile_no);
         $birthday   = e($student->birthday);
-        $fb_link   = e($student->fb_link);
-        $status = e($student->status);
+        $fb_link    = e($student->fb_link);
+        $status     = e($student->status);
     }
 }
 ?>
@@ -37,8 +37,8 @@ if (isset($_POST['id'])) {
 </div>
 <div class="row">
     <div class="col-sm-6">
-        <label for="student_number" class="form-label">Student Number</label>
-        <input type="text" id="student_number" name="student_number" class="form-control" placeholder="Student Number" value="<?= $student_no ?? '' ?>" data-toggle="input-mask" data-mask-format="000000">
+        <label for="student_no" class="form-label required">Student Number</label>
+        <input type="text" id="student_no" name="student_number" class="form-control" placeholder="Employee Number" value="<?= $student_no ?? '' ?>" data-toggle="input-mask" data-mask-format="00000000">
     </div>
     <div class="col-sm-6">
         <label for="email" class="form-label required">Email</label>
@@ -47,18 +47,18 @@ if (isset($_POST['id'])) {
 </div>
 <div class="row">
     <div class="col-sm-6">
-        <label for="mobile_no" class="form-label required">Mobile Number</label>
-        <input type="text" id="mobile_no" name="mobile_no" class="form-control" placeholder="Mobile Number" value="<?= $mobile_no ?? '' ?>">
+        <label for="role" class="form-label required">Mobile Number</label>
+        <input type="tel" id="mobile_no" name="mobile_no" class="form-control" maxlength="11" value="<?= $mobile_no ?? '' ?>" placeholder="Mobile Number">
     </div>
     <div class="col-sm-6">
-        <label for="birthday" class="form-label required">Birthday</label>
-        <input class="form-control" id="birthday" type="date" name="birthday" value="<?= $birthday ?? '' ?>">
+        <label for="role" class="form-label required">Birthday</label>
+        <input type="date" id="birthday" name="birthday" class="form-control" value="<?= $birthday ?? '' ?>">
     </div>
 </div>
 <div class="row">
-    <div class="col-md-6">
-        <label for="fb_link" class="form-label">Facebook Link</label>
-        <input type="text" id="fb_link" name="fb_link" class="form-control" placeholder="Facebook Link" value="<?= $fb_link ?? '' ?>">
+    <div class="col-sm-6">
+        <label for="fb_link" class="form-label required">Facebook Link</label>
+        <input type="text" id="fb_link" name="fb_link" class="form-control" value="<?= $fb_link ?? '' ?>" placeholder="Facebook Link">
     </div>
     <div class="col-sm-6">
         <label for="status" class="form-label required">Status</label>
